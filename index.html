@@ -86,6 +86,23 @@ tr:hover td{background:#f9fafb}
   .checklist{columns:1}
   #map-main{height:320px}
   .day-map{height:220px}
+  
+  /* PPT模式 */
+  .ppt-mode .section{min-height:100vh;scroll-snap-align:start}
+  .ppt-mode .day-card{min-height:auto}
+  .ppt-mode body{scroll-snap-type:y mandatory;overflow-y:scroll}
+  
+  /* PPT模式按钮 */
+  .ppt-toggle{display:flex}
+}
+
+/* PPT模式切换按钮 */
+.ppt-toggle{position:fixed;top:236px;right:20px;z-index:10000;background:#ff7043;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
+.ppt-toggle:hover{background:#f4511e;transform:scale(1.1)}
+.ppt-toggle.active{background:#4caf50}
+
+@media(max-width:768px){
+  .ppt-toggle{display:flex}
 }
 .alt-section{background:#faf5ff;border:2px solid #e1bee7;border-radius:12px;padding:16px;margin-top:16px}
 .alt-section h4{color:#7b1fa2;margin-bottom:12px}
@@ -199,6 +216,9 @@ tr:hover td{background:#f9fafb}
 
 <!-- 地图样式切换按钮 -->
 <button class="map-style-toggle" onclick="toggleMapStyle()" title="切换地图样式">🎨</button>
+
+<!-- PPT模式切换按钮（手机端显示） -->
+<button class="ppt-toggle" onclick="togglePPTMode()" title="切换PPT浏览模式">📱</button>
 
 <header class="hero">
   <div class="container">
@@ -983,94 +1003,151 @@ initTheme();
 AMapLoader.load({
   key: 'c35ae2e7a1c547ed5b27d4aed249a2db',
   version: '2.0',
-  plugins: ['AMap.Scale', 'AMap.ToolBar']
+  plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.PlaceSearch', 'AMap.AutoComplete']
 }).then(function(AMap) {
   AMapRef = AMap;
   AMap.getConfig().appname = 'amap-jsapi-skill';
   
+  // POI搜索缓存
+  var poiCache = {};
+  
+  // 搜索景点坐标
+  function searchPOI(name, city, callback) {
+    var key = name + '_' + city;
+    if (poiCache[key]) {
+      callback(poiCache[key]);
+      return;
+    }
+    
+    var placeSearch = new AMap.PlaceSearch({
+      city: city || '全国',
+      pageSize: 1
+    });
+    
+    placeSearch.search(name, function(status, result) {
+      if (status === 'complete' && result.poiList && result.poiList.pois.length > 0) {
+        var poi = result.poiList.pois[0];
+        var pos = [poi.location.lng, poi.location.lat];
+        poiCache[key] = pos;
+        callback(pos);
+      } else {
+        callback(null);
+      }
+    });
+  }
+  
+  // 批量搜索并创建标记
+  function searchAndMark(map, pois, defaultColor) {
+    pois.forEach(function(poi) {
+      searchPOI(poi.name, poi.city, function(pos) {
+        if (pos) {
+          createMarker(map, pos, poi.color || defaultColor, poi.name, poi.desc);
+          if (poi.routeTo) {
+            // 如果需要连线到下一个点，稍后处理
+          }
+        }
+      });
+    });
+  }
+  
   // 主地图
   var mapMain = createMap('map-main', [101.0, 26.5], 7);
   
-  // 标记
-  createMarker(mapMain, [102.75, 25.04], '#e74c3c', '昆明长水机场', '起点');
-  createMarker(mapMain, [102.68, 25.02], '#e74c3c', '昆明站', '高铁站');
-  createMarker(mapMain, [100.23, 26.87], '#3498db', '丽江古城', '海拔2400m');
-  createMarker(mapMain, [100.25, 26.88], '#f39c12', '东巴谷', '日照金山观赏点');
-  createMarker(mapMain, [100.20, 27.00], '#f39c12', '玉龙雪山', '海拔4680m');
-  createMarker(mapMain, [100.05, 27.15], '#f39c12', '虎跳峡', '世界最深峡谷');
-  createMarker(mapMain, [99.70, 27.83], '#9b59b6', '香格里拉', '海拔3300m');
-  createMarker(mapMain, [99.68, 27.85], '#f39c12', '松赞林寺', '小布达拉宫');
-  createMarker(mapMain, [100.22, 25.58], '#27ae60', '大理', '备选方案');
+  // 搜索并标记主要城市和景点
+  var mainPOIs = [
+    {name: '昆明长水机场', city: '昆明', color: '#e74c3c', desc: '起点'},
+    {name: '昆明站', city: '昆明', color: '#e74c3c', desc: '高铁站'},
+    {name: '丽江古城', city: '丽江', color: '#3498db', desc: '海拔2400m'},
+    {name: '玉龙雪山', city: '丽江', color: '#f39c12', desc: '海拔4680m'},
+    {name: '虎跳峡', city: '迪庆', color: '#f39c12', desc: '世界最深峡谷'},
+    {name: '松赞林寺', city: '迪庆', color: '#f39c12', desc: '小布达拉宫'},
+    {name: '独克宗古城', city: '迪庆', color: '#9b59b6', desc: '海拔3300m'},
+    {name: '大理古城', city: '大理', color: '#27ae60', desc: '备选方案'}
+  ];
   
-  // 路线
-  createRoute(mapMain, [[102.75, 25.04], [100.23, 26.87]], '#3b82f6');
-  createRoute(mapMain, [[100.23, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
-  createRoute(mapMain, [[99.70, 27.83], [100.23, 26.87]], '#9b59b6');
-  createRoute(mapMain, [[102.75, 25.04], [100.22, 25.58]], '#27ae60');
+  searchAndMark(mapMain, mainPOIs, '#f39c12');
   
-  // 路线标签
-  createTextMarker(mapMain, [101.50, 25.95], '高铁 3.5h', '#3b82f6');
-  createTextMarker(mapMain, [100.00, 27.35], '自驾 4h', '#f39c12');
-  createTextMarker(mapMain, [99.90, 27.35], '高铁 1.5h', '#9b59b6');
+  // 路线（使用大致路径）
+  setTimeout(function() {
+    createRoute(mapMain, [[102.75, 25.04], [100.23, 26.87]], '#3b82f6');
+    createRoute(mapMain, [[100.23, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
+    createRoute(mapMain, [[99.70, 27.83], [100.23, 26.87]], '#9b59b6');
+    createRoute(mapMain, [[102.75, 25.04], [100.22, 25.58]], '#27ae60');
+    
+    createTextMarker(mapMain, [101.50, 25.95], '高铁 3.5h', '#3b82f6');
+    createTextMarker(mapMain, [100.00, 27.35], '自驾 4h', '#f39c12');
+    createTextMarker(mapMain, [99.90, 27.35], '高铁 1.5h', '#9b59b6');
+  }, 1000);
   
   // Day1 方案A 地图
   var map1a = createMap('map-day1-a', [102.70, 25.03], 13);
-  createMarker(map1a, [102.75, 25.04], '#e74c3c', '昆明长水机场');
-  createMarker(map1a, [102.68, 25.02], '#e74c3c', '昆明站');
-  createMarker(map1a, [102.70, 25.04], '#f39c12', '篆新农贸市场', '强烈推荐！');
-  createMarker(map1a, [102.68, 25.00], '#f39c12', '滇池海埂公园', '9月秋景美');
-  createMarker(map1a, [102.68, 25.01], '#f39c12', '茶马花街', '美食街');
-  createRoute(map1a, [[102.75, 25.04], [102.68, 25.02]], '#e74c3c');
-  createRoute(map1a, [[102.68, 25.02], [102.70, 25.04], [102.68, 25.00]], '#f39c12');
+  var day1aPOIs = [
+    {name: '昆明长水机场', city: '昆明', color: '#e74c3c'},
+    {name: '篆新农贸市场', city: '昆明', color: '#f39c12', desc: '强烈推荐！'},
+    {name: '滇池海埂公园', city: '昆明', color: '#f39c12', desc: '9月秋景美'},
+    {name: '茶马花街', city: '昆明', color: '#f39c12', desc: '美食街'}
+  ];
+  searchAndMark(map1a, day1aPOIs, '#f39c12');
   
   // Day1 方案B 地图
   var map1b = createMap('map-day1-b', [101.00, 25.30], 9);
-  createMarker(map1b, [102.75, 25.04], '#e74c3c', '昆明长水机场');
-  createMarker(map1b, [102.68, 25.02], '#e74c3c', '昆明站');
-  createMarker(map1b, [100.22, 25.58], '#27ae60', '大理古城');
-  createMarker(map1b, [100.18, 25.75], '#27ae60', '洱海', '看日出日落');
-  createRoute(map1b, [[102.75, 25.04], [102.68, 25.02]], '#e74c3c');
-  createRoute(map1b, [[102.68, 25.02], [100.22, 25.58]], '#27ae60');
+  var day1bPOIs = [
+    {name: '昆明长水机场', city: '昆明', color: '#e74c3c'},
+    {name: '昆明站', city: '昆明', color: '#e74c3c'},
+    {name: '大理古城', city: '大理', color: '#27ae60'},
+    {name: '洱海', city: '大理', color: '#27ae60', desc: '看日出日落'}
+  ];
+  searchAndMark(map1b, day1bPOIs, '#27ae60');
   
   // Day2 方案A 地图
   var map2a = createMap('map-day2-a', [101.50, 26.00], 8);
-  createMarker(map2a, [102.68, 25.02], '#e74c3c', '昆明站');
-  createMarker(map2a, [100.23, 26.87], '#3498db', '丽江古城');
-  createMarker(map2a, [100.24, 26.87], '#f39c12', '忠义市场', '能看到雪山的菜市场');
-  createRoute(map2a, [[102.68, 25.02], [100.23, 26.87]], '#3b82f6');
+  var day2aPOIs = [
+    {name: '昆明站', city: '昆明', color: '#e74c3c'},
+    {name: '丽江古城', city: '丽江', color: '#3498db'},
+    {name: '忠义市场', city: '丽江', color: '#f39c12', desc: '能看到雪山的菜市场'}
+  ];
+  searchAndMark(map2a, day2aPOIs, '#3b82f6');
   
   // Day2 方案B 地图
   var map2b = createMap('map-day2-b', [100.50, 26.30], 9);
-  createMarker(map2b, [100.18, 25.75], '#27ae60', '洱海');
-  createMarker(map2b, [100.13, 25.80], '#27ae60', '双廊古镇');
-  createMarker(map2b, [100.23, 26.87], '#3498db', '丽江古城');
-  createRoute(map2b, [[100.18, 25.75], [100.13, 25.80], [100.23, 26.87]], '#27ae60');
+  var day2bPOIs = [
+    {name: '洱海', city: '大理', color: '#27ae60'},
+    {name: '双廊古镇', city: '大理', color: '#27ae60'},
+    {name: '丽江古城', city: '丽江', color: '#3498db'}
+  ];
+  searchAndMark(map2b, day2bPOIs, '#27ae60');
   
   // Day3 地图
   var map3 = createMap('map-day3', [100.21, 26.95], 12);
-  createMarker(map3, [100.23, 26.87], '#3498db', '丽江古城');
-  createMarker(map3, [100.25, 26.88], '#f39c12', '东巴谷', '日照金山');
-  createMarker(map3, [100.20, 26.97], '#f39c12', '甘海子');
-  createMarker(map3, [100.19, 26.99], '#f39c12', '云杉坪');
-  createMarker(map3, [100.19, 26.98], '#f39c12', '蓝月谷');
-  createMarker(map3, [100.20, 26.95], '#f39c12', '玉湖村');
-  createRoute(map3, [[100.23, 26.87], [100.25, 26.88], [100.20, 26.97], [100.19, 26.99], [100.19, 26.98], [100.20, 26.95]], '#e74c3c');
+  var day3POIs = [
+    {name: '丽江古城', city: '丽江', color: '#3498db'},
+    {name: '东巴谷', city: '丽江', color: '#f39c12', desc: '日照金山'},
+    {name: '甘海子', city: '丽江', color: '#f39c12'},
+    {name: '云杉坪', city: '丽江', color: '#f39c12'},
+    {name: '蓝月谷', city: '丽江', color: '#f39c12'},
+    {name: '玉湖村', city: '丽江', color: '#f39c12'}
+  ];
+  searchAndMark(map3, day3POIs, '#e74c3c');
   
   // Day4 地图
   var map4 = createMap('map-day4', [100.00, 27.30], 10);
-  createMarker(map4, [100.23, 26.87], '#3498db', '丽江');
-  createMarker(map4, [100.05, 27.15], '#f39c12', '虎跳峡');
-  createMarker(map4, [100.08, 27.25], '#f39c12', '哈巴雪山');
-  createMarker(map4, [99.70, 27.83], '#9b59b6', '香格里拉');
-  createRoute(map4, [[100.23, 26.87], [100.05, 27.15], [100.08, 27.25], [99.70, 27.83]], '#f39c12');
+  var day4POIs = [
+    {name: '丽江古城', city: '丽江', color: '#3498db'},
+    {name: '虎跳峡', city: '迪庆', color: '#f39c12'},
+    {name: '哈巴雪山', city: '迪庆', color: '#f39c12'},
+    {name: '独克宗古城', city: '迪庆', color: '#9b59b6'}
+  ];
+  searchAndMark(map4, day4POIs, '#f39c12');
   
   // Day5 地图
   var map5 = createMap('map-day5', [99.95, 27.35], 11);
-  createMarker(map5, [99.70, 27.83], '#9b59b6', '独克宗古城');
-  createMarker(map5, [99.68, 27.85], '#f39c12', '松赞林寺');
-  createMarker(map5, [99.65, 27.88], '#f39c12', '纳帕海');
-  createMarker(map5, [100.21, 26.90], '#3498db', '束河古镇');
-  createRoute(map5, [[99.70, 27.83], [100.21, 26.90]], '#9b59b6');
+  var day5POIs = [
+    {name: '独克宗古城', city: '迪庆', color: '#9b59b6'},
+    {name: '松赞林寺', city: '迪庆', color: '#f39c12'},
+    {name: '纳帕海', city: '迪庆', color: '#f39c12'},
+    {name: '束河古镇', city: '丽江', color: '#3498db'}
+  ];
+  searchAndMark(map5, day5POIs, '#9b59b6');
   
 }).catch(function(e) {
   console.error('地图加载失败', e);
@@ -1161,6 +1238,48 @@ function toggleTheme() {
   }
   
   updateMapTheme();
+}
+
+// PPT模式切换
+function togglePPTMode() {
+  var body = document.body;
+  var btn = document.querySelector('.ppt-toggle');
+  var isPPT = body.classList.toggle('ppt-mode');
+  
+  localStorage.setItem('pptMode', isPPT ? 'on' : 'off');
+  btn.textContent = isPPT ? '📄' : '📱';
+  btn.classList.toggle('active', isPPT);
+  
+  if (isPPT) {
+    // PPT模式：展开所有day-card
+    document.querySelectorAll('.day-card').forEach(function(card) {
+      card.classList.add('open');
+    });
+    showToast('PPT模式：上下滑动浏览');
+  } else {
+    // 正常模式：收起所有day-card
+    document.querySelectorAll('.day-card').forEach(function(card) {
+      card.classList.remove('open');
+    });
+    showToast('正常模式');
+  }
+  
+  setTimeout(refreshMaps, 200);
+}
+
+// 初始化PPT模式
+function initPPTMode() {
+  var saved = localStorage.getItem('pptMode');
+  var btn = document.querySelector('.ppt-toggle');
+  
+  if (saved === 'on' && window.innerWidth <= 768) {
+    document.body.classList.add('ppt-mode');
+    btn.textContent = '📄';
+    btn.classList.add('active');
+    document.querySelectorAll('.day-card').forEach(function(card) {
+      card.classList.add('open');
+    });
+  }
 }
 
 // 方案切换
@@ -1258,6 +1377,9 @@ function initPlan() {
 
 // 页面加载时初始化方案
 initPlan();
+
+// 页面加载时初始化PPT模式
+initPPTMode();
 
 // 页面加载完成后刷新地图
 window.addEventListener('load', function() {
