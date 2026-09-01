@@ -148,10 +148,7 @@ tr:hover td{background:#f9fafb}
 .dark .timeline-item .time{color:#64b5f6}
 .dark .timeline-item .content{color:#bbb}
 
-/* 深色模式地图滤镜 */
-.dark .day-map,
-.dark #map-main{filter:invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2)}
-.dark .satellite-btn{background:#333;color:#fff;border-color:#555}
+/* 深色模式地图滤镜 - 已改用官方深色瓦片 */
 
 /* 卫星图切换按钮 */
 .satellite-toggle{position:fixed;top:128px;right:20px;z-index:10000;background:#00897b;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
@@ -894,10 +891,12 @@ var grayIcon = createIcon('#95a5a6', 12);
 // 地图瓦片层（高德地图，国内可访问）
 var tiles = {
   amapRoad: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+  amapDark: 'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=11',
   amapSatellite: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
   amapSatelliteLabel: 'https://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}'
 };
 var isSatellite = false;
+var isDarkMode = false;
 
 // 存储所有地图的图层引用
 var mapLayers = {};
@@ -906,14 +905,21 @@ var mapLayers = {};
 function createMap(id, center, zoom) {
   var map = L.map(id, {attributionControl: false}).setView(center, zoom);
   var roadLayer = L.tileLayer(tiles.amapRoad, {maxZoom:18, subdomains:['1','2','3','4']});
+  var darkLayer = L.tileLayer(tiles.amapDark, {maxZoom:18, subdomains:['1','2','3','4']});
   var satelliteLayer = L.tileLayer(tiles.amapSatellite, {maxZoom:18, subdomains:['1','2','3','4']});
   var satelliteLabelLayer = L.tileLayer(tiles.amapSatelliteLabel, {maxZoom:18, subdomains:['1','2','3','4']});
   
-  roadLayer.addTo(map);
+  // 根据当前模式添加图层
+  if (isDarkMode) {
+    darkLayer.addTo(map);
+  } else {
+    roadLayer.addTo(map);
+  }
   
   mapLayers[id] = {
     map: map,
     roadLayer: roadLayer,
+    darkLayer: darkLayer,
     satelliteLayer: satelliteLayer,
     satelliteLabelLayer: satelliteLabelLayer
   };
@@ -929,13 +935,18 @@ function toggleSatellite(btn) {
   Object.keys(mapLayers).forEach(function(id) {
     var layers = mapLayers[id];
     
+    // 移除所有图层
+    layers.map.removeLayer(layers.roadLayer);
+    layers.map.removeLayer(layers.darkLayer);
+    layers.map.removeLayer(layers.satelliteLayer);
+    layers.map.removeLayer(layers.satelliteLabelLayer);
+    
     if (isSatellite) {
-      layers.map.removeLayer(layers.roadLayer);
       layers.satelliteLayer.addTo(layers.map);
       layers.satelliteLabelLayer.addTo(layers.map);
+    } else if (isDarkMode) {
+      layers.darkLayer.addTo(layers.map);
     } else {
-      layers.map.removeLayer(layers.satelliteLayer);
-      layers.map.removeLayer(layers.satelliteLabelLayer);
       layers.roadLayer.addTo(layers.map);
     }
   });
@@ -943,6 +954,24 @@ function toggleSatellite(btn) {
   // 更新按钮状态
   btn.classList.toggle('active', isSatellite);
   btn.textContent = isSatellite ? '🗺️ 路网图' : '🛰️ 卫星图';
+}
+
+// 更新地图深浅色模式
+function updateMapTheme() {
+  if (isSatellite) return; // 卫星图模式下不切换
+  
+  Object.keys(mapLayers).forEach(function(id) {
+    var layers = mapLayers[id];
+    
+    layers.map.removeLayer(layers.roadLayer);
+    layers.map.removeLayer(layers.darkLayer);
+    
+    if (isDarkMode) {
+      layers.darkLayer.addTo(layers.map);
+    } else {
+      layers.roadLayer.addTo(layers.map);
+    }
+  });
 }
 
 // 主地图
@@ -1052,6 +1081,10 @@ function toggleTheme() {
   
   // 更新按钮图标
   btn.textContent = isDark ? '☀️' : '🌙';
+  
+  // 更新地图模式
+  isDarkMode = isDark;
+  updateMapTheme();
 }
 
 // 初始化主题
@@ -1062,6 +1095,7 @@ function initTheme() {
   if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark');
     btn.textContent = '☀️';
+    isDarkMode = true;
   }
 }
 
