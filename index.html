@@ -87,6 +87,17 @@ tr:hover td{background:#f9fafb}
   #map-main{height:320px}
   .day-map{height:220px}
   
+  /* 表格手机端适配 - 卡片式布局 */
+  .table-wrap{overflow-x:visible}
+  table{font-size:.85rem}
+  thead{display:none}
+  tbody{display:block}
+  tr{display:block;background:#fff;border-radius:8px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:12px}
+  td{display:block;padding:4px 0;border:none;text-align:left}
+  td:before{content:attr(data-label);font-weight:600;color:#2d6a4f;display:inline-block;width:70px;margin-right:8px}
+  td:first-child{font-size:1rem;font-weight:600;color:#2d6a4f;padding-bottom:8px;border-bottom:1px solid #eee}
+  td:first-child:before{display:none}
+  
   /* PPT模式 */
   .ppt-mode .section{min-height:100vh;scroll-snap-align:start}
   .ppt-mode .day-card{min-height:auto}
@@ -271,13 +282,43 @@ tr:hover td{background:#f9fafb}
     <div id="overview-plan-a" class="tab-panel active">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>日期</th><th>行程</th><th>交通方式</th><th>距离</th><th>耗时</th></tr></thead>
+          <thead><tr><th>日期</th><th>行程</th><th>交通</th><th>距离</th><th>耗时</th></tr></thead>
           <tbody>
-            <tr><td>9.25</td><td>揭阳/湛江 → 昆明 → 逛农贸市场/滇池</td><td>✈️ 飞机</td><td>~1500km</td><td>~2.5h</td></tr>
-            <tr><td>9.26</td><td>昆明 → 丽江 → 忠义市场/古城</td><td>🚄 高铁</td><td>~520km</td><td>~3.5h</td></tr>
-            <tr><td>9.27</td><td>丽江 → 东巴谷日照金山 → 玉龙雪山</td><td>🚗 包车</td><td>~30km</td><td>~45min</td></tr>
-            <tr><td>9.28</td><td>丽江 → 虎跳峡 → 香格里拉</td><td>🚗 自驾</td><td>~180km</td><td>~4h</td></tr>
-            <tr><td>9.29</td><td>香格里拉 → 丽江 → 深圳</td><td>🚄✈️</td><td>~180km</td><td>—</td></tr>
+            <tr>
+              <td data-label="日期">9.25</td>
+              <td data-label="行程">揭阳/湛江 → 昆明 → 逛农贸市场/滇池</td>
+              <td data-label="交通">✈️ 飞机</td>
+              <td data-label="距离">~1500km</td>
+              <td data-label="耗时">~2.5h</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.26</td>
+              <td data-label="行程">昆明 → 丽江 → 忠义市场/古城</td>
+              <td data-label="交通">🚄 高铁</td>
+              <td data-label="距离">~520km</td>
+              <td data-label="耗时">~3.5h</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.27</td>
+              <td data-label="行程">丽江 → 东巴谷日照金山 → 玉龙雪山</td>
+              <td data-label="交通">🚗 包车</td>
+              <td data-label="距离">~30km</td>
+              <td data-label="耗时">~45min</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.28</td>
+              <td data-label="行程">丽江 → 虎跳峡 → 香格里拉</td>
+              <td data-label="交通">🚗 自驾</td>
+              <td data-label="距离">~180km</td>
+              <td data-label="耗时">~4h</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.29</td>
+              <td data-label="行程">香格里拉 → 丽江 → 深圳</td>
+              <td data-label="交通">🚄✈️</td>
+              <td data-label="距离">~180km</td>
+              <td data-label="耗时">—</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -287,13 +328,43 @@ tr:hover td{background:#f9fafb}
     <div id="overview-plan-b" class="tab-panel">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>日期</th><th>行程</th><th>交通方式</th><th>距离</th><th>耗时</th></tr></thead>
+          <thead><tr><th>日期</th><th>行程</th><th>交通</th><th>距离</th><th>耗时</th></tr></thead>
           <tbody>
-            <tr><td>9.25</td><td>揭阳/湛江 → 昆明 → 高铁大理 → 洱海日落</td><td>✈️🚄</td><td>~1700km</td><td>~4.5h</td></tr>
-            <tr><td>9.26</td><td>洱海日出 → 环洱海 → 高铁丽江</td><td>🚗🚄</td><td>~200km</td><td>~3h</td></tr>
-            <tr><td>9.27</td><td>丽江 → 东巴谷日照金山 → 玉龙雪山</td><td>🚗 包车</td><td>~30km</td><td>~45min</td></tr>
-            <tr><td>9.28</td><td>丽江 → 虎跳峡 → 香格里拉</td><td>🚗 自驾</td><td>~180km</td><td>~4h</td></tr>
-            <tr><td>9.29</td><td>香格里拉 → 丽江 → 深圳</td><td>🚄✈️</td><td>~180km</td><td>—</td></tr>
+            <tr>
+              <td data-label="日期">9.25</td>
+              <td data-label="行程">揭阳/湛江 → 昆明 → 高铁大理 → 洱海日落</td>
+              <td data-label="交通">✈️🚄</td>
+              <td data-label="距离">~1700km</td>
+              <td data-label="耗时">~4.5h</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.26</td>
+              <td data-label="行程">洱海日出 → 环洱海 → 高铁丽江</td>
+              <td data-label="交通">🚗🚄</td>
+              <td data-label="距离">~200km</td>
+              <td data-label="耗时">~3h</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.27</td>
+              <td data-label="行程">丽江 → 东巴谷日照金山 → 玉龙雪山</td>
+              <td data-label="交通">🚗 包车</td>
+              <td data-label="距离">~30km</td>
+              <td data-label="耗时">~45min</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.28</td>
+              <td data-label="行程">丽江 → 虎跳峡 → 香格里拉</td>
+              <td data-label="交通">🚗 自驾</td>
+              <td data-label="距离">~180km</td>
+              <td data-label="耗时">~4h</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.29</td>
+              <td data-label="行程">香格里拉 → 丽江 → 深圳</td>
+              <td data-label="交通">🚄✈️</td>
+              <td data-label="距离">~180km</td>
+              <td data-label="耗时">—</td>
+            </tr>
           </tbody>
         </table>
       </div>
