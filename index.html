@@ -850,8 +850,8 @@ var allMaps = [];
 
 // 创建地图并添加到数组
 function createMap(id, center, zoom) {
-  var map = L.map(id).setView(center, zoom);
-  L.tileLayer(tiles.amap, {attribution:'© 高德地图', maxZoom:18, subdomains:['1','2','3','4']}).addTo(map);
+  var map = L.map(id, {attributionControl: false}).setView(center, zoom);
+  L.tileLayer(tiles.amap, {maxZoom:18, subdomains:['1','2','3','4']}).addTo(map);
   allMaps.push(map);
   return map;
 }
@@ -885,8 +885,8 @@ var currentTile = 'amap';
 
 // 创建带路线的地图
 function createMapWithRoute(containerId, center, zoom, markers, routeCoords) {
-  var map = L.map(containerId).setView(center, zoom);
-  L.tileLayer(tiles.amap, {attribution:'© 高德地图', maxZoom:18, subdomains:['1','2','3','4']}).addTo(map);
+  var map = L.map(containerId, {attributionControl: false}).setView(center, zoom);
+  L.tileLayer(tiles.amap, {maxZoom:18, subdomains:['1','2','3','4']}).addTo(map);
   
   // 添加标记
   markers.forEach(function(m) {
