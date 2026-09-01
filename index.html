@@ -203,7 +203,7 @@ tr:hover td{background:#f9fafb}
     <p class="subtitle">昆明 → 丽江 → 香格里拉 · 5人同行</p>
     <div class="meta">
       <span>📅 2026年9月25日(中秋) - 9月30日</span>
-      <span>👥 5人同行（2位长辈+3位年轻人）</span>
+      <span>👥 5人同行（2位年轻人+3位长辈）</span>
       <span>✈️ 揭阳/湛江 → 昆明</span>
     </div>
   </div>
@@ -976,6 +976,7 @@ function updateMapTheme() {
 }
 
 // 主地图
+initTheme(); // 先初始化主题
 var mapMain = createMap('map-main', [26.5, 101.0], 7);
 
 // 机场/高铁站标记
@@ -1192,9 +1193,6 @@ function initPlan() {
     switchAllPlans('b');
   }
 }
-
-// 页面加载时初始化主题
-initTheme();
 
 // 页面加载时初始化方案
 initPlan();
