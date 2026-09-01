@@ -1091,7 +1091,7 @@ function switchTab(btn, panelId) {
 // 切换卫星图
 function toggleSatellite(btn) {
   isSatellite = !isSatellite;
-  var style = isSatellite ? 'amap://styles/normal' : (isDarkMode ? mapStyles.dark : mapStyles.light);
+  var style = isSatellite ? 'amap://styles/normal' : (isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light);
   
   allMaps.forEach(function(item) {
     if (item.map) item.map.setMapStyle(style);
