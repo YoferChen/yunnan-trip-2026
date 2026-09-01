@@ -151,6 +151,12 @@ tr:hover td{background:#f9fafb}
 /* 深色模式地图滤镜 */
 .dark .day-map,
 .dark #map-main{filter:invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2)}
+.dark .satellite-btn{background:#333;color:#fff;border-color:#555}
+
+/* 卫星图切换按钮 */
+.satellite-toggle{position:fixed;top:128px;right:20px;z-index:10000;background:#00897b;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
+.satellite-toggle:hover{background:#00695c;transform:scale(1.1)}
+.satellite-toggle.active{background:#f57c00}
 
 /* 深色模式覆盖内联样式 */
 .dark [style*="background:#f0fdf4"],
@@ -190,6 +196,9 @@ tr:hover td{background:#f9fafb}
   <span id="planLabel">A</span>
 </button>
 
+<!-- 卫星图切换按钮 -->
+<button class="satellite-toggle" onclick="toggleSatellite(this)" title="切换卫星图/路网图">🛰️</button>
+
 <header class="hero">
   <div class="container">
     <h1>🏔️ 云南6日家庭游</h1>
@@ -208,6 +217,7 @@ tr:hover td{background:#f9fafb}
     <h2 class="section-title">📍 行程总览与地图</h2>
     <div style="position:relative">
       <div id="map-main"></div>
+      <button class="satellite-btn" onclick="toggleSatellite(this)" title="切换卫星图">🛰️ 卫星图</button>
     </div>
     <div class="map-legend">
       <span style="color:#e74c3c">● 机场/高铁站</span>
@@ -883,42 +893,56 @@ var grayIcon = createIcon('#95a5a6', 12);
 
 // 地图瓦片层（高德地图，国内可访问）
 var tiles = {
-  amapLight: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
-  amapDark: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}'
+  amapRoad: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+  amapSatellite: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
+  amapSatelliteLabel: 'https://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}'
 };
-var currentTile = 'amapLight';
+var isSatellite = false;
 
-// 创建带路线的地图
-function createMapWithRoute(containerId, center, zoom, markers, routeCoords) {
-  var map = L.map(containerId, {attributionControl: false}).setView(center, zoom);
-  L.tileLayer(tiles.amap, {maxZoom:18, subdomains:['1','2','3','4']}).addTo(map);
+// 存储所有地图的图层引用
+var mapLayers = {};
+
+// 创建地图并添加到数组
+function createMap(id, center, zoom) {
+  var map = L.map(id, {attributionControl: false}).setView(center, zoom);
+  var roadLayer = L.tileLayer(tiles.amapRoad, {maxZoom:18, subdomains:['1','2','3','4']});
+  var satelliteLayer = L.tileLayer(tiles.amapSatellite, {maxZoom:18, subdomains:['1','2','3','4']});
+  var satelliteLabelLayer = L.tileLayer(tiles.amapSatelliteLabel, {maxZoom:18, subdomains:['1','2','3','4']});
   
-  // 添加标记
-  markers.forEach(function(m) {
-    L.marker(m.latlng, {icon:m.icon}).addTo(map).bindPopup(m.popup);
+  roadLayer.addTo(map);
+  
+  mapLayers[id] = {
+    map: map,
+    roadLayer: roadLayer,
+    satelliteLayer: satelliteLayer,
+    satelliteLabelLayer: satelliteLabelLayer
+  };
+  
+  allMaps.push(map);
+  return map;
+}
+
+// 切换卫星图
+function toggleSatellite(btn) {
+  isSatellite = !isSatellite;
+  
+  Object.keys(mapLayers).forEach(function(id) {
+    var layers = mapLayers[id];
+    
+    if (isSatellite) {
+      layers.map.removeLayer(layers.roadLayer);
+      layers.satelliteLayer.addTo(layers.map);
+      layers.satelliteLabelLayer.addTo(layers.map);
+    } else {
+      layers.map.removeLayer(layers.satelliteLayer);
+      layers.map.removeLayer(layers.satelliteLabelLayer);
+      layers.roadLayer.addTo(layers.map);
+    }
   });
   
-  // 添加路线
-  if (routeCoords && routeCoords.length > 1) {
-    var polyline = L.polyline(routeCoords, {
-      color: '#e74c3c',
-      weight: 4,
-      opacity: 0.8,
-      dashArray: '10, 8'
-    }).addTo(map);
-    
-    // 添加路线箭头
-    var arrowDecorator = L.polylineDecorator(routeCoords, {
-      patterns: [
-        {offset: '50%', repeat: 0, symbol: L.Symbol.arrowHead({pixelSize: 12, polygon: false, pathOptions: {color: '#e74c3c', weight: 2}})}
-      ]
-    });
-    if (typeof L.polylineDecorator === 'function') {
-      arrowDecorator.addTo(map);
-    }
-  }
-  
-  return map;
+  // 更新按钮状态
+  btn.classList.toggle('active', isSatellite);
+  btn.textContent = isSatellite ? '🗺️ 路网图' : '🛰️ 卫星图';
 }
 
 // 主地图
