@@ -148,6 +148,10 @@ tr:hover td{background:#f9fafb}
 .dark .timeline-item .time{color:#64b5f6}
 .dark .timeline-item .content{color:#bbb}
 
+/* 深色模式地图滤镜 */
+.dark .day-map,
+.dark #map-main{filter:invert(1) hue-rotate(180deg) brightness(0.8) contrast(1.2)}
+
 /* 深色模式覆盖内联样式 */
 .dark [style*="background:#f0fdf4"],
 .dark [style*="background: #f0fdf4"]{background:#1e3a2f!important;border-color:#2d5a3f!important}
@@ -879,9 +883,10 @@ var grayIcon = createIcon('#95a5a6', 12);
 
 // 地图瓦片层（高德地图，国内可访问）
 var tiles = {
-  amap: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}'
+  amapLight: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
+  amapDark: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}'
 };
-var currentTile = 'amap';
+var currentTile = 'amapLight';
 
 // 创建带路线的地图
 function createMapWithRoute(containerId, center, zoom, markers, routeCoords) {
