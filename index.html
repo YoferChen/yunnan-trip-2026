@@ -894,7 +894,7 @@ tr:hover td{background:#f9fafb}
 <script>
 // 安全密钥配置（必须）
 window._AMapSecurityConfig = {
-  securityJsCode: '你的安全密钥' // 需要替换为实际的安全密钥
+  securityJsCode: '你的安全密钥'
 };
 
 // 地图数组
@@ -1255,7 +1255,16 @@ function switchOverviewMap(plan) {
     tabs[1].classList.add('active');
   }
   
-  setTimeout(refreshMaps, 100);
+  // 延迟刷新地图，确保容器已显示
+  setTimeout(function() {
+    refreshMaps();
+    // 强制重新设置地图中心
+    if (plan === 'a' && window.allMapsData['map-main-a']) {
+      window.allMapsData['map-main-a'].setCenter([101.0, 26.5]);
+    } else if (plan === 'b' && window.allMapsData['map-main-b']) {
+      window.allMapsData['map-main-b'].setCenter([101.0, 26.0]);
+    }
+  }, 200);
 }
 
 // 切换卫星图
