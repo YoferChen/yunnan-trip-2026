@@ -236,8 +236,21 @@ tr:hover td{background:#f9fafb}
 <section class="section">
   <div class="container">
     <h2 class="section-title">📍 行程总览与地图</h2>
-    <div style="position:relative">
-      <div id="map-main"></div>
+    
+    <!-- 总览地图方案切换 -->
+    <div class="tabs" style="margin-bottom:0">
+      <button class="tab-btn active" onclick="switchOverviewMap('a')">🅰️ 方案A：昆明中转</button>
+      <button class="tab-btn" onclick="switchOverviewMap('b')">🅱️ 方案B：大理中转</button>
+    </div>
+    
+    <!-- 方案A地图 -->
+    <div id="overview-map-a" style="display:block">
+      <div id="map-main-a" style="height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px"></div>
+    </div>
+    
+    <!-- 方案B地图 -->
+    <div id="overview-map-b" style="display:none">
+      <div id="map-main-b" style="height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px"></div>
     </div>
     <div class="map-legend">
       <span style="color:#e74c3c">● 机场/高铁站</span>
@@ -1003,115 +1016,176 @@ initTheme();
 AMapLoader.load({
   key: 'c35ae2e7a1c547ed5b27d4aed249a2db',
   version: '2.0',
-  plugins: ['AMap.Scale', 'AMap.ToolBar', 'AMap.PlaceSearch', 'AMap.AutoComplete']
+  plugins: ['AMap.Scale', 'AMap.ToolBar']
 }).then(function(AMap) {
   AMapRef = AMap;
   AMap.getConfig().appname = 'amap-jsapi-skill';
   
-  // POI搜索缓存
-  var poiCache = {};
+  // 存储所有地图
+  window.allMapsData = {};
   
-  // 搜索景点坐标
-  function searchPOI(name, city, callback) {
-    var key = name + '_' + city;
-    if (poiCache[key]) {
-      callback(poiCache[key]);
-      return;
+  // 创建地图
+  function initMap(id, center, zoom) {
+    var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
+    var map = new AMap.Map(id, {
+      viewMode: '2D',
+      zoom: zoom,
+      center: center,
+      mapStyle: style
+    });
+    allMaps.push({id: id, map: map});
+    window.allMapsData[id] = map;
+    return map;
+  }
+  
+  // 添加标记
+  function addMarker(map, lng, lat, color, title, desc) {
+    var marker = new AMap.Marker({
+      position: [lng, lat],
+      title: title,
+      icon: new AMap.Icon({
+        size: new AMap.Size(24, 24),
+        image: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="' + color + '" stroke="white" stroke-width="2"/></svg>'),
+        imageSize: new AMap.Size(24, 24)
+      })
+    });
+    
+    if (desc) {
+      var infoWindow = new AMap.InfoWindow({
+        content: '<div style="padding:8px;"><b>' + title + '</b><br>' + desc + '</div>',
+        offset: new AMap.Pixel(0, -12)
+      });
+      marker.on('click', function() {
+        infoWindow.open(map, marker.getPosition());
+      });
     }
     
-    var placeSearch = new AMap.PlaceSearch({
-      city: city || '全国',
-      pageSize: 1
+    marker.setMap(map);
+    return marker;
+  }
+  
+  // 添加路线
+  function addRoute(map, path, color) {
+    var polyline = new AMap.Polyline({
+      path: path,
+      strokeColor: color,
+      strokeWeight: 3,
+      strokeStyle: 'dashed',
+      strokeDasharray: [10, 5]
     });
-    
-    placeSearch.search(name, function(status, result) {
-      if (status === 'complete' && result.poiList && result.poiList.pois.length > 0) {
-        var poi = result.poiList.pois[0];
-        var pos = [poi.location.lng, poi.location.lat];
-        poiCache[key] = pos;
-        callback(pos);
-      } else {
-        callback(null);
+    polyline.setMap(map);
+    return polyline;
+  }
+  
+  // 添加文字标签
+  function addLabel(map, lng, lat, text, bgColor) {
+    var label = new AMap.Text({
+      text: text,
+      position: [lng, lat],
+      style: {
+        'background': bgColor,
+        'color': '#fff',
+        'padding': '2px 6px',
+        'border-radius': '3px',
+        'font-size': '11px',
+        'border': 'none'
       }
     });
+    label.setMap(map);
+    return label;
   }
   
-  // 批量搜索并创建标记
-  function searchAndMark(map, pois, defaultColor) {
-    pois.forEach(function(poi) {
-      searchPOI(poi.name, poi.city, function(pos) {
-        if (pos) {
-          createMarker(map, pos, poi.color || defaultColor, poi.name, poi.desc);
-          if (poi.routeTo) {
-            // 如果需要连线到下一个点，稍后处理
-          }
-        }
-      });
-    });
-  }
+  // ======== 总览地图（方案A） ========
+  var mapMainA = initMap('map-main-a', [101.0, 26.5], 7);
+  addMarker(mapMainA, 102.95, 25.10, '#e74c3c', '昆明长水机场', '起点');
+  addMarker(mapMainA, 102.72, 25.02, '#e74c3c', '昆明站', '高铁站');
+  addMarker(mapMainA, 100.22, 26.87, '#3498db', '丽江古城', '海拔2400m');
+  addMarker(mapMainA, 100.26, 27.10, '#f39c12', '玉龙雪山', '海拔4680m');
+  addMarker(mapMainA, 100.05, 27.15, '#f39c12', '虎跳峡', '世界最深峡谷');
+  addMarker(mapMainA, 99.70, 27.83, '#9b59b6', '香格里拉', '海拔3300m');
+  addMarker(mapMainA, 99.68, 27.85, '#f39c12', '松赞林寺', '小布达拉宫');
+  addRoute(mapMainA, [[102.95, 25.10], [100.22, 26.87]], '#3b82f6');
+  addRoute(mapMainA, [[100.22, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
+  addRoute(mapMainA, [[99.70, 27.83], [100.22, 26.87]], '#9b59b6');
+  addLabel(mapMainA, 101.50, 25.95, '高铁 3.5h', '#3b82f6');
+  addLabel(mapMainA, 100.00, 27.35, '自驾 4h', '#f39c12');
+  addLabel(mapMainA, 99.90, 27.35, '高铁 1.5h', '#9b59b6');
   
-  // 主地图
-  var mapMain = createMap('map-main', [101.0, 26.5], 7);
+  // ======== 总览地图（方案B） ========
+  var mapMainB = initMap('map-main-b', [101.0, 26.0], 8);
+  addMarker(mapMainB, 102.95, 25.10, '#e74c3c', '昆明长水机场', '起点');
+  addMarker(mapMainB, 102.72, 25.02, '#e74c3c', '昆明站', '高铁站');
+  addMarker(mapMainB, 100.22, 25.58, '#27ae60', '大理古城', '方案B');
+  addMarker(mapMainB, 100.20, 25.75, '#27ae60', '洱海', '看日出日落');
+  addMarker(mapMainB, 100.22, 26.87, '#3498db', '丽江古城', '海拔2400m');
+  addMarker(mapMainB, 100.26, 27.10, '#f39c12', '玉龙雪山', '海拔4680m');
+  addMarker(mapMainB, 99.70, 27.83, '#9b59b6', '香格里拉', '海拔3300m');
+  addRoute(mapMainB, [[102.95, 25.10], [100.22, 25.58]], '#27ae60');
+  addRoute(mapMainB, [[100.22, 25.58], [100.22, 26.87]], '#27ae60');
+  addRoute(mapMainB, [[100.22, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
+  addRoute(mapMainB, [[99.70, 27.83], [100.22, 26.87]], '#9b59b6');
+  addLabel(mapMainB, 100.22, 25.40, '高铁 2h', '#27ae60');
+  addLabel(mapMainB, 100.00, 27.35, '自驾 4h', '#f39c12');
   
-  // 搜索并标记主要城市和景点
-  var mainPOIs = [
-    {name: '昆明长水机场', city: '昆明', color: '#e74c3c', desc: '起点'},
-    {name: '昆明站', city: '昆明', color: '#e74c3c', desc: '高铁站'},
-    {name: '丽江古城', city: '丽江', color: '#3498db', desc: '海拔2400m'},
-    {name: '玉龙雪山', city: '丽江', color: '#f39c12', desc: '海拔4680m'},
-    {name: '虎跳峡', city: '迪庆', color: '#f39c12', desc: '世界最深峡谷'},
-    {name: '松赞林寺', city: '迪庆', color: '#f39c12', desc: '小布达拉宫'},
-    {name: '独克宗古城', city: '迪庆', color: '#9b59b6', desc: '海拔3300m'},
-    {name: '大理古城', city: '大理', color: '#27ae60', desc: '备选方案'}
-  ];
+  // ======== Day1 方案A 地图（昆明） ========
+  var map1a = initMap('map-day1-a', [102.80, 25.03], 12);
+  addMarker(map1a, 102.95, 25.10, '#e74c3c', '昆明长水机场');
+  addMarker(map1a, 102.72, 25.02, '#e74c3c', '昆明站');
+  addMarker(map1a, 102.71, 25.04, '#f39c12', '篆新农贸市场', '强烈推荐！');
+  addMarker(map1a, 102.68, 24.97, '#f39c12', '滇池海埂公园', '9月秋景美');
+  addMarker(map1a, 102.67, 24.98, '#f39c12', '茶马花街', '美食街');
+  addRoute(map1a, [[102.95, 25.10], [102.72, 25.02]], '#e74c3c');
+  addRoute(map1a, [[102.72, 25.02], [102.71, 25.04], [102.68, 24.97]], '#f39c12');
   
-  searchAndMark(mapMain, mainPOIs, '#f39c12');
+  // ======== Day1 方案B 地图（大理） ========
+  var map1b = initMap('map-day1-b', [101.50, 25.50], 9);
+  addMarker(map1b, 102.95, 25.10, '#e74c3c', '昆明长水机场');
+  addMarker(map1b, 102.72, 25.02, '#e74c3c', '昆明站');
+  addMarker(map1b, 100.22, 25.58, '#27ae60', '大理古城');
+  addMarker(map1b, 100.20, 25.75, '#27ae60', '洱海', '看日出日落');
+  addRoute(map1b, [[102.95, 25.10], [102.72, 25.02]], '#e74c3c');
+  addRoute(map1b, [[102.72, 25.02], [100.22, 25.58]], '#27ae60');
   
-  // 路线（使用大致路径）
-  setTimeout(function() {
-    createRoute(mapMain, [[102.75, 25.04], [100.23, 26.87]], '#3b82f6');
-    createRoute(mapMain, [[100.23, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
-    createRoute(mapMain, [[99.70, 27.83], [100.23, 26.87]], '#9b59b6');
-    createRoute(mapMain, [[102.75, 25.04], [100.22, 25.58]], '#27ae60');
-    
-    createTextMarker(mapMain, [101.50, 25.95], '高铁 3.5h', '#3b82f6');
-    createTextMarker(mapMain, [100.00, 27.35], '自驾 4h', '#f39c12');
-    createTextMarker(mapMain, [99.90, 27.35], '高铁 1.5h', '#9b59b6');
-  }, 1000);
+  // ======== Day2 方案A 地图（昆明→丽江） ========
+  var map2a = initMap('map-day2-a', [101.50, 26.00], 8);
+  addMarker(map2a, 102.72, 25.02, '#e74c3c', '昆明站');
+  addMarker(map2a, 100.22, 26.87, '#3498db', '丽江古城');
+  addMarker(map2a, 100.23, 26.88, '#f39c12', '忠义市场', '能看到雪山的菜市场');
+  addRoute(map2a, [[102.72, 25.02], [100.22, 26.87]], '#3b82f6');
   
-  // Day1 方案A 地图
-  var map1a = createMap('map-day1-a', [102.70, 25.03], 13);
-  var day1aPOIs = [
-    {name: '昆明长水机场', city: '昆明', color: '#e74c3c'},
-    {name: '篆新农贸市场', city: '昆明', color: '#f39c12', desc: '强烈推荐！'},
-    {name: '滇池海埂公园', city: '昆明', color: '#f39c12', desc: '9月秋景美'},
-    {name: '茶马花街', city: '昆明', color: '#f39c12', desc: '美食街'}
-  ];
-  searchAndMark(map1a, day1aPOIs, '#f39c12');
+  // ======== Day2 方案B 地图（大理→丽江） ========
+  var map2b = initMap('map-day2-b', [100.20, 26.30], 9);
+  addMarker(map2b, 100.20, 25.75, '#27ae60', '洱海');
+  addMarker(map2b, 100.13, 25.80, '#27ae60', '双廊古镇');
+  addMarker(map2b, 100.22, 26.87, '#3498db', '丽江古城');
+  addRoute(map2b, [[100.20, 25.75], [100.13, 25.80], [100.22, 26.87]], '#27ae60');
   
-  // Day1 方案B 地图
-  var map1b = createMap('map-day1-b', [101.00, 25.30], 9);
-  var day1bPOIs = [
-    {name: '昆明长水机场', city: '昆明', color: '#e74c3c'},
-    {name: '昆明站', city: '昆明', color: '#e74c3c'},
-    {name: '大理古城', city: '大理', color: '#27ae60'},
-    {name: '洱海', city: '大理', color: '#27ae60', desc: '看日出日落'}
-  ];
-  searchAndMark(map1b, day1bPOIs, '#27ae60');
+  // ======== Day3 地图（玉龙雪山） ========
+  var map3 = initMap('map-day3', [100.22, 26.95], 12);
+  addMarker(map3, 100.22, 26.87, '#3498db', '丽江古城');
+  addMarker(map3, 100.26, 26.90, '#f39c12', '东巴谷', '日照金山');
+  addMarker(map3, 100.25, 26.95, '#f39c12', '甘海子');
+  addMarker(map3, 100.24, 26.98, '#f39c12', '云杉坪');
+  addMarker(map3, 100.23, 26.97, '#f39c12', '蓝月谷');
+  addMarker(map3, 100.22, 26.94, '#f39c12', '玉湖村');
+  addRoute(map3, [[100.22, 26.87], [100.26, 26.90], [100.25, 26.95], [100.24, 26.98], [100.23, 26.97], [100.22, 26.94]], '#e74c3c');
   
-  // Day2 方案A 地图
-  var map2a = createMap('map-day2-a', [101.50, 26.00], 8);
-  var day2aPOIs = [
-    {name: '昆明站', city: '昆明', color: '#e74c3c'},
-    {name: '丽江古城', city: '丽江', color: '#3498db'},
-    {name: '忠义市场', city: '丽江', color: '#f39c12', desc: '能看到雪山的菜市场'}
-  ];
-  searchAndMark(map2a, day2aPOIs, '#3b82f6');
+  // ======== Day4 地图（丽江→香格里拉） ========
+  var map4 = initMap('map-day4', [100.00, 27.30], 10);
+  addMarker(map4, 100.22, 26.87, '#3498db', '丽江');
+  addMarker(map4, 100.05, 27.15, '#f39c12', '虎跳峡');
+  addMarker(map4, 100.08, 27.25, '#f39c12', '哈巴雪山');
+  addMarker(map4, 99.70, 27.83, '#9b59b6', '香格里拉');
+  addRoute(map4, [[100.22, 26.87], [100.05, 27.15], [100.08, 27.25], [99.70, 27.83]], '#f39c12');
   
-  // Day2 方案B 地图
-  var map2b = createMap('map-day2-b', [100.50, 26.30], 9);
-  var day2bPOIs = [
-    {name: '洱海', city: '大理', color: '#27ae60'},
+  // ======== Day5 地图（香格里拉→丽江） ========
+  var map5 = initMap('map-day5', [100.00, 27.35], 11);
+  addMarker(map5, 99.70, 27.83, '#9b59b6', '独克宗古城');
+  addMarker(map5, 99.68, 27.85, '#f39c12', '松赞林寺');
+  addMarker(map5, 99.65, 27.88, '#f39c12', '纳帕海');
+  addMarker(map5, 100.21, 26.90, '#3498db', '束河古镇');
+  addMarker(map5, 100.20, 26.93, '#3498db', '白沙古镇');
+  addRoute(map5, [[99.70, 27.83], [100.21, 26.90]], '#9b59b6');
     {name: '双廊古镇', city: '大理', color: '#27ae60'},
     {name: '丽江古城', city: '丽江', color: '#3498db'}
   ];
@@ -1163,13 +1237,50 @@ function switchTab(btn, panelId) {
   setTimeout(refreshMaps, 100);
 }
 
+// 切换总览地图
+function switchOverviewMap(plan) {
+  var mapA = document.getElementById('overview-map-a');
+  var mapB = document.getElementById('overview-map-b');
+  var tabs = mapA.parentElement.querySelectorAll('.tabs .tab-btn');
+  
+  if (plan === 'a') {
+    mapA.style.display = 'block';
+    mapB.style.display = 'none';
+    tabs[0].classList.add('active');
+    tabs[1].classList.remove('active');
+  } else {
+    mapA.style.display = 'none';
+    mapB.style.display = 'block';
+    tabs[0].classList.remove('active');
+    tabs[1].classList.add('active');
+  }
+  
+  setTimeout(refreshMaps, 100);
+}
+
 // 切换卫星图
 function toggleSatellite(btn) {
   isSatellite = !isSatellite;
-  var style = isSatellite ? 'amap://styles/normal' : (isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light);
   
   allMaps.forEach(function(item) {
-    if (item.map) item.map.setMapStyle(style);
+    if (!item.map) return;
+    
+    if (isSatellite) {
+      // 添加卫星图层
+      item.satelliteLayer = new AMapRef.TileLayer.Satellite();
+      item.roadNetLayer = new AMapRef.TileLayer.RoadNet();
+      item.map.add([item.satelliteLayer, item.roadNetLayer]);
+    } else {
+      // 移除卫星图层
+      if (item.satelliteLayer) {
+        item.map.remove([item.satelliteLayer, item.roadNetLayer]);
+        item.satelliteLayer = null;
+        item.roadNetLayer = null;
+      }
+      // 恢复深色/浅色样式
+      var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
+      item.map.setMapStyle(style);
+    }
   });
   
   btn.classList.toggle('active', isSatellite);
