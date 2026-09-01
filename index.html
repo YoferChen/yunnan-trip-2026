@@ -893,6 +893,7 @@ var grayIcon = createIcon('#95a5a6', 12);
 var tiles = {
   amapRoad: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
   amapDark: 'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=11',
+  amapDarkLabel: 'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=11',
   amapSatellite: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
   amapSatelliteLabel: 'https://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}'
 };
@@ -907,12 +908,14 @@ function createMap(id, center, zoom) {
   var map = L.map(id, {attributionControl: false}).setView(center, zoom);
   var roadLayer = L.tileLayer(tiles.amapRoad, {maxZoom:18, subdomains:['1','2','3','4']});
   var darkLayer = L.tileLayer(tiles.amapDark, {maxZoom:18, subdomains:['1','2','3','4']});
+  var darkLabelLayer = L.tileLayer(tiles.amapDarkLabel, {maxZoom:18, subdomains:['1','2','3','4']});
   var satelliteLayer = L.tileLayer(tiles.amapSatellite, {maxZoom:18, subdomains:['1','2','3','4']});
   var satelliteLabelLayer = L.tileLayer(tiles.amapSatelliteLabel, {maxZoom:18, subdomains:['1','2','3','4']});
   
   // 根据当前模式添加图层
   if (isDarkMode) {
     darkLayer.addTo(map);
+    darkLabelLayer.addTo(map);
   } else {
     roadLayer.addTo(map);
   }
@@ -921,6 +924,7 @@ function createMap(id, center, zoom) {
     map: map,
     roadLayer: roadLayer,
     darkLayer: darkLayer,
+    darkLabelLayer: darkLabelLayer,
     satelliteLayer: satelliteLayer,
     satelliteLabelLayer: satelliteLabelLayer
   };
@@ -939,6 +943,7 @@ function toggleSatellite(btn) {
     // 移除所有图层
     layers.map.removeLayer(layers.roadLayer);
     layers.map.removeLayer(layers.darkLayer);
+    layers.map.removeLayer(layers.darkLabelLayer);
     layers.map.removeLayer(layers.satelliteLayer);
     layers.map.removeLayer(layers.satelliteLabelLayer);
     
@@ -947,6 +952,7 @@ function toggleSatellite(btn) {
       layers.satelliteLabelLayer.addTo(layers.map);
     } else if (isDarkMode) {
       layers.darkLayer.addTo(layers.map);
+      layers.darkLabelLayer.addTo(layers.map);
     } else {
       layers.roadLayer.addTo(layers.map);
     }
@@ -966,9 +972,11 @@ function updateMapTheme() {
     
     layers.map.removeLayer(layers.roadLayer);
     layers.map.removeLayer(layers.darkLayer);
+    layers.map.removeLayer(layers.darkLabelLayer);
     
     if (isDarkMode) {
       layers.darkLayer.addTo(layers.map);
+      layers.darkLabelLayer.addTo(layers.map);
     } else {
       layers.roadLayer.addTo(layers.map);
     }
