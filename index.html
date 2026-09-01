@@ -1186,42 +1186,6 @@ AMapLoader.load({
   addMarker(map5, 100.21, 26.90, '#3498db', '束河古镇');
   addMarker(map5, 100.20, 26.93, '#3498db', '白沙古镇');
   addRoute(map5, [[99.70, 27.83], [100.21, 26.90]], '#9b59b6');
-    {name: '双廊古镇', city: '大理', color: '#27ae60'},
-    {name: '丽江古城', city: '丽江', color: '#3498db'}
-  ];
-  searchAndMark(map2b, day2bPOIs, '#27ae60');
-  
-  // Day3 地图
-  var map3 = createMap('map-day3', [100.21, 26.95], 12);
-  var day3POIs = [
-    {name: '丽江古城', city: '丽江', color: '#3498db'},
-    {name: '东巴谷', city: '丽江', color: '#f39c12', desc: '日照金山'},
-    {name: '甘海子', city: '丽江', color: '#f39c12'},
-    {name: '云杉坪', city: '丽江', color: '#f39c12'},
-    {name: '蓝月谷', city: '丽江', color: '#f39c12'},
-    {name: '玉湖村', city: '丽江', color: '#f39c12'}
-  ];
-  searchAndMark(map3, day3POIs, '#e74c3c');
-  
-  // Day4 地图
-  var map4 = createMap('map-day4', [100.00, 27.30], 10);
-  var day4POIs = [
-    {name: '丽江古城', city: '丽江', color: '#3498db'},
-    {name: '虎跳峡', city: '迪庆', color: '#f39c12'},
-    {name: '哈巴雪山', city: '迪庆', color: '#f39c12'},
-    {name: '独克宗古城', city: '迪庆', color: '#9b59b6'}
-  ];
-  searchAndMark(map4, day4POIs, '#f39c12');
-  
-  // Day5 地图
-  var map5 = createMap('map-day5', [99.95, 27.35], 11);
-  var day5POIs = [
-    {name: '独克宗古城', city: '迪庆', color: '#9b59b6'},
-    {name: '松赞林寺', city: '迪庆', color: '#f39c12'},
-    {name: '纳帕海', city: '迪庆', color: '#f39c12'},
-    {name: '束河古镇', city: '丽江', color: '#3498db'}
-  ];
-  searchAndMark(map5, day5POIs, '#9b59b6');
   
 }).catch(function(e) {
   console.error('地图加载失败', e);
