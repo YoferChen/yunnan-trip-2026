@@ -255,12 +255,12 @@ tr:hover td{background:#f9fafb}
     </div>
     
     <!-- 方案A地图 -->
-    <div id="overview-map-a" style="display:block">
+    <div id="overview-map-a">
       <div id="map-main-a" style="height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px"></div>
     </div>
     
     <!-- 方案B地图 -->
-    <div id="overview-map-b" style="display:none">
+    <div id="overview-map-b" style="height:0;overflow:hidden;position:absolute;left:-9999px">
       <div id="map-main-b" style="height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px"></div>
     </div>
     <div class="map-legend">
@@ -961,27 +961,21 @@ tr:hover td{background:#f9fafb}
   </div>
 </footer>
 
-<script src="https://webapi.amap.com/loader.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=c35ae2e7a1c547ed5b27d4aed249a2db"></script>
 <script>
-// 安全密钥配置（必须）
-window._AMapSecurityConfig = {
-  securityJsCode: 'f78d73a43dbf748d2b984c3fbd390042'
-};
-
 // 地图数组
 var allMaps = [];
 var isDarkMode = false;
 var isSatellite = false;
-var AMapRef = null;
 
 // 地图样式配置
 var mapStyles = {
   light: 'amap://styles/normal',
   darkOptions: [
-    'amap://styles/dark',      // 幻影黑
-    'amap://styles/darkblue',  // 极夜蓝
-    'amap://styles/blue',      // 靛青蓝
-    'amap://styles/grey'       // 雅士灰
+    'amap://styles/dark',
+    'amap://styles/darkblue',
+    'amap://styles/blue',
+    'amap://styles/grey'
   ],
   darkNames: ['幻影黑', '极夜蓝', '靛青蓝', '雅士灰']
 };
@@ -1000,35 +994,53 @@ function initTheme() {
 
 // 创建地图
 function createMap(id, center, zoom) {
-  if (!AMapRef) return null;
   var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
-  var map = new AMapRef.Map(id, {
+  var map = new AMap.Map(id, {
     viewMode: '2D',
     zoom: zoom,
     center: center,
     mapStyle: style
   });
-  allMaps.push({id: id, map: map, center: center, zoom: zoom});
+  allMaps.push({id: id, map: map});
   return map;
 }
 
-// 创建标记
-function createMarker(map, position, color, title, content) {
-  if (!AMapRef || !map) return null;
-  var marker = new AMapRef.Marker({
-    position: position,
+// 添加标记（带名称标签）
+function addMarker(map, lng, lat, color, title, desc) {
+  // 创建标记点
+  var marker = new AMap.Marker({
+    position: [lng, lat],
     title: title,
-    icon: new AMapRef.Icon({
-      size: new AMapRef.Size(24, 24),
+    icon: new AMap.Icon({
+      size: new AMap.Size(24, 24),
       image: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="' + color + '" stroke="white" stroke-width="2"/></svg>'),
-      imageSize: new AMapRef.Size(24, 24)
+      imageSize: new AMap.Size(24, 24)
     })
   });
   
-  if (content) {
-    var infoWindow = new AMapRef.InfoWindow({
-      content: '<div style="padding:8px;font-size:14px;"><b>' + title + '</b><br>' + content + '</div>',
-      offset: new AMapRef.Pixel(0, -12)
+  // 添加名称标签
+  var nameLabel = new AMap.Text({
+    text: title,
+    position: [lng, lat],
+    offset: new AMap.Pixel(15, -5),
+    style: {
+      'background': 'rgba(255,255,255,0.9)',
+      'color': '#333',
+      'padding': '2px 6px',
+      'border-radius': '3px',
+      'font-size': '12px',
+      'font-weight': 'bold',
+      'border': '1px solid ' + color,
+      'white-space': 'nowrap'
+    }
+  });
+  nameLabel.setMap(map);
+  
+  // 点击显示详情
+  if (desc) {
+    var infoWindow = new AMap.InfoWindow({
+      content: '<div style="padding:8px;"><b>' + title + '</b><br>' + desc + '</div>',
+      offset: new AMap.Pixel(0, -12)
     });
     marker.on('click', function() {
       infoWindow.open(map, marker.getPosition());
@@ -1037,6 +1049,48 @@ function createMarker(map, position, color, title, content) {
   
   marker.setMap(map);
   return marker;
+}
+
+// 添加路线
+function addRoute(map, path, color) {
+  var polyline = new AMap.Polyline({
+    path: path,
+    strokeColor: color,
+    strokeWeight: 3,
+    strokeStyle: 'dashed',
+    strokeDasharray: [10, 5]
+  });
+  polyline.setMap(map);
+  return polyline;
+}
+
+// 添加文字标签
+function addLabel(map, lng, lat, text, bgColor) {
+  var label = new AMap.Text({
+    text: text,
+    position: [lng, lat],
+    style: {
+      'background': bgColor,
+      'color': '#fff',
+      'padding': '2px 6px',
+      'border-radius': '3px',
+      'font-size': '11px',
+      'border': 'none'
+    }
+  });
+  label.setMap(map);
+  return label;
+}
+
+// 刷新地图
+function refreshMaps() {
+  allMaps.forEach(function(item) {
+    if (item.map) item.map.resize();
+  });
+}
+
+// 初始化主题
+initTheme();
 }
 
 // 创建路线
@@ -1279,27 +1333,28 @@ function switchOverviewMap(plan) {
   var tabs = mapA.parentElement.querySelectorAll('.tabs .tab-btn');
   
   if (plan === 'a') {
-    mapA.style.display = 'block';
-    mapB.style.display = 'none';
+    mapA.style.height = 'auto';
+    mapA.style.overflow = 'visible';
+    mapA.style.position = 'static';
+    mapB.style.height = '0';
+    mapB.style.overflow = 'hidden';
+    mapB.style.position = 'absolute';
+    mapB.style.left = '-9999px';
     tabs[0].classList.add('active');
     tabs[1].classList.remove('active');
   } else {
-    mapA.style.display = 'none';
-    mapB.style.display = 'block';
+    mapA.style.height = '0';
+    mapA.style.overflow = 'hidden';
+    mapA.style.position = 'absolute';
+    mapA.style.left = '-9999px';
+    mapB.style.height = 'auto';
+    mapB.style.overflow = 'visible';
+    mapB.style.position = 'static';
     tabs[0].classList.remove('active');
     tabs[1].classList.add('active');
   }
   
-  // 延迟刷新地图，确保容器已显示
-  setTimeout(function() {
-    refreshMaps();
-    // 强制重新设置地图中心
-    if (plan === 'a' && window.allMapsData['map-main-a']) {
-      window.allMapsData['map-main-a'].setCenter([101.0, 26.5]);
-    } else if (plan === 'b' && window.allMapsData['map-main-b']) {
-      window.allMapsData['map-main-b'].setCenter([101.0, 26.0]);
-    }
-  }, 200);
+  setTimeout(refreshMaps, 200);
 }
 
 // 切换卫星图
