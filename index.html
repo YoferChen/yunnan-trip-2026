@@ -1156,6 +1156,12 @@ function toggleTheme() {
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
   btn.textContent = isDark ? '☀️' : '🌙';
   isDarkMode = isDark;
+  
+  // 切换到深色模式时，重置为第一个深色样式
+  if (isDark) {
+    currentDarkStyleIndex = 0;
+  }
+  
   updateMapTheme();
 }
 </script>
