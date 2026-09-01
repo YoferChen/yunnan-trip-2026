@@ -149,9 +149,14 @@ tr:hover td{background:#f9fafb}
 /* 深色模式地图滤镜 - 已改用官方深色瓦片 */
 
 /* 卫星图切换按钮 */
+// 深色模式切换按钮样式切换
 .satellite-toggle{position:fixed;top:128px;right:20px;z-index:10000;background:#00897b;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
 .satellite-toggle:hover{background:#00695c;transform:scale(1.1)}
 .satellite-toggle.active{background:#f57c00}
+
+/* 地图样式切换按钮 */
+.map-style-toggle{position:fixed;top:182px;right:20px;z-index:10000;background:#5c6bc0;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
+.map-style-toggle:hover{background:#3f51b5;transform:scale(1.1)}
 
 /* 深色模式覆盖内联样式 */
 .dark [style*="background:#f0fdf4"],
@@ -193,6 +198,9 @@ tr:hover td{background:#f9fafb}
 
 <!-- 卫星图切换按钮 -->
 <button class="satellite-toggle" onclick="toggleSatellite(this)" title="切换卫星图/路网图">🛰️</button>
+
+<!-- 地图样式切换按钮 -->
+<button class="map-style-toggle" onclick="toggleMapStyle()" title="切换地图样式">🎨</button>
 
 <header class="hero">
   <div class="container">
@@ -864,11 +872,18 @@ var isDarkMode = false;
 var isSatellite = false;
 var AMapRef = null;
 
-// 地图样式
+// 地图样式配置
 var mapStyles = {
   light: 'amap://styles/normal',
-  dark: 'amap://styles/dark'
+  darkOptions: [
+    'amap://styles/dark',      // 幻影黑
+    'amap://styles/darkblue',  // 极夜蓝
+    'amap://styles/blue',      // 靛青蓝
+    'amap://styles/grey'       // 雅士灰
+  ],
+  darkNames: ['幻影黑', '极夜蓝', '靛青蓝', '雅士灰']
 };
+var currentDarkStyleIndex = 0;
 
 // 初始化主题
 function initTheme() {
@@ -1089,10 +1104,47 @@ function toggleSatellite(btn) {
 // 更新地图主题
 function updateMapTheme() {
   if (isSatellite) return;
-  var style = isDarkMode ? mapStyles.dark : mapStyles.light;
+  var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
   allMaps.forEach(function(item) {
     if (item.map) item.map.setMapStyle(style);
   });
+}
+
+// 切换地图样式
+function toggleMapStyle() {
+  if (!isDarkMode) {
+    // 如果是浅色模式，先切换到深色模式
+    toggleTheme();
+    return;
+  }
+  
+  // 循环切换深色样式
+  currentDarkStyleIndex = (currentDarkStyleIndex + 1) % mapStyles.darkOptions.length;
+  var style = mapStyles.darkOptions[currentDarkStyleIndex];
+  var name = mapStyles.darkNames[currentDarkStyleIndex];
+  
+  allMaps.forEach(function(item) {
+    if (item.map) item.map.setMapStyle(style);
+  });
+  
+  // 显示提示
+  showToast('地图样式：' + name);
+}
+
+// 显示提示
+function showToast(message) {
+  var toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;z-index:10000;transition:opacity 0.3s';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.style.opacity = '1';
+  setTimeout(function() {
+    toast.style.opacity = '0';
+  }, 2000);
 }
 
 // 深色模式切换
