@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>云南6日家庭游规划 · 9.25-9.30</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#f5f5f0;color:#333;line-height:1.7}
@@ -88,8 +87,6 @@ tr:hover td{background:#f9fafb}
   #map-main{height:320px}
   .day-map{height:220px}
 }
-.leaflet-popup-content{font-size:14px;line-height:1.5}
-.leaflet-popup-content b{color:#1e3a5f}
 .alt-section{background:#faf5ff;border:2px solid #e1bee7;border-radius:12px;padding:16px;margin-top:16px}
 .alt-section h4{color:#7b1fa2;margin-bottom:12px}
 .comparison-table{margin:16px 0}
@@ -139,7 +136,7 @@ tr:hover td{background:#f9fafb}
 .dark .map-legend{color:#aaa}
 .dark .section-title{color:#e0e0e0;border-left-color:#64b5f6}
 .dark .footer{color:#888;border-top-color:#333}
-.dark .leaflet-popup-content b{color:#e0e0e0}
+
 .dark .alt-section{background:#2d1e3a;border-color:#4a2d6a}
 .dark .alt-section h4{color:#ce93d8}
 .dark .comparison-table td:first-child{color:#e0e0e0}
@@ -215,7 +212,6 @@ tr:hover td{background:#f9fafb}
     <h2 class="section-title">📍 行程总览与地图</h2>
     <div style="position:relative">
       <div id="map-main"></div>
-      <button class="satellite-btn" onclick="toggleSatellite(this)" title="切换卫星图">🛰️ 卫星图</button>
     </div>
     <div class="map-legend">
       <span style="color:#e74c3c">● 机场/高铁站</span>
@@ -855,221 +851,214 @@ tr:hover td{background:#f9fafb}
   </div>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=c35ae2e7a1c547ed5b27d4aed249a2db"></script>
 <script>
-// 地图数组，用于批量操作
+// 地图数组
 var allMaps = [];
+var isDarkMode = false;
+var isSatellite = false;
 
-// 创建地图并添加到数组
+// 地图样式
+var mapStyles = {
+  light: 'amap://styles/normal',
+  dark: 'amap://styles/dark',
+  satellite: 'amap://styles/normal'
+};
+
+// 创建地图
 function createMap(id, center, zoom) {
-  var map = L.map(id, {attributionControl: false}).setView(center, zoom);
-  L.tileLayer(tiles.amap, {maxZoom:18, subdomains:['1','2','3','4']}).addTo(map);
-  allMaps.push(map);
+  var style = isDarkMode ? mapStyles.dark : mapStyles.light;
+  var map = new AMap.Map(id, {
+    zoom: zoom,
+    center: center,
+    mapStyle: style,
+    viewMode: '2D'
+  });
+  allMaps.push({id: id, map: map, center: center, zoom: zoom});
   return map;
 }
 
-// 刷新所有地图尺寸
+// 刷新地图
 function refreshMaps() {
-  allMaps.forEach(function(map) {
-    map.invalidateSize();
+  allMaps.forEach(function(item) {
+    item.map.resize();
   });
 }
-function createIcon(color, size) {
-  return L.divIcon({
-    className:'',
-    html:'<div style="background:'+color+';width:'+size+'px;height:'+size+'px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.3);"></div>',
-    iconSize:[size+6,size+6],
-    iconAnchor:[(size+6)/2,(size+6)/2]
+
+// 创建标记
+function createMarker(map, position, color, title, content) {
+  var marker = new AMap.Marker({
+    position: position,
+    title: title,
+    icon: new AMap.Icon({
+      size: new AMap.Size(24, 24),
+      image: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="' + color + '" stroke="white" stroke-width="2"/></svg>'),
+      imageSize: new AMap.Size(24, 24)
+    })
   });
-}
-var redIcon = createIcon('#e74c3c', 16);
-var blueIcon = createIcon('#3498db', 16);
-var purpleIcon = createIcon('#9b59b6', 16);
-var orangeIcon = createIcon('#f39c12', 14);
-var greenIcon = createIcon('#27ae60', 14);
-var grayIcon = createIcon('#95a5a6', 12);
-
-// 地图瓦片层（高德地图，国内可访问）
-var tiles = {
-  amapRoad: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
-  amapDark: 'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=8&ltype=4',
-  amapSatellite: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
-  amapSatelliteLabel: 'https://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}'
-};
-var isSatellite = false;
-var isDarkMode = false;
-
-// 存储所有地图的图层引用
-var mapLayers = {};
-
-// 创建地图并添加到数组
-function createMap(id, center, zoom) {
-  var map = L.map(id, {attributionControl: false}).setView(center, zoom);
-  var roadLayer = L.tileLayer(tiles.amapRoad, {maxZoom:18, subdomains:['1','2','3','4']});
-  var darkLayer = L.tileLayer(tiles.amapDark, {maxZoom:18, subdomains:['1','2','3','4']});
-  var satelliteLayer = L.tileLayer(tiles.amapSatellite, {maxZoom:18, subdomains:['1','2','3','4']});
-  var satelliteLabelLayer = L.tileLayer(tiles.amapSatelliteLabel, {maxZoom:18, subdomains:['1','2','3','4']});
   
-  // 根据当前模式添加图层
-  if (isDarkMode) {
-    darkLayer.addTo(map);
-  } else {
-    roadLayer.addTo(map);
+  if (content) {
+    var infoWindow = new AMap.InfoWindow({
+      content: '<div style="padding:8px;font-size:14px;"><b>' + title + '</b><br>' + content + '</div>',
+      offset: new AMap.Pixel(0, -12)
+    });
+    marker.on('click', function() {
+      infoWindow.open(map, marker.getPosition());
+    });
   }
   
-  mapLayers[id] = {
-    map: map,
-    roadLayer: roadLayer,
-    darkLayer: darkLayer,
-    satelliteLayer: satelliteLayer,
-    satelliteLabelLayer: satelliteLabelLayer
-  };
-  
-  allMaps.push(map);
-  return map;
+  marker.setMap(map);
+  return marker;
 }
 
-// 切换卫星图
-function toggleSatellite(btn) {
-  isSatellite = !isSatellite;
-  
-  Object.keys(mapLayers).forEach(function(id) {
-    var layers = mapLayers[id];
-    
-    // 移除所有图层
-    layers.map.removeLayer(layers.roadLayer);
-    layers.map.removeLayer(layers.darkLayer);
-    layers.map.removeLayer(layers.satelliteLayer);
-    layers.map.removeLayer(layers.satelliteLabelLayer);
-    
-    if (isSatellite) {
-      layers.satelliteLayer.addTo(layers.map);
-      layers.satelliteLabelLayer.addTo(layers.map);
-    } else if (isDarkMode) {
-      layers.darkLayer.addTo(layers.map);
-    } else {
-      layers.roadLayer.addTo(layers.map);
-    }
+// 创建路线
+function createRoute(map, path, color) {
+  var polyline = new AMap.Polyline({
+    path: path,
+    strokeColor: color,
+    strokeWeight: 3,
+    strokeStyle: 'dashed',
+    strokeDasharray: [10, 5],
+    lineJoin: 'round'
   });
-  
-  // 更新按钮状态
-  btn.classList.toggle('active', isSatellite);
-  btn.textContent = isSatellite ? '🗺️ 路网图' : '🛰️ 卫星图';
+  polyline.setMap(map);
+  return polyline;
 }
 
-// 更新地图深浅色模式
-function updateMapTheme() {
-  if (isSatellite) return; // 卫星图模式下不切换
-  
-  Object.keys(mapLayers).forEach(function(id) {
-    var layers = mapLayers[id];
-    
-    layers.map.removeLayer(layers.roadLayer);
-    layers.map.removeLayer(layers.darkLayer);
-    
-    if (isDarkMode) {
-      layers.darkLayer.addTo(layers.map);
-    } else {
-      layers.roadLayer.addTo(layers.map);
+// 创建文本标记
+function createTextMarker(map, position, text, bgColor) {
+  var textMarker = new AMap.Text({
+    text: text,
+    position: position,
+    style: {
+      'background': bgColor,
+      'color': '#fff',
+      'padding': '2px 6px',
+      'border-radius': '3px',
+      'font-size': '11px',
+      'white-space': 'nowrap',
+      'border': 'none'
     }
   });
+  textMarker.setMap(map);
+  return textMarker;
 }
 
 // 主地图
-initTheme(); // 先初始化主题
+initTheme();
 var mapMain = createMap('map-main', [26.5, 101.0], 7);
 
-// 机场/高铁站标记
-L.marker([25.04, 102.75], {icon:redIcon}).addTo(mapMain).bindPopup('<b>昆明长水机场</b><br>起点');
-L.marker([25.02, 102.68], {icon:redIcon}).addTo(mapMain).bindPopup('<b>昆明站</b><br>高铁站');
-L.marker([26.87, 100.23], {icon:blueIcon}).addTo(mapMain).bindPopup('<b>丽江古城</b><br>海拔2400m');
-L.marker([26.88, 100.25], {icon:orangeIcon}).addTo(mapMain).bindPopup('<b>东巴谷</b><br>日照金山观赏点');
-L.marker([27.00, 100.20], {icon:orangeIcon}).addTo(mapMain).bindPopup('<b>玉龙雪山</b><br>海拔4680m');
-L.marker([27.15, 100.05], {icon:orangeIcon}).addTo(mapMain).bindPopup('<b>虎跳峡</b><br>世界最深峡谷');
-L.marker([27.83, 99.70], {icon:purpleIcon}).addTo(mapMain).bindPopup('<b>香格里拉</b><br>海拔3300m');
-L.marker([27.85, 99.68], {icon:orangeIcon}).addTo(mapMain).bindPopup('<b>松赞林寺</b><br>小布达拉宫');
-L.marker([25.58, 100.22], {icon:greenIcon}).addTo(mapMain).bindPopup('<b>大理</b><br>备选方案');
+// 标记
+createMarker(mapMain, [102.75, 25.04], '#e74c3c', '昆明长水机场', '起点');
+createMarker(mapMain, [102.68, 25.02], '#e74c3c', '昆明站', '高铁站');
+createMarker(mapMain, [100.23, 26.87], '#3498db', '丽江古城', '海拔2400m');
+createMarker(mapMain, [100.25, 26.88], '#f39c12', '东巴谷', '日照金山观赏点');
+createMarker(mapMain, [100.20, 27.00], '#f39c12', '玉龙雪山', '海拔4680m');
+createMarker(mapMain, [100.05, 27.15], '#f39c12', '虎跳峡', '世界最深峡谷');
+createMarker(mapMain, [99.70, 27.83], '#9b59b6', '香格里拉', '海拔3300m');
+createMarker(mapMain, [99.68, 27.85], '#f39c12', '松赞林寺', '小布达拉宫');
+createMarker(mapMain, [100.22, 25.58], '#27ae60', '大理', '备选方案');
 
 // 路线
-L.polyline([[25.04,102.75],[26.87,100.23]], {color:'#3b82f6',weight:3,dashArray:'10,8',opacity:0.8}).addTo(mapMain);
-L.polyline([[26.87,100.23],[27.15,100.05],[27.83,99.70]], {color:'#f39c12',weight:3,dashArray:'10,8',opacity:0.8}).addTo(mapMain);
-L.polyline([[27.83,99.70],[26.87,100.23]], {color:'#9b59b6',weight:3,dashArray:'10,8',opacity:0.8}).addTo(mapMain);
-L.polyline([[25.04,102.75],[25.58,100.22]], {color:'#27ae60',weight:2,dashArray:'5,5',opacity:0.6}).addTo(mapMain);
+createRoute(mapMain, [[102.75, 25.04], [100.23, 26.87]], '#3b82f6');
+createRoute(mapMain, [[100.23, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
+createRoute(mapMain, [[99.70, 27.83], [100.23, 26.87]], '#9b59b6');
+createRoute(mapMain, [[102.75, 25.04], [100.22, 25.58]], '#27ae60');
 
 // 路线标签
-L.marker([25.95, 101.50], {icon:L.divIcon({className:'',html:'<div style="background:#3b82f6;color:#fff;padding:2px 6px;border-radius:3px;font-size:11px;white-space:nowrap;">高铁 3.5h</div>',iconSize:[60,20],iconAnchor:[30,10]})}).addTo(mapMain);
-L.marker([27.35, 100.00], {icon:L.divIcon({className:'',html:'<div style="background:#f39c12;color:#fff;padding:2px 6px;border-radius:3px;font-size:11px;white-space:nowrap;">自驾 4h</div>',iconSize:[50,20],iconAnchor:[25,10]})}).addTo(mapMain);
-L.marker([27.35, 99.90], {icon:L.divIcon({className:'',html:'<div style="background:#9b59b6;color:#fff;padding:2px 6px;border-radius:3px;font-size:11px;white-space:nowrap;">高铁 1.5h</div>',iconSize:[60,20],iconAnchor:[30,10]})}).addTo(mapMain);
+createTextMarker(mapMain, [101.50, 25.95], '高铁 3.5h', '#3b82f6');
+createTextMarker(mapMain, [100.00, 27.35], '自驾 4h', '#f39c12');
+createTextMarker(mapMain, [99.90, 27.35], '高铁 1.5h', '#9b59b6');
 
-// Day1 方案A 地图（昆明）
+// Day1 方案A 地图
 var map1a = createMap('map-day1-a', [25.03, 102.70], 13);
-L.marker([25.04, 102.75], {icon:redIcon}).addTo(map1a).bindPopup('<b>昆明长水机场</b>');
-L.marker([25.02, 102.68], {icon:redIcon}).addTo(map1a).bindPopup('<b>昆明站</b>');
-L.marker([25.04, 102.70], {icon:orangeIcon}).addTo(map1a).bindPopup('<b>篆新农贸市场</b><br>强烈推荐！');
-L.marker([25.00, 102.68], {icon:orangeIcon}).addTo(map1a).bindPopup('<b>滇池海埂公园</b><br>9月秋景美');
-L.marker([25.01, 102.68], {icon:orangeIcon}).addTo(map1a).bindPopup('<b>茶马花街</b><br>美食街');
-L.polyline([[25.04,102.75],[25.02,102.68]], {color:'#e74c3c',weight:3,dashArray:'8,6'}).addTo(map1a);
-L.polyline([[25.02,102.68],[25.04,102.70],[25.00,102.68]], {color:'#f39c12',weight:3,dashArray:'8,6'}).addTo(map1a);
+createMarker(map1a, [102.75, 25.04], '#e74c3c', '昆明长水机场');
+createMarker(map1a, [102.68, 25.02], '#e74c3c', '昆明站');
+createMarker(map1a, [102.70, 25.04], '#f39c12', '篆新农贸市场', '强烈推荐！');
+createMarker(map1a, [102.68, 25.00], '#f39c12', '滇池海埂公园', '9月秋景美');
+createMarker(map1a, [102.68, 25.01], '#f39c12', '茶马花街', '美食街');
+createRoute(map1a, [[102.75, 25.04], [102.68, 25.02]], '#e74c3c');
+createRoute(map1a, [[102.68, 25.02], [102.70, 25.04], [102.68, 25.00]], '#f39c12');
 
-// Day1 方案B 地图（大理）
+// Day1 方案B 地图
 var map1b = createMap('map-day1-b', [25.30, 101.00], 9);
-L.marker([25.04, 102.75], {icon:redIcon}).addTo(map1b).bindPopup('<b>昆明长水机场</b>');
-L.marker([25.02, 102.68], {icon:redIcon}).addTo(map1b).bindPopup('<b>昆明站</b>');
-L.marker([25.58, 100.22], {icon:greenIcon}).addTo(map1b).bindPopup('<b>大理古城</b>');
-L.marker([25.75, 100.18], {icon:greenIcon}).addTo(map1b).bindPopup('<b>洱海</b><br>看日出日落');
-L.polyline([[25.04,102.75],[25.02,102.68]], {color:'#e74c3c',weight:3,dashArray:'8,6'}).addTo(map1b);
-L.polyline([[25.02,102.68],[25.58,100.22]], {color:'#27ae60',weight:3,dashArray:'10,8'}).addTo(map1b);
+createMarker(map1b, [102.75, 25.04], '#e74c3c', '昆明长水机场');
+createMarker(map1b, [102.68, 25.02], '#e74c3c', '昆明站');
+createMarker(map1b, [100.22, 25.58], '#27ae60', '大理古城');
+createMarker(map1b, [100.18, 25.75], '#27ae60', '洱海', '看日出日落');
+createRoute(map1b, [[102.75, 25.04], [102.68, 25.02]], '#e74c3c');
+createRoute(map1b, [[102.68, 25.02], [100.22, 25.58]], '#27ae60');
 
-// Day2 方案A 地图（昆明→丽江）
+// Day2 方案A 地图
 var map2a = createMap('map-day2-a', [26.00, 101.50], 8);
-L.marker([25.02, 102.68], {icon:redIcon}).addTo(map2a).bindPopup('<b>昆明站</b>');
-L.marker([26.87, 100.23], {icon:blueIcon}).addTo(map2a).bindPopup('<b>丽江古城</b>');
-L.marker([26.87, 100.24], {icon:orangeIcon}).addTo(map2a).bindPopup('<b>忠义市场</b><br>能看到雪山的菜市场');
-L.polyline([[25.02,102.68],[26.87,100.23]], {color:'#3b82f6',weight:3,dashArray:'10,8'}).addTo(map2a);
+createMarker(map2a, [102.68, 25.02], '#e74c3c', '昆明站');
+createMarker(map2a, [100.23, 26.87], '#3498db', '丽江古城');
+createMarker(map2a, [100.24, 26.87], '#f39c12', '忠义市场', '能看到雪山的菜市场');
+createRoute(map2a, [[102.68, 25.02], [100.23, 26.87]], '#3b82f6');
 
-// Day2 方案B 地图（大理→丽江）
+// Day2 方案B 地图
 var map2b = createMap('map-day2-b', [26.30, 100.50], 9);
-L.marker([25.75, 100.18], {icon:greenIcon}).addTo(map2b).bindPopup('<b>洱海</b>');
-L.marker([25.80, 100.13], {icon:greenIcon}).addTo(map2b).bindPopup('<b>双廊古镇</b>');
-L.marker([26.87, 100.23], {icon:blueIcon}).addTo(map2b).bindPopup('<b>丽江古城</b>');
-L.polyline([[25.75,100.18],[25.80,100.13],[26.87,100.23]], {color:'#27ae60',weight:3,dashArray:'10,8'}).addTo(map2b);
+createMarker(map2b, [100.18, 25.75], '#27ae60', '洱海');
+createMarker(map2b, [100.13, 25.80], '#27ae60', '双廊古镇');
+createMarker(map2b, [100.23, 26.87], '#3498db', '丽江古城');
+createRoute(map2b, [[100.18, 25.75], [100.13, 25.80], [100.23, 26.87]], '#27ae60');
 
 // Day3 地图
 var map3 = createMap('map-day3', [26.95, 100.21], 12);
-L.marker([26.87, 100.23], {icon:blueIcon}).addTo(map3).bindPopup('<b>丽江古城</b>');
-L.marker([26.88, 100.25], {icon:orangeIcon}).addTo(map3).bindPopup('<b>东巴谷</b><br>日照金山');
-L.marker([26.97, 100.20], {icon:orangeIcon}).addTo(map3).bindPopup('<b>甘海子</b>');
-L.marker([26.99, 100.19], {icon:orangeIcon}).addTo(map3).bindPopup('<b>云杉坪</b>');
-L.marker([26.98, 100.19], {icon:orangeIcon}).addTo(map3).bindPopup('<b>蓝月谷</b>');
-L.marker([26.95, 100.20], {icon:orangeIcon}).addTo(map3).bindPopup('<b>玉湖村</b>');
-L.polyline([[26.87,100.23],[26.88,100.25],[26.97,100.20],[26.99,100.19],[26.98,100.19],[26.95,100.20]], {color:'#e74c3c',weight:3,dashArray:'8,6'}).addTo(map3);
+createMarker(map3, [100.23, 26.87], '#3498db', '丽江古城');
+createMarker(map3, [100.25, 26.88], '#f39c12', '东巴谷', '日照金山');
+createMarker(map3, [100.20, 26.97], '#f39c12', '甘海子');
+createMarker(map3, [100.19, 26.99], '#f39c12', '云杉坪');
+createMarker(map3, [100.19, 26.98], '#f39c12', '蓝月谷');
+createMarker(map3, [100.20, 26.95], '#f39c12', '玉湖村');
+createRoute(map3, [[100.23, 26.87], [100.25, 26.88], [100.20, 26.97], [100.19, 26.99], [100.19, 26.98], [100.20, 26.95]], '#e74c3c');
 
 // Day4 地图
 var map4 = createMap('map-day4', [27.30, 100.00], 10);
-L.marker([26.87, 100.23], {icon:blueIcon}).addTo(map4).bindPopup('<b>丽江</b>');
-L.marker([27.15, 100.05], {icon:orangeIcon}).addTo(map4).bindPopup('<b>虎跳峡</b>');
-L.marker([27.25, 100.08], {icon:orangeIcon}).addTo(map4).bindPopup('<b>哈巴雪山</b>');
-L.marker([27.83, 99.70], {icon:purpleIcon}).addTo(map4).bindPopup('<b>香格里拉</b>');
-L.polyline([[26.87,100.23],[27.15,100.05],[27.25,100.08],[27.83,99.70]], {color:'#f39c12',weight:4,dashArray:'10,8'}).addTo(map4);
+createMarker(map4, [100.23, 26.87], '#3498db', '丽江');
+createMarker(map4, [100.05, 27.15], '#f39c12', '虎跳峡');
+createMarker(map4, [100.08, 27.25], '#f39c12', '哈巴雪山');
+createMarker(map4, [99.70, 27.83], '#9b59b6', '香格里拉');
+createRoute(map4, [[100.23, 26.87], [100.05, 27.15], [100.08, 27.25], [99.70, 27.83]], '#f39c12');
 
 // Day5 地图
 var map5 = createMap('map-day5', [27.35, 99.95], 11);
-L.marker([27.83, 99.70], {icon:purpleIcon}).addTo(map5).bindPopup('<b>独克宗古城</b>');
-L.marker([27.85, 99.68], {icon:orangeIcon}).addTo(map5).bindPopup('<b>松赞林寺</b>');
-L.marker([27.88, 99.65], {icon:orangeIcon}).addTo(map5).bindPopup('<b>纳帕海</b>');
-L.marker([26.90, 100.21], {icon:blueIcon}).addTo(map5).bindPopup('<b>束河古镇</b>');
-L.polyline([[27.83,99.70],[26.90,100.21]], {color:'#9b59b6',weight:3,dashArray:'10,8'}).addTo(map5);
+createMarker(map5, [99.70, 27.83], '#9b59b6', '独克宗古城');
+createMarker(map5, [99.68, 27.85], '#f39c12', '松赞林寺');
+createMarker(map5, [99.65, 27.88], '#f39c12', '纳帕海');
+createMarker(map5, [100.21, 26.90], '#3498db', '束河古镇');
+createRoute(map5, [[99.70, 27.83], [100.21, 26.90]], '#9b59b6');
 
-// Tab切换（带地图切换）
+// Tab切换
 function switchTab(btn, panelId) {
   var parent = btn.closest('.section') || btn.closest('.day-body') || btn.parentElement.parentElement;
   parent.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
   parent.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
   btn.classList.add('active');
   document.getElementById(panelId).classList.add('active');
-  
-  // 延迟刷新地图，确保容器已显示
   setTimeout(refreshMaps, 100);
+}
+
+// 切换卫星图
+function toggleSatellite(btn) {
+  isSatellite = !isSatellite;
+  var style = isSatellite ? 'amap://styles/normal' : (isDarkMode ? mapStyles.dark : mapStyles.light);
+  
+  allMaps.forEach(function(item) {
+    item.map.setMapStyle(style);
+  });
+  
+  btn.classList.toggle('active', isSatellite);
+  btn.textContent = isSatellite ? '🗺️ 路网图' : '🛰️ 卫星图';
+}
+
+// 更新地图主题
+function updateMapTheme() {
+  if (isSatellite) return;
+  var style = isDarkMode ? mapStyles.dark : mapStyles.light;
+  allMaps.forEach(function(item) {
+    item.map.setMapStyle(style);
+  });
 }
 
 // 深色模式切换
@@ -1078,13 +1067,8 @@ function toggleTheme() {
   var btn = document.querySelector('.theme-toggle');
   var isDark = html.classList.toggle('dark');
   
-  // 保存偏好
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  
-  // 更新按钮图标
   btn.textContent = isDark ? '☀️' : '🌙';
-  
-  // 更新地图模式
   isDarkMode = isDark;
   updateMapTheme();
 }
@@ -1093,7 +1077,6 @@ function toggleTheme() {
 function initTheme() {
   var saved = localStorage.getItem('theme');
   var btn = document.querySelector('.theme-toggle');
-  
   if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark');
     btn.textContent = '☀️';
@@ -1209,6 +1192,5 @@ document.querySelectorAll('.day-header').forEach(function(header) {
   });
 });
 </script>
-<script src="https://unpkg.com/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.min.js"></script>
 </body>
 </html>
