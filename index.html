@@ -103,8 +103,10 @@ tr:hover td{background:#f9fafb}
 /* 深色模式适配 */
 .dark body{background:#1a1a1a;color:#e0e0e0}
 .dark a{color:#64b5f6}
-.dark .section{background:#1a1a1a}
-.dark .section[style*="background:#fff"]{background:#222}
+.dark .section,
+.dark section.section{background:#1a1a1a!important}
+.dark .section[style],
+.dark section[style]{background:#1a1a1a!important}
 .dark .day-card{background:#2d2d2d;box-shadow:0 2px 12px rgba(0,0,0,.3)}
 .dark .day-header{border-bottom-color:#444}
 .dark .day-info h3{color:#e0e0e0}
