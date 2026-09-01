@@ -100,6 +100,11 @@ tr:hover td{background:#f9fafb}
 .theme-toggle{position:fixed;top:20px;right:20px;z-index:10000;background:#2d6a4f;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
 .theme-toggle:hover{background:#1b4332;transform:scale(1.1)}
 
+/* 方案切换按钮 */
+.plan-toggle{position:fixed;top:74px;right:20px;z-index:10000;background:#7b1fa2;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s;font-weight:bold}
+.plan-toggle:hover{background:#6a1b9a;transform:scale(1.1)}
+.plan-toggle span{font-size:11px;line-height:1}
+
 /* 深色模式适配 */
 .dark body{background:#1a1a1a;color:#e0e0e0}
 .dark a{color:#64b5f6}
@@ -148,6 +153,11 @@ tr:hover td{background:#f9fafb}
 
 <!-- 深色模式切换按钮 -->
 <button class="theme-toggle" onclick="toggleTheme()" title="切换浅色/深色模式">🌙</button>
+
+<!-- 方案切换按钮 -->
+<button class="plan-toggle" onclick="togglePlan()" title="切换方案A/B">
+  <span id="planLabel">A</span>
+</button>
 
 <header class="hero">
   <div class="container">
@@ -999,8 +1009,104 @@ function initTheme() {
   }
 }
 
+// 方案切换
+var currentPlan = 'a';
+
+function togglePlan() {
+  var btn = document.getElementById('planLabel');
+  
+  // 切换方案
+  currentPlan = currentPlan === 'a' ? 'b' : 'a';
+  
+  // 更新按钮文字
+  btn.textContent = currentPlan.toUpperCase();
+  
+  // 保存偏好
+  localStorage.setItem('plan', currentPlan);
+  
+  // 切换所有方案标签
+  switchAllPlans(currentPlan);
+}
+
+function switchAllPlans(plan) {
+  // 总览区域的方案
+  var overviewPlanA = document.getElementById('overview-plan-a');
+  var overviewPlanB = document.getElementById('overview-plan-b');
+  
+  if (overviewPlanA && overviewPlanB) {
+    var overviewTabs = overviewPlanA.parentElement.querySelectorAll('.tab-btn');
+    overviewTabs.forEach(function(tab) { tab.classList.remove('active'); });
+    
+    if (plan === 'a') {
+      overviewPlanA.classList.add('active');
+      overviewPlanB.classList.remove('active');
+      overviewTabs[0].classList.add('active');
+    } else {
+      overviewPlanA.classList.remove('active');
+      overviewPlanB.classList.add('active');
+      overviewTabs[1].classList.add('active');
+    }
+  }
+  
+  // Day1 的方案
+  var day1PlanA = document.getElementById('day1-plan-a');
+  var day1PlanB = document.getElementById('day1-plan-b');
+  
+  if (day1PlanA && day1PlanB) {
+    var day1Tabs = day1PlanA.parentElement.querySelectorAll('.tab-btn');
+    day1Tabs.forEach(function(tab) { tab.classList.remove('active'); });
+    
+    if (plan === 'a') {
+      day1PlanA.classList.add('active');
+      day1PlanB.classList.remove('active');
+      day1Tabs[0].classList.add('active');
+    } else {
+      day1PlanA.classList.remove('active');
+      day1PlanB.classList.add('active');
+      day1Tabs[1].classList.add('active');
+    }
+  }
+  
+  // Day2 的方案
+  var day2PlanA = document.getElementById('day2-plan-a');
+  var day2PlanB = document.getElementById('day2-plan-b');
+  
+  if (day2PlanA && day2PlanB) {
+    var day2Tabs = day2PlanA.parentElement.querySelectorAll('.tab-btn');
+    day2Tabs.forEach(function(tab) { tab.classList.remove('active'); });
+    
+    if (plan === 'a') {
+      day2PlanA.classList.add('active');
+      day2PlanB.classList.remove('active');
+      day2Tabs[0].classList.add('active');
+    } else {
+      day2PlanA.classList.remove('active');
+      day2PlanB.classList.add('active');
+      day2Tabs[1].classList.add('active');
+    }
+  }
+  
+  // 刷新地图
+  setTimeout(refreshMaps, 100);
+}
+
+// 初始化方案
+function initPlan() {
+  var saved = localStorage.getItem('plan');
+  var btn = document.getElementById('planLabel');
+  
+  if (saved === 'b') {
+    currentPlan = 'b';
+    btn.textContent = 'B';
+    switchAllPlans('b');
+  }
+}
+
 // 页面加载时初始化主题
 initTheme();
+
+// 页面加载时初始化方案
+initPlan();
 
 // 页面加载完成后刷新地图
 window.addEventListener('load', function() {
