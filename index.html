@@ -178,14 +178,10 @@ tr:hover td{background:var(--bg-card)}
 .ppt-toggle:hover{background:#f4511e;transform:scale(1.1)}
 .ppt-toggle.active{background:#4caf50}
 
-/* PPT卡片模式 - 全屏滚动锁定 */
+/* PPT卡片模式 - 弹簧滑动效果 */
 .ppt-card-mode{
   overflow:hidden;
   height:100vh;
-  position:fixed;
-  width:100%;
-  top:0;
-  left:0;
 }
 .ppt-card-mode body{
   overflow: hidden;
@@ -193,25 +189,16 @@ tr:hover td{background:var(--bg-card)}
 }
 .ppt-card-mode .ppt-cards-wrapper{
   height:100vh;
-  overflow: hidden;
-  position:relative;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 .ppt-card-mode .ppt-card{
   min-height:100vh;
   height:100vh;
+  scroll-snap-align: start;
   overflow-y: auto;
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  opacity:0;
-  visibility:hidden;
-  transition:opacity 0.3s ease, visibility 0.3s ease;
-}
-.ppt-card-mode .ppt-card.active{
-  opacity:1;
-  visibility:visible;
-  position:relative;
+  -webkit-overflow-scrolling: touch;
 }
 .ppt-card-mode .ppt-card::-webkit-scrollbar{
   width:4px;
@@ -1724,15 +1711,8 @@ function pptPrev() {
 
 function scrollToCard(index) {
   var cards = document.querySelectorAll('.ppt-card');
-  // 隐藏所有卡片
-  cards.forEach(function(card) {
-    card.classList.remove('active');
-  });
-  // 显示当前卡片
   if (cards[index]) {
-    cards[index].classList.add('active');
-    // 滚动到顶部
-    cards[index].scrollTop = 0;
+    cards[index].scrollIntoView({ behavior: 'smooth' });
     updatePPTIndicator();
     showIndicator();
     setTimeout(refreshMaps, 300);
@@ -1772,23 +1752,31 @@ function showIndicator() {
   }
 }
 
-// 监听滚动事件，更新当前卡片索引（PPT模式下锁定）
+// 监听滚动事件，更新当前卡片索引
+var scrollTimer = null;
 function handlePPTScroll() {
   if (!document.documentElement.classList.contains('ppt-card-mode')) return;
   
-  var cards = document.querySelectorAll('.ppt-card');
-  var currentCard = cards[currentCardIndex];
-  
-  if (currentCard) {
-    var rect = currentCard.getBoundingClientRect();
-    // 如果当前卡片不在视口内，强制回到当前卡片
-    if (rect.top > 10 || rect.bottom < window.innerHeight - 10) {
-      currentCard.scrollIntoView({ behavior: 'instant' });
+  // 防抖处理
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(function() {
+    var cards = document.querySelectorAll('.ppt-card');
+    var wrapper = document.querySelector('.ppt-cards-wrapper');
+    if (!wrapper) return;
+    
+    var scrollTop = wrapper.scrollTop;
+    var windowHeight = window.innerHeight;
+    
+    // 计算当前应该显示哪个卡片
+    var newIndex = Math.round(scrollTop / windowHeight);
+    if (newIndex >= 0 && newIndex < cards.length && newIndex !== currentCardIndex) {
+      currentCardIndex = newIndex;
+      updatePPTIndicator();
     }
-  }
-  
-  // 显示页码指示器
-  showIndicator();
+    
+    // 显示页码指示器
+    showIndicator();
+  }, 100);
 }
 
 // 初始化PPT指示器
