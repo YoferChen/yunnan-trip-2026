@@ -127,6 +127,12 @@ tr:hover td{background:var(--bg-card)}
   td:before{content:attr(data-label);font-weight:600;color:#2d6a4f;display:inline-block;width:70px;margin-right:8px}
   td:first-child{font-size:1rem;font-weight:600;color:#2d6a4f;padding-bottom:8px;border-bottom:1px solid #eee}
   td:first-child:before{display:none}
+  
+  /* 深色模式下手机端表格 */
+  .dark tr{background:var(--bg-white);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+  .dark td{color:var(--text)}
+  .dark td:before{color:#64b5f6}
+  .dark td:first-child{color:#64b5f6;border-bottom-color:#444}
 }
 
 /* PPT模式切换按钮 */
@@ -134,17 +140,21 @@ tr:hover td{background:var(--bg-card)}
 .ppt-toggle:hover{background:#f4511e;transform:scale(1.1)}
 .ppt-toggle.active{background:#4caf50}
 
-/* PPT卡片模式 - 全屏滚动 */
+/* PPT卡片模式 - 全屏滚动锁定 */
+.ppt-card-mode{
+  overflow:hidden;
+  height:100vh;
+}
 .ppt-card-mode body{
-  scroll-snap-type:y mandatory;
-  overflow-y:scroll;
-  scroll-behavior:smooth;
+  overflow:hidden;
+  height:100vh;
 }
 .ppt-card-mode .ppt-card{
   min-height:100vh;
-  scroll-snap-align:start;
+  height:100vh;
   overflow-y:auto;
   padding-bottom:80px;
+  scroll-snap-align:start;
 }
 .ppt-card-mode .ppt-card::-webkit-scrollbar{
   width:4px;
@@ -501,8 +511,12 @@ tr:hover td{background:var(--bg-card)}
 <section class="section ppt-card" style="background:#fff" data-index="1">
   <div class="container">
     <h2 class="section-title">📋 每日行程安排</h2>
+  </div>
+</section>
 
-    <!-- Day 1 -->
+<!-- Day 1 -->
+<section class="section ppt-card" style="background:#f8f9fa" data-index="2">
+  <div class="container">
     <div class="day-card open">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">25</span><span class="label">周四</span></div>
@@ -642,8 +656,12 @@ tr:hover td{background:var(--bg-card)}
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Day 2 -->
+<!-- Day 2 -->
+<section class="section ppt-card" style="background:#fff" data-index="3">
+  <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">26</span><span class="label">周五</span></div>
@@ -759,8 +777,12 @@ tr:hover td{background:var(--bg-card)}
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Day 3 -->
+<!-- Day 3 -->
+<section class="section ppt-card" style="background:#f8f9fa" data-index="4">
+  <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">27</span><span class="label">周六</span></div>
@@ -832,8 +854,12 @@ tr:hover td{background:var(--bg-card)}
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Day 4 -->
+<!-- Day 4 -->
+<section class="section ppt-card" style="background:#fff" data-index="5">
+  <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">28</span><span class="label">周日</span></div>
@@ -916,8 +942,12 @@ tr:hover td{background:var(--bg-card)}
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Day 5 -->
+<!-- Day 5 -->
+<section class="section ppt-card" style="background:#f8f9fa" data-index="6">
+  <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">29</span><span class="label">周一</span></div>
@@ -959,12 +989,11 @@ tr:hover td{background:var(--bg-card)}
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
 <!-- 实用信息 -->
-<section class="section ppt-card" data-index="2">
+<section class="section ppt-card" data-index="7">
   <div class="container">
     <h2 class="section-title">🎒 实用信息</h2>
     <div class="tabs">
@@ -1062,7 +1091,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- 小红书攻略 -->
-<section class="section ppt-card" style="background:#fff" data-index="3">
+<section class="section ppt-card" style="background:#fff" data-index="8">
   <div class="container">
     <h2 class="section-title">📱 小红书热门攻略</h2>
     <div class="info-grid">
@@ -1299,7 +1328,7 @@ function togglePPTCardMode() {
 
 // PPT卡片导航
 var currentCardIndex = 0;
-var totalCards = 4; // 总览 + 每日行程 + 实用信息 + 小红书攻略
+var totalCards = 9; // 总览 + 每日行程标题 + Day1-5 + 实用信息 + 小红书攻略
 
 function pptNext() {
   if (currentCardIndex < totalCards - 1) {
@@ -1318,6 +1347,7 @@ function pptPrev() {
 function scrollToCard(index) {
   var cards = document.querySelectorAll('.ppt-card');
   if (cards[index]) {
+    // 锁定到当前卡片
     cards[index].scrollIntoView({ behavior: 'smooth' });
     updatePPTIndicator();
     setTimeout(refreshMaps, 300);
@@ -1329,11 +1359,13 @@ function updatePPTIndicator() {
   var indicator = document.getElementById('pptIndicator');
   if (!indicator) return;
   
+  var labels = ['总览', '行程', 'Day1', 'Day2', 'Day3', 'Day4', 'Day5', '实用', '攻略'];
   indicator.innerHTML = '';
   for (var i = 0; i < totalCards; i++) {
     var dot = document.createElement('div');
     dot.className = 'ppt-dot' + (i === currentCardIndex ? ' active' : '');
     dot.setAttribute('data-index', i);
+    dot.setAttribute('title', labels[i] || '');
     dot.onclick = function() {
       currentCardIndex = parseInt(this.getAttribute('data-index'));
       scrollToCard(currentCardIndex);
@@ -1342,23 +1374,18 @@ function updatePPTIndicator() {
   }
 }
 
-// 监听滚动事件，更新当前卡片索引
+// 监听滚动事件，更新当前卡片索引（PPT模式下锁定）
 function handlePPTScroll() {
   if (!document.documentElement.classList.contains('ppt-card-mode')) return;
   
   var cards = document.querySelectorAll('.ppt-card');
-  var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  var windowHeight = window.innerHeight;
+  var currentCard = cards[currentCardIndex];
   
-  for (var i = 0; i < cards.length; i++) {
-    var card = cards[i];
-    var rect = card.getBoundingClientRect();
-    if (rect.top <= windowHeight / 2 && rect.bottom >= windowHeight / 2) {
-      if (currentCardIndex !== i) {
-        currentCardIndex = i;
-        updatePPTIndicator();
-      }
-      break;
+  if (currentCard) {
+    var rect = currentCard.getBoundingClientRect();
+    // 如果当前卡片不在视口内，强制回到当前卡片
+    if (rect.top > 10 || rect.bottom < window.innerHeight - 10) {
+      currentCard.scrollIntoView({ behavior: 'instant' });
     }
   }
 }
