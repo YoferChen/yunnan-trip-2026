@@ -182,6 +182,10 @@ tr:hover td{background:var(--bg-card)}
 .ppt-card-mode{
   overflow:hidden;
   height:100vh;
+  position:fixed;
+  width:100%;
+  top:0;
+  left:0;
 }
 .ppt-card-mode body{
   overflow: hidden;
@@ -189,16 +193,25 @@ tr:hover td{background:var(--bg-card)}
 }
 .ppt-card-mode .ppt-cards-wrapper{
   height:100vh;
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  position:relative;
 }
 .ppt-card-mode .ppt-card{
   min-height:100vh;
   height:100vh;
-  scroll-snap-align:start;
   overflow-y: auto;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 0.3s ease, visibility 0.3s ease;
+}
+.ppt-card-mode .ppt-card.active{
+  opacity:1;
+  visibility:visible;
+  position:relative;
 }
 .ppt-card-mode .ppt-card::-webkit-scrollbar{
   width:4px;
@@ -1670,6 +1683,8 @@ function initPPTMode() {
     updatePPTIndicator();
     // 展开所有Day卡片
     document.querySelectorAll('.day-card').forEach(function(c){ c.classList.add('open'); });
+    // 显示第一个卡片
+    scrollToCard(0);
   }
 }
 
@@ -1709,9 +1724,15 @@ function pptPrev() {
 
 function scrollToCard(index) {
   var cards = document.querySelectorAll('.ppt-card');
+  // 隐藏所有卡片
+  cards.forEach(function(card) {
+    card.classList.remove('active');
+  });
+  // 显示当前卡片
   if (cards[index]) {
-    // 锁定到当前卡片
-    cards[index].scrollIntoView({ behavior: 'smooth' });
+    cards[index].classList.add('active');
+    // 滚动到顶部
+    cards[index].scrollTop = 0;
     updatePPTIndicator();
     showIndicator();
     setTimeout(refreshMaps, 300);
