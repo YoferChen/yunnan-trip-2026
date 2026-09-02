@@ -1052,7 +1052,7 @@ function addLabel(map, lng, lat, text, bgColor) {
 function refreshMaps() {
   for (var i = 0; i < allMaps.length; i++) {
     var m = allMaps[i].map;
-    if (m && m.resize) {
+    if (m && typeof m.resize === 'function') {
       try { m.resize(); } catch(e) {}
     }
   }
