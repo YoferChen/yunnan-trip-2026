@@ -3,11 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>云南6日家庭游规划 · 9.25-9.30</title>
+<title>云南5日家庭游规划 · 9.25-9.29</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
 <style>
+:root {
+  --primary: #2d6a4f;
+  --primary-dark: #1b4332;
+  --accent: #1e3a5f;
+  --success: #166534;
+  --warning: #e65100;
+  --info: #1565c0;
+  --highlight: #c62828;
+  --purple: #7b1fa2;
+  --text: #333;
+  --text-light: #666;
+  --text-muted: #999;
+  --bg: #f5f5f0;
+  --bg-white: #fff;
+  --bg-card: #f9fafb;
+  --border: #e5e7eb;
+  --shadow: rgba(0,0,0,.06);
+}
+
+.dark {
+  --text: #e0e0e0;
+  --text-light: #aaa;
+  --text-muted: #888;
+  --bg: #1a1a1a;
+  --bg-white: #2d2d2d;
+  --bg-card: #333;
+  --border: #444;
+  --shadow: rgba(0,0,0,.3);
+}
+
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#f5f5f0;color:#333;line-height:1.7}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
 a{color:#2563eb;text-decoration:none}
 .container{max-width:1200px;margin:0 auto;padding:0 24px}
 .hero{background:linear-gradient(135deg,#1e3a5f 0%,#2d6a4f 50%,#40916c 100%);color:#fff;padding:60px 0 40px;text-align:center}
@@ -16,68 +46,68 @@ a{color:#2563eb;text-decoration:none}
 .hero .meta{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;font-size:.95rem;opacity:.9}
 .hero .meta span{display:flex;align-items:center;gap:6px}
 .section{padding:48px 0}
-.section-title{font-size:1.6rem;font-weight:700;margin-bottom:24px;padding-left:14px;border-left:4px solid #2d6a4f;color:#1e3a5f}
-.day-card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:28px;overflow:hidden}
+.section-title{font-size:1.6rem;font-weight:700;margin-bottom:24px;padding-left:14px;border-left:4px solid var(--primary);color:var(--accent)}
+.day-card{background:var(--bg-white);border-radius:12px;box-shadow:0 2px 12px var(--shadow);margin-bottom:28px;overflow:hidden}
 .day-header{display:flex;align-items:center;gap:16px;padding:20px 24px;cursor:pointer;user-select:none}
 .day-badge{background:linear-gradient(135deg,#2d6a4f,#40916c);color:#fff;border-radius:10px;min-width:64px;height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700}
 .day-badge .num{font-size:1.6rem;line-height:1}
 .day-badge .label{font-size:.7rem;opacity:.85}
-.day-info h3{font-size:1.15rem;color:#1e3a5f}
-.day-info .route{font-size:.9rem;color:#666;margin-top:2px}
+.day-info h3{font-size:1.15rem;color:var(--accent)}
+.day-info .route{font-size:.9rem;color:var(--text-light);margin-top:2px}
 .day-body{padding:0 24px 24px;display:none}
 .day-card.open .day-body{display:block}
-.day-card.open .day-header{border-bottom:1px solid #eee}
-.chevron{margin-left:auto;transition:transform .2s;font-size:1.2rem;color:#999}
+.day-card.open .day-header{border-bottom:1px solid var(--border)}
+.chevron{margin-left:auto;transition:transform .2s;font-size:1.2rem;color:var(--text-muted)}
 .day-card.open .chevron{transform:rotate(180deg)}
-.day-map{width:100%;height:300px;border-radius:8px;margin:16px 0;z-index:1;border:2px solid #e5e7eb}
+.day-map{width:100%;height:300px;border-radius:8px;margin:16px 0;z-index:1;border:2px solid var(--border)}
 .spot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px}
-.spot{background:#f9fafb;border-radius:10px;padding:16px;border:1px solid #e5e7eb}
-.spot h4{font-size:1rem;color:#1e3a5f;margin-bottom:8px}
-.spot .desc{font-size:.88rem;color:#555;line-height:1.6}
-.spot .tag{display:inline-block;background:#e8f5e9;color:#2d6a4f;font-size:.75rem;padding:2px 8px;border-radius:4px;margin-top:8px;margin-right:4px}
-.spot .tag.warn{background:#fff3e0;color:#e65100}
-.spot .tag.info{background:#e3f2fd;color:#1565c0}
-.spot .tag.highlight{background:#fce4ec;color:#c62828}
-.spot .tag.alt{background:#f3e5f5;color:#7b1fa2}
-.spot .time-info{font-size:.82rem;color:#666;margin-top:8px;padding-top:8px;border-top:1px dashed #e5e7eb}
+.spot{background:var(--bg-card);border-radius:10px;padding:16px;border:1px solid var(--border)}
+.spot h4{font-size:1rem;color:var(--accent);margin-bottom:8px}
+.spot .desc{font-size:.88rem;color:var(--text);line-height:1.6}
+.spot .tag{display:inline-block;background:#e8f5e9;color:var(--primary);font-size:.75rem;padding:2px 8px;border-radius:4px;margin-top:8px;margin-right:4px}
+.spot .tag.warn{background:#fff3e0;color:var(--warning)}
+.spot .tag.info{background:#e3f2fd;color:var(--info)}
+.spot .tag.highlight{background:#fce4ec;color:var(--highlight)}
+.spot .tag.alt{background:#f3e5f5;color:var(--purple)}
+.spot .time-info{font-size:.82rem;color:var(--text-light);margin-top:8px;padding-top:8px;border-top:1px dashed var(--border)}
 .transport-bar{display:flex;align-items:flex-start;gap:12px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;margin:12px 0}
 .transport-bar .icon{font-size:1.4rem}
-.transport-bar .info{font-size:.9rem;color:#333}
-.transport-bar .info strong{color:#166534}
+.transport-bar .info{font-size:.9rem;color:var(--text)}
+.transport-bar .info strong{color:var(--success)}
 .transport-bar.warn{background:#fff8e1;border-color:#ffcc02}
 .transport-bar.alt{background:#f3e5f5;border-color:#ce93d8}
-#map-main{height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px;z-index:1}
-.map-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.85rem;color:#555;margin-bottom:24px}
+#map-main{height:500px;border-radius:12px;box-shadow:0 2px 12px var(--shadow);margin-bottom:16px;z-index:1}
+.map-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.85rem;color:var(--text-light);margin-bottom:24px}
 .map-legend span{display:flex;align-items:center;gap:4px}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-.info-card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.info-card h4{font-size:1.05rem;color:#1e3a5f;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.info-card{background:var(--bg-white);border-radius:12px;padding:24px;box-shadow:0 2px 8px var(--shadow)}
+.info-card h4{font-size:1.05rem;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .info-card ul{list-style:none;font-size:.9rem}
-.info-card li{padding:6px 0;border-bottom:1px dashed #e5e7eb}
+.info-card li{padding:6px 0;border-bottom:1px dashed var(--border)}
 .info-card li:last-child{border:none}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:.9rem;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.06)}
-th{background:#2d6a4f;color:#fff;padding:12px 16px;text-align:left;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--bg-white);border-radius:8px;overflow:hidden;box-shadow:0 1px 6px var(--shadow)}
+th{background:var(--primary);color:#fff;padding:12px 16px;text-align:left;font-weight:600}
 td{padding:10px 16px;border-bottom:1px solid #f0f0f0}
 tr:last-child td{border:none}
-tr:hover td{background:#f9fafb}
+tr:hover td{background:var(--bg-card)}
 .checklist{columns:2;column-gap:24px;font-size:.9rem}
 .checklist label{display:flex;align-items:flex-start;gap:8px;padding:6px 0;break-inside:avoid;cursor:pointer}
-.checklist input{margin-top:4px;accent-color:#2d6a4f}
-.tabs{display:flex;gap:0;margin-bottom:0;border-bottom:2px solid #e5e7eb}
-.tab-btn{padding:10px 20px;font-size:.95rem;border:none;background:none;cursor:pointer;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
-.tab-btn.active{color:#2d6a4f;border-bottom-color:#2d6a4f;font-weight:600}
+.checklist input{margin-top:4px;accent-color:var(--primary)}
+.tabs{display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--border)}
+.tab-btn{padding:10px 20px;font-size:.95rem;border:none;background:none;cursor:pointer;color:var(--text-light);border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s}
+.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
 .tab-panel{display:none;padding:20px 0}
 .tab-panel.active{display:block}
 .xhs-link{display:inline-flex;align-items:center;gap:4px;background:#ff2442;color:#fff;padding:4px 10px;border-radius:4px;font-size:.8rem;margin-top:8px;transition:.2s}
 .xhs-link:hover{background:#e61e3a;color:#fff}
 .timeline{position:relative;padding-left:30px;margin:16px 0}
-.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:#2d6a4f}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--primary)}
 .timeline-item{position:relative;margin-bottom:16px;padding-left:20px}
-.timeline-item::before{content:'';position:absolute;left:-24px;top:8px;width:10px;height:10px;border-radius:50%;background:#2d6a4f;border:2px solid #fff}
-.timeline-item .time{font-weight:600;color:#2d6a4f;font-size:.9rem}
-.timeline-item .content{font-size:.9rem;color:#555}
-.footer{text-align:center;padding:32px 0;font-size:.85rem;color:#999;border-top:1px solid #e5e7eb;margin-top:40px}
+.timeline-item::before{content:'';position:absolute;left:-24px;top:8px;width:10px;height:10px;border-radius:50%;background:var(--primary);border:2px solid var(--bg-white)}
+.timeline-item .time{font-weight:600;color:var(--primary);font-size:.9rem}
+.timeline-item .content{font-size:.9rem;color:var(--text-light)}
+.footer{text-align:center;padding:32px 0;font-size:.85rem;color:var(--text-muted);border-top:1px solid var(--border);margin-top:40px}
 @media(max-width:768px){
   .hero h1{font-size:1.6rem}
   .hero .meta{flex-direction:column;gap:8px}
@@ -131,47 +161,46 @@ tr:hover td{background:#f9fafb}
 .plan-toggle span{font-size:11px;line-height:1}
 
 /* 深色模式适配 */
-.dark body{background:#1a1a1a;color:#e0e0e0}
 .dark a{color:#64b5f6}
 .dark .section,
-.dark section.section{background:#1a1a1a!important}
+.dark section.section{background:var(--bg)!important}
 .dark .section[style],
-.dark section[style]{background:#1a1a1a!important}
-.dark .day-card{background:#2d2d2d;box-shadow:0 2px 12px rgba(0,0,0,.3)}
-.dark .day-header{border-bottom-color:#444}
-.dark .day-info h3{color:#e0e0e0}
-.dark .day-info .route{color:#aaa}
-.dark .chevron{color:#888}
-.dark .day-map{border-color:#444}
-.dark .spot{background:#333;border-color:#444}
-.dark .spot h4{color:#e0e0e0}
-.dark .spot .desc{color:#bbb}
-.dark .spot .time-info{color:#aaa;border-top-color:#444}
+.dark section[style]{background:var(--bg)!important}
+.dark .day-card{background:var(--bg-white);box-shadow:0 2px 12px var(--shadow)}
+.dark .day-header{border-bottom-color:var(--border)}
+.dark .day-info h3{color:var(--text)}
+.dark .day-info .route{color:var(--text-light)}
+.dark .chevron{color:var(--text-muted)}
+.dark .day-map{border-color:var(--border)}
+.dark .spot{background:var(--bg-card);border-color:var(--border)}
+.dark .spot h4{color:var(--text)}
+.dark .spot .desc{color:var(--text)}
+.dark .spot .time-info{color:var(--text-light);border-top-color:var(--border)}
 .dark .transport-bar{background:#1e3a2f;border-color:#2d5a3f}
-.dark .transport-bar .info{color:#e0e0e0}
+.dark .transport-bar .info{color:var(--text)}
 .dark .transport-bar.warn{background:#3a2e1e;border-color:#5a4a2d}
 .dark .transport-bar.alt{background:#2d1e3a;border-color:#4a2d6a}
-.dark .info-card{background:#2d2d2d;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.dark .info-card h4{color:#e0e0e0}
-.dark .info-card li{border-bottom-color:#444}
-.dark table{background:#2d2d2d;box-shadow:0 1px 6px rgba(0,0,0,.3)}
+.dark .info-card{background:var(--bg-white);box-shadow:0 2px 8px var(--shadow)}
+.dark .info-card h4{color:var(--text)}
+.dark .info-card li{border-bottom-color:var(--border)}
+.dark table{background:var(--bg-white);box-shadow:0 1px 6px var(--shadow)}
 .dark td{border-bottom-color:#333}
-.dark tr:hover td{background:#333}
-.dark .tabs{border-bottom-color:#444}
-.dark .tab-btn{color:#aaa}
+.dark tr:hover td{background:var(--bg-card)}
+.dark .tabs{border-bottom-color:var(--border)}
+.dark .tab-btn{color:var(--text-light)}
 .dark .tab-btn.active{color:#64b5f6;border-bottom-color:#64b5f6}
-.dark .map-legend{color:#aaa}
-.dark .section-title{color:#e0e0e0;border-left-color:#64b5f6}
-.dark .footer{color:#888;border-top-color:#333}
+.dark .map-legend{color:var(--text-light)}
+.dark .section-title{color:var(--text);border-left-color:#64b5f6}
+.dark .footer{color:var(--text-muted);border-top-color:#333}
 
 .dark .alt-section{background:#2d1e3a;border-color:#4a2d6a}
 .dark .alt-section h4{color:#ce93d8}
-.dark .comparison-table td:first-child{color:#e0e0e0}
+.dark .comparison-table td:first-child{color:var(--text)}
 .dark .xhs-link{background:#d32f2f}
 .dark .timeline::before{background:#64b5f6}
-.dark .timeline-item::before{background:#64b5f6;border-color:#2d2d2d}
+.dark .timeline-item::before{background:#64b5f6;border-color:var(--bg-white)}
 .dark .timeline-item .time{color:#64b5f6}
-.dark .timeline-item .content{color:#bbb}
+.dark .timeline-item .content{color:var(--text-light)}
 
 /* 深色模式地图滤镜 - 已改用官方深色瓦片 */
 
@@ -188,14 +217,14 @@ tr:hover td{background:#f9fafb}
 .dark [style*="background:#f0fdf4"],
 .dark [style*="background: #f0fdf4"]{background:#1e3a2f!important;border-color:#2d5a3f!important}
 .dark [style*="background:#f0fdf4"] *,
-.dark [style*="background: #f0fdf4"] *{color:#e0e0e0}
+.dark [style*="background: #f0fdf4"] *{color:var(--text)}
 .dark [style*="background:#f0fdf4"] strong,
 .dark [style*="background: #f0fdf4"] strong{color:#81c784!important}
 
 .dark [style*="background:#fff8e1"],
 .dark [style*="background: #fff8e1"]{background:#3a2e1e!important;border-color:#5a4a2d!important}
 .dark [style*="background:#fff8e1"] *,
-.dark [style*="background: #fff8e1"] *{color:#e0e0e0}
+.dark [style*="background: #fff8e1"] *{color:var(--text)}
 .dark [style*="background:#fff8e1"] strong,
 .dark [style*="background: #fff8e1"] strong{color:#ffb74d!important}
 
@@ -207,9 +236,9 @@ tr:hover td{background:#f9fafb}
 .dark [style*="color:#e65100"],
 .dark [style*="color: #e65100"]{color:#ffb74d!important}
 .dark [style*="color:#555"],
-.dark [style*="color: #555"]{color:#bbb!important}
+.dark [style*="color: #555"]{color:var(--text-light)!important}
 .dark [style*="color:#666"],
-.dark [style*="color: #666"]{color:#aaa!important}
+.dark [style*="color: #666"]{color:var(--text-light)!important}
 </style>
 </head>
 <body>
@@ -233,10 +262,10 @@ tr:hover td{background:#f9fafb}
 
 <header class="hero">
   <div class="container">
-    <h1>🏔️ 云南6日家庭游</h1>
+    <h1>🏔️ 云南5日家庭游</h1>
     <p class="subtitle">昆明 → 丽江 → 香格里拉 · 5人同行</p>
     <div class="meta">
-      <span>📅 2026年9月25日(中秋) - 9月30日</span>
+      <span>📅 2026年9月25日(中秋) - 9月29日</span>
       <span>👥 5人同行（2位年轻人+3位长辈）</span>
       <span>✈️ 揭阳/湛江 → 昆明</span>
     </div>
@@ -250,8 +279,8 @@ tr:hover td{background:#f9fafb}
     
     <!-- 总览地图方案切换 -->
     <div class="tabs" style="margin-bottom:0">
-      <button class="tab-btn active" onclick="switchOverviewMap('a')">🅰️ 方案A：昆明中转</button>
-      <button class="tab-btn" onclick="switchOverviewMap('b')">🅱️ 方案B：大理中转</button>
+      <button class="tab-btn active" onclick="switchAllPlans('a')">🅰️ 方案A：昆明中转</button>
+      <button class="tab-btn" onclick="switchAllPlans('b')">🅱️ 方案B：大理中转</button>
     </div>
     
     <!-- 方案A地图 -->
@@ -957,7 +986,7 @@ tr:hover td{background:#f9fafb}
 
 <footer class="footer">
   <div class="container">
-    <p>云南6日家庭游规划 · 数据来源：小红书热门攻略 · 最后更新：2026-08-31</p>
+    <p>云南5日家庭游规划 · 数据来源：小红书热门攻略 · 最后更新：2026-08-31</p>
   </div>
 </footer>
 
@@ -1030,16 +1059,22 @@ addMarker(mapMainA,102.95,25.10,'#e74c3c','昆明长水机场','起点'); addMar
 addMarker(mapMainA,100.22,26.87,'#3498db','丽江古城','海拔2400m'); addMarker(mapMainA,100.26,27.10,'#f39c12','玉龙雪山','海拔4680m');
 addMarker(mapMainA,100.05,27.15,'#f39c12','虎跳峡','世界最深峡谷'); addMarker(mapMainA,99.70,27.83,'#9b59b6','香格里拉','海拔3300m');
 addMarker(mapMainA,99.68,27.85,'#f39c12','松赞林寺','小布达拉宫');
-addRoute(mapMainA,[[102.95,25.10],[100.22,26.87]],'#3b82f6'); addRoute(mapMainA,[[100.22,26.87],[100.05,27.15],[99.70,27.83]],'#f39c12');
+addRoute(mapMainA,[[102.95,25.10],[100.22,26.87]],'#3b82f6');
+addRoute(mapMainA,[[100.22,26.87],[100.05,27.15],[99.70,27.83]],'#f39c12');
+addRoute(mapMainA,[[99.70,27.83],[100.22,26.87]],'#9b59b6');
 addLabel(mapMainA,101.50,25.95,'高铁 3.5h','#3b82f6'); addLabel(mapMainA,100.00,27.35,'自驾 4h','#f39c12');
+addLabel(mapMainA,99.90,27.35,'高铁 1.5h','#9b59b6');
 
 // 总览地图B
 var mapMainB = createMap('map-main-b', [101.0, 26.0], 8);
 addMarker(mapMainB,102.95,25.10,'#e74c3c','昆明长水机场','起点'); addMarker(mapMainB,102.72,25.02,'#e74c3c','昆明站');
 addMarker(mapMainB,100.22,25.58,'#27ae60','大理古城','方案B'); addMarker(mapMainB,100.20,25.75,'#27ae60','洱海','看日出日落');
 addMarker(mapMainB,100.22,26.87,'#3498db','丽江古城'); addMarker(mapMainB,99.70,27.83,'#9b59b6','香格里拉');
-addRoute(mapMainB,[[102.95,25.10],[100.22,25.58]],'#27ae60'); addRoute(mapMainB,[[100.22,25.58],[100.22,26.87]],'#27ae60');
+addRoute(mapMainB,[[102.95,25.10],[100.22,25.58]],'#27ae60');
+addRoute(mapMainB,[[100.22,25.58],[100.22,26.87]],'#27ae60');
 addRoute(mapMainB,[[100.22,26.87],[100.05,27.15],[99.70,27.83]],'#f39c12');
+addRoute(mapMainB,[[99.70,27.83],[100.22,26.87]],'#9b59b6');
+addLabel(mapMainB,100.22,25.40,'高铁 2h','#27ae60'); addLabel(mapMainB,100.00,27.35,'自驾 4h','#f39c12');
 
 // Day1A
 var map1a = createMap('map-day1-a', [102.80, 25.03], 12);
@@ -1093,22 +1128,6 @@ function switchTab(btn, panelId) {
   btn.classList.add('active');
   document.getElementById(panelId).classList.add('active');
   setTimeout(refreshMaps, 100);
-}
-
-function switchOverviewMap(plan) {
-  var mapA = document.getElementById('overview-map-a');
-  var mapB = document.getElementById('overview-map-b');
-  var tabs = mapA.parentElement.querySelectorAll('.tabs .tab-btn');
-  if (plan === 'a') {
-    mapA.style.height='auto'; mapA.style.overflow='visible'; mapA.style.position='static';
-    mapB.style.height='0'; mapB.style.overflow='hidden'; mapB.style.position='absolute'; mapB.style.left='-9999px';
-    tabs[0].classList.add('active'); tabs[1].classList.remove('active');
-  } else {
-    mapA.style.height='0'; mapA.style.overflow='hidden'; mapA.style.position='absolute'; mapA.style.left='-9999px';
-    mapB.style.height='auto'; mapB.style.overflow='visible'; mapB.style.position='static';
-    tabs[0].classList.remove('active'); tabs[1].classList.add('active');
-  }
-  setTimeout(refreshMaps, 200);
 }
 
 function toggleSatellite(btn) {
@@ -1195,30 +1214,38 @@ function togglePlan() {
   switchAllPlans(currentPlan);
 }
 
+// 通用tab切换函数
+function switchTabs(tabContainer, plan) {
+  if (!tabContainer) return;
+  var tabs = tabContainer.querySelectorAll('.tab-btn');
+  var panels = tabContainer.querySelectorAll('.tab-panel');
+  tabs.forEach(function(t){ t.classList.remove('active'); });
+  panels.forEach(function(p){ p.classList.remove('active'); });
+  var index = plan === 'a' ? 0 : 1;
+  if (tabs[index]) tabs[index].classList.add('active');
+  if (panels[index]) panels[index].classList.add('active');
+}
+
 function switchAllPlans(plan) {
-  var overviewPlanA = document.getElementById('overview-plan-a');
-  var overviewPlanB = document.getElementById('overview-plan-b');
-  if (overviewPlanA && overviewPlanB) {
-    var tabs = overviewPlanA.parentElement.querySelectorAll('.tab-btn');
-    tabs.forEach(function(t){ t.classList.remove('active'); });
-    if (plan==='a') { overviewPlanA.classList.add('active'); overviewPlanB.classList.remove('active'); tabs[0].classList.add('active'); }
-    else { overviewPlanA.classList.remove('active'); overviewPlanB.classList.add('active'); tabs[1].classList.add('active'); }
+  // 切换总览地图
+  var mapA = document.getElementById('overview-map-a');
+  var mapB = document.getElementById('overview-map-b');
+  if (mapA && mapB) {
+    if (plan === 'a') {
+      mapA.style.height='auto'; mapA.style.overflow='visible'; mapA.style.position='static';
+      mapB.style.height='0'; mapB.style.overflow='hidden'; mapB.style.position='absolute'; mapB.style.left='-9999px';
+    } else {
+      mapA.style.height='0'; mapA.style.overflow='hidden'; mapA.style.position='absolute'; mapA.style.left='-9999px';
+      mapB.style.height='auto'; mapB.style.overflow='visible'; mapB.style.position='static';
+    }
   }
-  var day1A = document.getElementById('day1-plan-a'), day1B = document.getElementById('day1-plan-b');
-  if (day1A && day1B) {
-    var t1 = day1A.parentElement.querySelectorAll('.tab-btn');
-    t1.forEach(function(t){ t.classList.remove('active'); });
-    if (plan==='a') { day1A.classList.add('active'); day1B.classList.remove('active'); t1[0].classList.add('active'); }
-    else { day1A.classList.remove('active'); day1B.classList.add('active'); t1[1].classList.add('active'); }
-  }
-  var day2A = document.getElementById('day2-plan-a'), day2B = document.getElementById('day2-plan-b');
-  if (day2A && day2B) {
-    var t2 = day2A.parentElement.querySelectorAll('.tab-btn');
-    t2.forEach(function(t){ t.classList.remove('active'); });
-    if (plan==='a') { day2A.classList.add('active'); day2B.classList.remove('active'); t2[0].classList.add('active'); }
-    else { day2A.classList.remove('active'); day2B.classList.add('active'); t2[1].classList.add('active'); }
-  }
-  switchOverviewMap(plan);
+  
+  // 切换所有tab
+  switchTabs(document.querySelector('#overview-plan-a')?.parentElement, plan);
+  switchTabs(document.querySelector('#day1-plan-a')?.parentElement, plan);
+  switchTabs(document.querySelector('#day2-plan-a')?.parentElement, plan);
+  
+  setTimeout(refreshMaps, 200);
 }
 
 function initPlan() {
