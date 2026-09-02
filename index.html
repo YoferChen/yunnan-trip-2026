@@ -181,20 +181,24 @@ tr:hover td{background:var(--bg-card)}
 /* PPT卡片模式 - 全屏滚动锁定 */
 .ppt-card-mode{
   overflow:hidden;
+  height:100vh;
 }
 .ppt-card-mode body{
   overflow: hidden;
+  height:100vh;
 }
 .ppt-card-mode .ppt-cards-wrapper{
   height:100vh;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 .ppt-card-mode .ppt-card{
   min-height:100vh;
+  height:100vh;
   scroll-snap-align:start;
-  padding-bottom:80px;
+  overflow-y: auto;
 }
 .ppt-card-mode .ppt-card::-webkit-scrollbar{
   width:4px;
@@ -1195,14 +1199,24 @@ tr:hover td{background:var(--bg-card)}
     <div id="tab-weather" class="tab-panel active">
       <div class="table-wrap">
         <table>
-          <thead><tr><th>城市</th><th>海拔</th><th>9月底气温</th><th>穿搭建议</th></tr></thead>
+          <thead><tr><th>城市/地点</th><th>海拔</th><th>9月底气温</th><th>穿搭建议</th></tr></thead>
           <tbody>
             <tr><td>昆明</td><td>~1890m</td><td>15-22°C</td><td>长袖+薄外套</td></tr>
-            <tr><td>丽江</td><td>~2400m</td><td>10-20°C</td><td>冲锋衣/卫衣</td></tr>
-            <tr><td>玉龙雪山</td><td>4680m</td><td>-5~5°C</td><td>羽绒服必备</td></tr>
+            <tr><td>大理</td><td>~1970m</td><td>12-21°C</td><td>长袖+薄外套，早晚加厚</td></tr>
+            <tr><td>丽江古城</td><td>~2400m</td><td>10-20°C</td><td>冲锋衣/卫衣</td></tr>
+            <tr><td>云杉坪</td><td>~3240m</td><td>5-12°C</td><td>冲锋衣+抓绒</td></tr>
+            <tr><td>玉龙雪山顶</td><td>~4680m</td><td>-5~5°C</td><td>羽绒服必备（景区可租）</td></tr>
             <tr><td>香格里拉</td><td>~3300m</td><td>5-18°C</td><td>羽绒服+保暖内衣</td></tr>
           </tbody>
         </table>
+      </div>
+      <div style="margin-top:16px;padding:16px;background:var(--bg-card);border-radius:8px">
+        <h4 style="margin-bottom:8px;color:var(--accent)">👕 穿搭小贴士</h4>
+        <ul style="font-size:.9rem;color:var(--text-light);list-style:none">
+          <li>• 云南早晚温差大，建议<strong>洋葱式穿搭</strong>，方便增减</li>
+          <li>• 玉龙雪山羽绒服可在景区租（50元），不用自带</li>
+          <li>• 香格里拉海拔高，注意保暖，避免感冒引发高反</li>
+        </ul>
       </div>
     </div>
     <div id="tab-health" class="tab-panel">
@@ -1240,41 +1254,142 @@ tr:hover td{background:var(--bg-card)}
     </div>
     <div id="tab-food" class="tab-panel">
       <div class="info-grid">
-        <div class="info-card"><h4>🍜 昆明美食</h4><ul><li>过桥米线、小锅米线</li><li>汽锅鸡、野生菌火锅</li><li>鲜花饼（伴手礼）</li></ul></div>
-        <div class="info-card"><h4>🍜 丽江美食</h4><ul><li>腊排骨火锅</li><li>鸡豆凉粉、丽江粑饼</li></ul></div>
-        <div class="info-card"><h4>🍜 香格里拉美食</h4><ul><li>牦牛火锅（必吃）</li><li>酥油茶、青稞饼</li></ul></div>
+        <div class="info-card">
+          <h4>🍜 昆明美食</h4>
+          <ul>
+            <li><strong>篆新农贸市场：</strong>烤饵块、豆花米线、各种云南水果</li>
+            <li><strong>野生菌火锅：</strong>"菌故"或"滇菌王"（9月正当季）</li>
+            <li><strong>汽锅鸡：</strong>"福照楼"或"翠府"</li>
+            <li><strong>过桥米线：</strong>"建新园"或"桥香园"</li>
+            <li><strong>傣味小炒：</strong>"傣家小院"</li>
+            <li><strong>鲜花饼：</strong>"嘉华饼屋"（伴手礼首选）</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>🍜 大理美食</h4>
+          <ul>
+            <li><strong>白族土八碗：</strong>白族传统宴席菜</li>
+            <li><strong>喜洲粑粑：</strong>喜洲古镇必吃，甜/咸可选</li>
+            <li><strong>乳扇：</strong>大理特色奶制品，烤/炸都好吃</li>
+            <li><strong>凉鸡米线：</strong>"再回首"老字号</li>
+            <li><strong>酸辣鱼：</strong>洱海鱼，酸辣开胃</li>
+            <li><strong>烤饵块：</strong>古城路边摊都有</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>🍜 丽江美食</h4>
+          <ul>
+            <li><strong>忠义市场：</strong>拌水果（9.9元随便选）、纳西粑粑</li>
+            <li><strong>腊排骨火锅：</strong>"钰洁腊排骨"或"滇厨餐厅"</li>
+            <li><strong>鸡豆凉粉：</strong>"阿妈意"或古城内小摊</li>
+            <li><strong>丽江粑粑：</strong>"丽江粑粑铺"</li>
+            <li><strong>束河美食：</strong>"粗茶淡饭"（本地人推荐）</li>
+            <li><strong>三文鱼：</strong>"花马街"一带有新鲜虹鳟鱼</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>🍜 香格里拉美食</h4>
+          <ul>
+            <li><strong>牦牛火锅：</strong>"阿若康巴"或"迪庆藏餐"（必吃）</li>
+            <li><strong>酥油茶：</strong>"觉色滇香"或古城内藏餐馆</li>
+            <li><strong>青稞饼/糌粑：</strong>古城内藏餐馆都有</li>
+            <li><strong>酸奶：</strong>"香格里拉酸奶坊"</li>
+            <li><strong>松茸：</strong>9月是松茸季，可以尝尝鲜松茸</li>
+            <li><strong>尼西土鸡：</strong>当地特色，汤鲜肉嫩</li>
+          </ul>
+        </div>
       </div>
     </div>
     <div id="tab-checklist" class="tab-panel">
       <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin-bottom:16px">
-        <h4 style="color:#166534;margin-bottom:12px">🎒 参考行李清单（亲测实用）</h4>
-        <div style="font-size:.9rem;color:#555">
-          <p><strong>你和妈妈各背一个双肩包：</strong></p>
-          <p style="margin-top:8px"><strong>你的包：</strong>士力架、可乐、雨衣、鞋套、冲锋衣、防晒手套、防晒口罩、防晒帽</p>
-          <p><strong>妈妈的包：</strong>糖果、保温杯、雨伞、牛肉干、冲锋衣、防晒手套、防晒口罩、防晒帽</p>
+        <h4 style="color:#166534;margin-bottom:12px">🎒 5人行李分配建议</h4>
+        <div style="font-size:.9rem;color:#var(--text)">
+          <p><strong>两位年轻人各背一个双肩包：</strong></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
+            <div style="background:var(--bg-card);padding:12px;border-radius:8px">
+              <p style="font-weight:600;color:var(--accent)">包1（体力好）</p>
+              <ul style="list-style:none;margin-top:4px">
+                <li>• 士力架、巧克力</li>
+                <li>• 可乐（补充能量）</li>
+                <li>• 雨衣、鞋套</li>
+                <li>• 冲锋衣（备用）</li>
+                <li>• 充电宝</li>
+              </ul>
+            </div>
+            <div style="background:var(--bg-card);padding:12px;border-radius:8px">
+              <p style="font-weight:600;color:var(--accent)">包2（细心）</p>
+              <ul style="list-style:none;margin-top:4px">
+                <li>• 糖果、牛肉干</li>
+                <li>• 保温杯（热水）</li>
+                <li>• 雨伞</li>
+                <li>• 湿纸巾、纸巾</li>
+                <li>• 急救药品</li>
+              </ul>
+            </div>
+          </div>
+          <p style="margin-top:12px;color:var(--text-light)"><strong>长辈3人：</strong>轻装出行，只带随身小包（手机、钱包、身份证、常用药）</p>
         </div>
       </div>
-      <div class="checklist">
-        <label><input type="checkbox"> 身份证</label>
-        <label><input type="checkbox"> 冲锋衣（必带）</label>
-        <label><input type="checkbox"> 防晒手套</label>
-        <label><input type="checkbox"> 防晒口罩</label>
-        <label><input type="checkbox"> 防晒帽</label>
-        <label><input type="checkbox"> 墨镜</label>
-        <label><input type="checkbox"> 保温杯</label>
-        <label><input type="checkbox"> 雨衣/雨伞</label>
-        <label><input type="checkbox"> 鞋套</label>
-        <label><input type="checkbox"> 士力架/巧克力</label>
-        <label><input type="checkbox"> 可乐（补充能量）</label>
-        <label><input type="checkbox"> 牛肉干/糖果</label>
-        <label><input type="checkbox"> 葡萄糖口服液</label>
-        <label><input type="checkbox"> 布洛芬</label>
-        <label><input type="checkbox"> 感冒药</label>
-        <label><input type="checkbox"> 藿香正气液</label>
-        <label><input type="checkbox"> 湿纸巾</label>
-        <label><input type="checkbox"> 一次性内裤袜子</label>
-        <label><input type="checkbox"> 充电宝</label>
-        <label><input type="checkbox"> 驾照（自驾）</label>
+      <h4 style="margin-bottom:12px;color:var(--accent)">📋 完整清单（可勾选）</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
+        <div>
+          <h5 style="color:var(--primary);margin-bottom:8px">📱 随身必备</h5>
+          <div class="checklist">
+            <label><input type="checkbox"> 身份证（5人）</label>
+            <label><input type="checkbox"> 手机+充电宝</label>
+            <label><input type="checkbox"> 现金（部分景点）</label>
+            <label><input type="checkbox"> 驾照（自驾）</label>
+          </div>
+        </div>
+        <div>
+          <h5 style="color:var(--primary);margin-bottom:8px">👕 穿搭衣物</h5>
+          <div class="checklist">
+            <label><input type="checkbox"> 冲锋衣（必带）</label>
+            <label><input type="checkbox"> 羽绒服（雪山/香格里拉）</label>
+            <label><input type="checkbox"> 保暖内衣</label>
+            <label><input type="checkbox"> 换洗衣物</label>
+          </div>
+        </div>
+        <div>
+          <h5 style="color:var(--primary);margin-bottom:8px">🧴 防晒用品</h5>
+          <div class="checklist">
+            <label><input type="checkbox"> 防晒霜（SPF50+）</label>
+            <label><input type="checkbox"> 防晒帽</label>
+            <label><input type="checkbox"> 防晒口罩</label>
+            <label><input type="checkbox"> 防晒手套</label>
+            <label><input type="checkbox"> 墨镜</label>
+          </div>
+        </div>
+        <div>
+          <h5 style="color:var(--primary);margin-bottom:8px">💊 药品健康</h5>
+          <div class="checklist">
+            <label><input type="checkbox"> 葡萄糖口服液</label>
+            <label><input type="checkbox"> 布洛芬</label>
+            <label><input type="checkbox"> 感冒药</label>
+            <label><input type="checkbox"> 藿香正气液</label>
+            <label><input type="checkbox"> 肠胃药</label>
+            <label><input type="checkbox"> 创可贴</label>
+          </div>
+        </div>
+        <div>
+          <h5 style="color:var(--primary);margin-bottom:8px">🍫 能量补给</h5>
+          <div class="checklist">
+            <label><input type="checkbox"> 士力架/巧克力</label>
+            <label><input type="checkbox"> 可乐</label>
+            <label><input type="checkbox"> 牛肉干</label>
+            <label><input type="checkbox"> 糖果</label>
+            <label><input type="checkbox"> 保温杯</label>
+          </div>
+        </div>
+        <div>
+          <h5 style="color:var(--primary);margin-bottom:8px">🌂 其他</h5>
+          <div class="checklist">
+            <label><input type="checkbox"> 雨衣/雨伞</label>
+            <label><input type="checkbox"> 鞋套</label>
+            <label><input type="checkbox"> 湿纸巾</label>
+            <label><input type="checkbox"> 一次性内裤袜子</label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1598,6 +1713,7 @@ function scrollToCard(index) {
     // 锁定到当前卡片
     cards[index].scrollIntoView({ behavior: 'smooth' });
     updatePPTIndicator();
+    showIndicator();
     setTimeout(refreshMaps, 300);
   }
 }
