@@ -1050,15 +1050,12 @@ function addLabel(map, lng, lat, text, bgColor) {
 }
 
 function refreshMaps() {
-  allMaps.forEach(function(i){
-    try {
-      if(i.map && i.map.getStatus && typeof i.map.resize === 'function') {
-        i.map.resize();
-      }
-    } catch(e) {
-      // ignore resize errors
+  for (var i = 0; i < allMaps.length; i++) {
+    var m = allMaps[i].map;
+    if (m && m.resize) {
+      try { m.resize(); } catch(e) {}
     }
-  });
+  }
 }
 
 initTheme();
