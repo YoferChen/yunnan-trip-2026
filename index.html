@@ -1220,10 +1220,8 @@ var currentDarkStyleIndex = 0;
 
 function initTheme() {
   var saved = localStorage.getItem('theme');
-  var btn = document.querySelector('.theme-toggle');
   if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark');
-    btn.textContent = '☀️';
     isDarkMode = true;
   }
 }
@@ -1505,11 +1503,10 @@ updatePPTIndicator();
 
 var currentPlan = 'a';
 function togglePlan() {
-  var btn = document.getElementById('planLabel');
   currentPlan = currentPlan === 'a' ? 'b' : 'a';
-  btn.textContent = currentPlan.toUpperCase();
   localStorage.setItem('plan', currentPlan);
   switchAllPlans(currentPlan);
+  showToast('已切换到方案' + currentPlan.toUpperCase());
 }
 
 // 通用tab切换函数
@@ -1548,8 +1545,7 @@ function switchAllPlans(plan) {
 
 function initPlan() {
   var saved = localStorage.getItem('plan');
-  var btn = document.getElementById('planLabel');
-  if (saved === 'b') { currentPlan='b'; btn.textContent='B'; switchAllPlans('b'); }
+  if (saved === 'b') { currentPlan='b'; switchAllPlans('b'); }
 }
 
 initPlan();
