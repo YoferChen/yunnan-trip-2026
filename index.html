@@ -1049,7 +1049,17 @@ function addLabel(map, lng, lat, text, bgColor) {
   new AMap.Text({text:text, position:[lng,lat], style:{'background':bgColor,'color':'#fff','padding':'2px 6px','border-radius':'3px','font-size':'11px','border':'none'}}).setMap(map);
 }
 
-function refreshMaps() { allMaps.forEach(function(i){ if(i.map) i.map.resize(); }); }
+function refreshMaps() {
+  allMaps.forEach(function(i){
+    try {
+      if(i.map && i.map.getStatus && typeof i.map.resize === 'function') {
+        i.map.resize();
+      }
+    } catch(e) {
+      // ignore resize errors
+    }
+  });
+}
 
 initTheme();
 
