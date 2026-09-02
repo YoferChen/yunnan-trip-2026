@@ -130,7 +130,7 @@ tr:hover td{background:var(--bg-card)}
 }
 
 /* PPT模式切换按钮 */
-.ppt-toggle{position:fixed;top:236px;right:20px;z-index:10000;background:#ff7043;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
+.ppt-toggle{position:fixed;top:236px;right:20px;z-index:10000;background:#ff7043;color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);transition:.3s}
 .ppt-toggle:hover{background:#f4511e;transform:scale(1.1)}
 .ppt-toggle.active{background:#4caf50}
 
@@ -226,7 +226,6 @@ tr:hover td{background:var(--bg-card)}
 }
 
 @media(max-width:768px){
-  .ppt-toggle{display:flex}
   .ppt-nav-btn{width:40px;height:40px;font-size:16px}
 }
 .alt-section{background:#faf5ff;border:2px solid #e1bee7;border-radius:12px;padding:16px;margin-top:16px}
