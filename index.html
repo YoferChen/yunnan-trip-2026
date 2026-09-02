@@ -179,18 +179,20 @@ tr:hover td{background:var(--bg-card)}
 /* PPT卡片模式 - 全屏滚动锁定 */
 .ppt-card-mode{
   overflow:hidden;
-  height:100vh;
 }
 .ppt-card-mode body{
-  overflow:hidden;
+  overflow: hidden;
+}
+.ppt-card-mode .ppt-cards-wrapper{
   height:100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 }
 .ppt-card-mode .ppt-card{
   min-height:100vh;
-  height:100vh;
-  overflow-y:auto;
-  padding-bottom:80px;
   scroll-snap-align:start;
+  padding-bottom:80px;
 }
 .ppt-card-mode .ppt-card::-webkit-scrollbar{
   width:4px;
@@ -561,6 +563,7 @@ tr:hover td{background:var(--bg-card)}
 </header>
 
 <!-- 行程总览 -->
+<div class="ppt-cards-wrapper">
 <section class="section ppt-card" data-index="0">
   <div class="container">
     <h2 class="section-title">📍 行程总览与地图</h2>
@@ -1284,6 +1287,7 @@ tr:hover td{background:var(--bg-card)}
     </div>
   </div>
 </section>
+</div>
 
 <footer class="footer">
   <div class="container">
