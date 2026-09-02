@@ -963,25 +963,16 @@ tr:hover td{background:#f9fafb}
 
 <script src="https://webapi.amap.com/maps?v=1.4.15&key=c35ae2e7a1c547ed5b27d4aed249a2db"></script>
 <script>
-// 地图数组
 var allMaps = [];
 var isDarkMode = false;
 var isSatellite = false;
-
-// 地图样式配置
 var mapStyles = {
   light: 'amap://styles/normal',
-  darkOptions: [
-    'amap://styles/dark',
-    'amap://styles/darkblue',
-    'amap://styles/blue',
-    'amap://styles/grey'
-  ],
-  darkNames: ['幻影黑', '极夜蓝', '靛青蓝', '雅士灰']
+  darkOptions: ['amap://styles/dark','amap://styles/darkblue','amap://styles/blue','amap://styles/grey'],
+  darkNames: ['幻影黑','极夜蓝','靛青蓝','雅士灰']
 };
 var currentDarkStyleIndex = 0;
 
-// 初始化主题
 function initTheme() {
   var saved = localStorage.getItem('theme');
   var btn = document.querySelector('.theme-toggle');
@@ -992,22 +983,14 @@ function initTheme() {
   }
 }
 
-// 创建地图
 function createMap(id, center, zoom) {
   var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
-  var map = new AMap.Map(id, {
-    viewMode: '2D',
-    zoom: zoom,
-    center: center,
-    mapStyle: style
-  });
-  allMaps.push({id: id, map: map});
+  var map = new AMap.Map(id, {viewMode:'2D', zoom:zoom, center:center, mapStyle:style});
+  allMaps.push({id:id, map:map});
   return map;
 }
 
-// 添加标记（带名称标签）
 function addMarker(map, lng, lat, color, title, desc) {
-  // 创建标记点
   var marker = new AMap.Marker({
     position: [lng, lat],
     title: title,
@@ -1017,306 +1000,92 @@ function addMarker(map, lng, lat, color, title, desc) {
       imageSize: new AMap.Size(24, 24)
     })
   });
-  
-  // 添加名称标签
   var nameLabel = new AMap.Text({
-    text: title,
-    position: [lng, lat],
-    offset: new AMap.Pixel(15, -5),
-    style: {
-      'background': 'rgba(255,255,255,0.9)',
-      'color': '#333',
-      'padding': '2px 6px',
-      'border-radius': '3px',
-      'font-size': '12px',
-      'font-weight': 'bold',
-      'border': '1px solid ' + color,
-      'white-space': 'nowrap'
-    }
+    text: title, position: [lng, lat], offset: new AMap.Pixel(15, -5),
+    style: {'background':'rgba(255,255,255,0.9)','color':'#333','padding':'2px 6px','border-radius':'3px','font-size':'12px','font-weight':'bold','border':'1px solid '+color,'white-space':'nowrap'}
   });
   nameLabel.setMap(map);
-  
-  // 点击显示详情
   if (desc) {
-    var infoWindow = new AMap.InfoWindow({
-      content: '<div style="padding:8px;"><b>' + title + '</b><br>' + desc + '</div>',
-      offset: new AMap.Pixel(0, -12)
-    });
-    marker.on('click', function() {
-      infoWindow.open(map, marker.getPosition());
-    });
+    var infoWindow = new AMap.InfoWindow({content:'<div style="padding:8px;"><b>'+title+'</b><br>'+desc+'</div>', offset:new AMap.Pixel(0,-12)});
+    marker.on('click', function(){ infoWindow.open(map, marker.getPosition()); });
   }
-  
   marker.setMap(map);
-  return marker;
 }
 
-// 添加路线
 function addRoute(map, path, color) {
-  var polyline = new AMap.Polyline({
-    path: path,
-    strokeColor: color,
-    strokeWeight: 3,
-    strokeStyle: 'dashed',
-    strokeDasharray: [10, 5]
-  });
-  polyline.setMap(map);
-  return polyline;
+  new AMap.Polyline({path:path, strokeColor:color, strokeWeight:3, strokeStyle:'dashed', strokeDasharray:[10,5]}).setMap(map);
 }
 
-// 添加文字标签
 function addLabel(map, lng, lat, text, bgColor) {
-  var label = new AMap.Text({
-    text: text,
-    position: [lng, lat],
-    style: {
-      'background': bgColor,
-      'color': '#fff',
-      'padding': '2px 6px',
-      'border-radius': '3px',
-      'font-size': '11px',
-      'border': 'none'
-    }
-  });
-  label.setMap(map);
-  return label;
+  new AMap.Text({text:text, position:[lng,lat], style:{'background':bgColor,'color':'#fff','padding':'2px 6px','border-radius':'3px','font-size':'11px','border':'none'}}).setMap(map);
 }
 
-// 刷新地图
-function refreshMaps() {
-  allMaps.forEach(function(item) {
-    if (item.map) item.map.resize();
-  });
-}
+function refreshMaps() { allMaps.forEach(function(i){ if(i.map) i.map.resize(); }); }
 
-// 初始化主题
-initTheme();
-}
-
-// 创建路线
-function createRoute(map, path, color) {
-  if (!AMapRef || !map) return null;
-  var polyline = new AMapRef.Polyline({
-    path: path,
-    strokeColor: color,
-    strokeWeight: 3,
-    strokeStyle: 'dashed',
-    strokeDasharray: [10, 5],
-    lineJoin: 'round'
-  });
-  polyline.setMap(map);
-  return polyline;
-}
-
-// 创建文本标记
-function createTextMarker(map, position, text, bgColor) {
-  if (!AMapRef || !map) return null;
-  var textMarker = new AMapRef.Text({
-    text: text,
-    position: position,
-    style: {
-      'background': bgColor,
-      'color': '#fff',
-      'padding': '2px 6px',
-      'border-radius': '3px',
-      'font-size': '11px',
-      'white-space': 'nowrap',
-      'border': 'none'
-    }
-  });
-  textMarker.setMap(map);
-  return textMarker;
-}
-
-// 刷新地图
-function refreshMaps() {
-  allMaps.forEach(function(item) {
-    if (item.map) item.map.resize();
-  });
-}
-
-// 加载地图
 initTheme();
 
-AMapLoader.load({
-  key: 'c35ae2e7a1c547ed5b27d4aed249a2db',
-  version: '2.0',
-  plugins: ['AMap.Scale', 'AMap.ToolBar']
-}).then(function(AMap) {
-  AMapRef = AMap;
-  AMap.getConfig().appname = 'amap-jsapi-skill';
-  
-  // 存储所有地图
-  window.allMapsData = {};
-  
-  // 创建地图
-  function initMap(id, center, zoom) {
-    var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
-    var map = new AMap.Map(id, {
-      viewMode: '2D',
-      zoom: zoom,
-      center: center,
-      mapStyle: style
-    });
-    allMaps.push({id: id, map: map});
-    window.allMapsData[id] = map;
-    return map;
-  }
-  
-  // 添加标记
-  function addMarker(map, lng, lat, color, title, desc) {
-    var marker = new AMap.Marker({
-      position: [lng, lat],
-      title: title,
-      icon: new AMap.Icon({
-        size: new AMap.Size(24, 24),
-        image: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="' + color + '" stroke="white" stroke-width="2"/></svg>'),
-        imageSize: new AMap.Size(24, 24)
-      })
-    });
-    
-    if (desc) {
-      var infoWindow = new AMap.InfoWindow({
-        content: '<div style="padding:8px;"><b>' + title + '</b><br>' + desc + '</div>',
-        offset: new AMap.Pixel(0, -12)
-      });
-      marker.on('click', function() {
-        infoWindow.open(map, marker.getPosition());
-      });
-    }
-    
-    marker.setMap(map);
-    return marker;
-  }
-  
-  // 添加路线
-  function addRoute(map, path, color) {
-    var polyline = new AMap.Polyline({
-      path: path,
-      strokeColor: color,
-      strokeWeight: 3,
-      strokeStyle: 'dashed',
-      strokeDasharray: [10, 5]
-    });
-    polyline.setMap(map);
-    return polyline;
-  }
-  
-  // 添加文字标签
-  function addLabel(map, lng, lat, text, bgColor) {
-    var label = new AMap.Text({
-      text: text,
-      position: [lng, lat],
-      style: {
-        'background': bgColor,
-        'color': '#fff',
-        'padding': '2px 6px',
-        'border-radius': '3px',
-        'font-size': '11px',
-        'border': 'none'
-      }
-    });
-    label.setMap(map);
-    return label;
-  }
-  
-  // ======== 总览地图（方案A） ========
-  var mapMainA = initMap('map-main-a', [101.0, 26.5], 7);
-  addMarker(mapMainA, 102.95, 25.10, '#e74c3c', '昆明长水机场', '起点');
-  addMarker(mapMainA, 102.72, 25.02, '#e74c3c', '昆明站', '高铁站');
-  addMarker(mapMainA, 100.22, 26.87, '#3498db', '丽江古城', '海拔2400m');
-  addMarker(mapMainA, 100.26, 27.10, '#f39c12', '玉龙雪山', '海拔4680m');
-  addMarker(mapMainA, 100.05, 27.15, '#f39c12', '虎跳峡', '世界最深峡谷');
-  addMarker(mapMainA, 99.70, 27.83, '#9b59b6', '香格里拉', '海拔3300m');
-  addMarker(mapMainA, 99.68, 27.85, '#f39c12', '松赞林寺', '小布达拉宫');
-  addRoute(mapMainA, [[102.95, 25.10], [100.22, 26.87]], '#3b82f6');
-  addRoute(mapMainA, [[100.22, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
-  addRoute(mapMainA, [[99.70, 27.83], [100.22, 26.87]], '#9b59b6');
-  addLabel(mapMainA, 101.50, 25.95, '高铁 3.5h', '#3b82f6');
-  addLabel(mapMainA, 100.00, 27.35, '自驾 4h', '#f39c12');
-  addLabel(mapMainA, 99.90, 27.35, '高铁 1.5h', '#9b59b6');
-  
-  // ======== 总览地图（方案B） ========
-  var mapMainB = initMap('map-main-b', [101.0, 26.0], 8);
-  addMarker(mapMainB, 102.95, 25.10, '#e74c3c', '昆明长水机场', '起点');
-  addMarker(mapMainB, 102.72, 25.02, '#e74c3c', '昆明站', '高铁站');
-  addMarker(mapMainB, 100.22, 25.58, '#27ae60', '大理古城', '方案B');
-  addMarker(mapMainB, 100.20, 25.75, '#27ae60', '洱海', '看日出日落');
-  addMarker(mapMainB, 100.22, 26.87, '#3498db', '丽江古城', '海拔2400m');
-  addMarker(mapMainB, 100.26, 27.10, '#f39c12', '玉龙雪山', '海拔4680m');
-  addMarker(mapMainB, 99.70, 27.83, '#9b59b6', '香格里拉', '海拔3300m');
-  addRoute(mapMainB, [[102.95, 25.10], [100.22, 25.58]], '#27ae60');
-  addRoute(mapMainB, [[100.22, 25.58], [100.22, 26.87]], '#27ae60');
-  addRoute(mapMainB, [[100.22, 26.87], [100.05, 27.15], [99.70, 27.83]], '#f39c12');
-  addRoute(mapMainB, [[99.70, 27.83], [100.22, 26.87]], '#9b59b6');
-  addLabel(mapMainB, 100.22, 25.40, '高铁 2h', '#27ae60');
-  addLabel(mapMainB, 100.00, 27.35, '自驾 4h', '#f39c12');
-  
-  // ======== Day1 方案A 地图（昆明） ========
-  var map1a = initMap('map-day1-a', [102.80, 25.03], 12);
-  addMarker(map1a, 102.95, 25.10, '#e74c3c', '昆明长水机场');
-  addMarker(map1a, 102.72, 25.02, '#e74c3c', '昆明站');
-  addMarker(map1a, 102.71, 25.04, '#f39c12', '篆新农贸市场', '强烈推荐！');
-  addMarker(map1a, 102.68, 24.97, '#f39c12', '滇池海埂公园', '9月秋景美');
-  addMarker(map1a, 102.67, 24.98, '#f39c12', '茶马花街', '美食街');
-  addRoute(map1a, [[102.95, 25.10], [102.72, 25.02]], '#e74c3c');
-  addRoute(map1a, [[102.72, 25.02], [102.71, 25.04], [102.68, 24.97]], '#f39c12');
-  
-  // ======== Day1 方案B 地图（大理） ========
-  var map1b = initMap('map-day1-b', [101.50, 25.50], 9);
-  addMarker(map1b, 102.95, 25.10, '#e74c3c', '昆明长水机场');
-  addMarker(map1b, 102.72, 25.02, '#e74c3c', '昆明站');
-  addMarker(map1b, 100.22, 25.58, '#27ae60', '大理古城');
-  addMarker(map1b, 100.20, 25.75, '#27ae60', '洱海', '看日出日落');
-  addRoute(map1b, [[102.95, 25.10], [102.72, 25.02]], '#e74c3c');
-  addRoute(map1b, [[102.72, 25.02], [100.22, 25.58]], '#27ae60');
-  
-  // ======== Day2 方案A 地图（昆明→丽江） ========
-  var map2a = initMap('map-day2-a', [101.50, 26.00], 8);
-  addMarker(map2a, 102.72, 25.02, '#e74c3c', '昆明站');
-  addMarker(map2a, 100.22, 26.87, '#3498db', '丽江古城');
-  addMarker(map2a, 100.23, 26.88, '#f39c12', '忠义市场', '能看到雪山的菜市场');
-  addRoute(map2a, [[102.72, 25.02], [100.22, 26.87]], '#3b82f6');
-  
-  // ======== Day2 方案B 地图（大理→丽江） ========
-  var map2b = initMap('map-day2-b', [100.20, 26.30], 9);
-  addMarker(map2b, 100.20, 25.75, '#27ae60', '洱海');
-  addMarker(map2b, 100.13, 25.80, '#27ae60', '双廊古镇');
-  addMarker(map2b, 100.22, 26.87, '#3498db', '丽江古城');
-  addRoute(map2b, [[100.20, 25.75], [100.13, 25.80], [100.22, 26.87]], '#27ae60');
-  
-  // ======== Day3 地图（玉龙雪山） ========
-  var map3 = initMap('map-day3', [100.22, 26.95], 12);
-  addMarker(map3, 100.22, 26.87, '#3498db', '丽江古城');
-  addMarker(map3, 100.26, 26.90, '#f39c12', '东巴谷', '日照金山');
-  addMarker(map3, 100.25, 26.95, '#f39c12', '甘海子');
-  addMarker(map3, 100.24, 26.98, '#f39c12', '云杉坪');
-  addMarker(map3, 100.23, 26.97, '#f39c12', '蓝月谷');
-  addMarker(map3, 100.22, 26.94, '#f39c12', '玉湖村');
-  addRoute(map3, [[100.22, 26.87], [100.26, 26.90], [100.25, 26.95], [100.24, 26.98], [100.23, 26.97], [100.22, 26.94]], '#e74c3c');
-  
-  // ======== Day4 地图（丽江→香格里拉） ========
-  var map4 = initMap('map-day4', [100.00, 27.30], 10);
-  addMarker(map4, 100.22, 26.87, '#3498db', '丽江');
-  addMarker(map4, 100.05, 27.15, '#f39c12', '虎跳峡');
-  addMarker(map4, 100.08, 27.25, '#f39c12', '哈巴雪山');
-  addMarker(map4, 99.70, 27.83, '#9b59b6', '香格里拉');
-  addRoute(map4, [[100.22, 26.87], [100.05, 27.15], [100.08, 27.25], [99.70, 27.83]], '#f39c12');
-  
-  // ======== Day5 地图（香格里拉→丽江） ========
-  var map5 = initMap('map-day5', [100.00, 27.35], 11);
-  addMarker(map5, 99.70, 27.83, '#9b59b6', '独克宗古城');
-  addMarker(map5, 99.68, 27.85, '#f39c12', '松赞林寺');
-  addMarker(map5, 99.65, 27.88, '#f39c12', '纳帕海');
-  addMarker(map5, 100.21, 26.90, '#3498db', '束河古镇');
-  addMarker(map5, 100.20, 26.93, '#3498db', '白沙古镇');
-  addRoute(map5, [[99.70, 27.83], [100.21, 26.90]], '#9b59b6');
-  
-}).catch(function(e) {
-  console.error('地图加载失败', e);
-});
+// 总览地图A
+var mapMainA = createMap('map-main-a', [101.0, 26.5], 7);
+addMarker(mapMainA,102.95,25.10,'#e74c3c','昆明长水机场','起点'); addMarker(mapMainA,102.72,25.02,'#e74c3c','昆明站','高铁站');
+addMarker(mapMainA,100.22,26.87,'#3498db','丽江古城','海拔2400m'); addMarker(mapMainA,100.26,27.10,'#f39c12','玉龙雪山','海拔4680m');
+addMarker(mapMainA,100.05,27.15,'#f39c12','虎跳峡','世界最深峡谷'); addMarker(mapMainA,99.70,27.83,'#9b59b6','香格里拉','海拔3300m');
+addMarker(mapMainA,99.68,27.85,'#f39c12','松赞林寺','小布达拉宫');
+addRoute(mapMainA,[[102.95,25.10],[100.22,26.87]],'#3b82f6'); addRoute(mapMainA,[[100.22,26.87],[100.05,27.15],[99.70,27.83]],'#f39c12');
+addLabel(mapMainA,101.50,25.95,'高铁 3.5h','#3b82f6'); addLabel(mapMainA,100.00,27.35,'自驾 4h','#f39c12');
 
-// Tab切换
+// 总览地图B
+var mapMainB = createMap('map-main-b', [101.0, 26.0], 8);
+addMarker(mapMainB,102.95,25.10,'#e74c3c','昆明长水机场','起点'); addMarker(mapMainB,102.72,25.02,'#e74c3c','昆明站');
+addMarker(mapMainB,100.22,25.58,'#27ae60','大理古城','方案B'); addMarker(mapMainB,100.20,25.75,'#27ae60','洱海','看日出日落');
+addMarker(mapMainB,100.22,26.87,'#3498db','丽江古城'); addMarker(mapMainB,99.70,27.83,'#9b59b6','香格里拉');
+addRoute(mapMainB,[[102.95,25.10],[100.22,25.58]],'#27ae60'); addRoute(mapMainB,[[100.22,25.58],[100.22,26.87]],'#27ae60');
+addRoute(mapMainB,[[100.22,26.87],[100.05,27.15],[99.70,27.83]],'#f39c12');
+
+// Day1A
+var map1a = createMap('map-day1-a', [102.80, 25.03], 12);
+addMarker(map1a,102.95,25.10,'#e74c3c','昆明长水机场'); addMarker(map1a,102.72,25.02,'#e74c3c','昆明站');
+addMarker(map1a,102.71,25.04,'#f39c12','篆新农贸市场','强烈推荐！'); addMarker(map1a,102.68,24.97,'#f39c12','滇池海埂公园');
+addMarker(map1a,102.67,24.98,'#f39c12','茶马花街');
+addRoute(map1a,[[102.95,25.10],[102.72,25.02]],'#e74c3c'); addRoute(map1a,[[102.72,25.02],[102.71,25.04],[102.68,24.97]],'#f39c12');
+
+// Day1B
+var map1b = createMap('map-day1-b', [101.50, 25.50], 9);
+addMarker(map1b,102.95,25.10,'#e74c3c','昆明长水机场'); addMarker(map1b,102.72,25.02,'#e74c3c','昆明站');
+addMarker(map1b,100.22,25.58,'#27ae60','大理古城'); addMarker(map1b,100.20,25.75,'#27ae60','洱海');
+addRoute(map1b,[[102.95,25.10],[102.72,25.02]],'#e74c3c'); addRoute(map1b,[[102.72,25.02],[100.22,25.58]],'#27ae60');
+
+// Day2A
+var map2a = createMap('map-day2-a', [101.50, 26.00], 8);
+addMarker(map2a,102.72,25.02,'#e74c3c','昆明站'); addMarker(map2a,100.22,26.87,'#3498db','丽江古城');
+addMarker(map2a,100.23,26.88,'#f39c12','忠义市场','能看到雪山的菜市场');
+addRoute(map2a,[[102.72,25.02],[100.22,26.87]],'#3b82f6');
+
+// Day2B
+var map2b = createMap('map-day2-b', [100.20, 26.30], 9);
+addMarker(map2b,100.20,25.75,'#27ae60','洱海'); addMarker(map2b,100.13,25.80,'#27ae60','双廊古镇');
+addMarker(map2b,100.22,26.87,'#3498db','丽江古城');
+addRoute(map2b,[[100.20,25.75],[100.13,25.80],[100.22,26.87]],'#27ae60');
+
+// Day3
+var map3 = createMap('map-day3', [100.22, 26.95], 12);
+addMarker(map3,100.22,26.87,'#3498db','丽江古城'); addMarker(map3,100.26,26.90,'#f39c12','东巴谷','日照金山');
+addMarker(map3,100.25,26.95,'#f39c12','甘海子'); addMarker(map3,100.24,26.98,'#f39c12','云杉坪');
+addMarker(map3,100.23,26.97,'#f39c12','蓝月谷'); addMarker(map3,100.22,26.94,'#f39c12','玉湖村');
+addRoute(map3,[[100.22,26.87],[100.26,26.90],[100.25,26.95],[100.24,26.98],[100.23,26.97],[100.22,26.94]],'#e74c3c');
+
+// Day4
+var map4 = createMap('map-day4', [100.00, 27.30], 10);
+addMarker(map4,100.22,26.87,'#3498db','丽江'); addMarker(map4,100.05,27.15,'#f39c12','虎跳峡');
+addMarker(map4,100.08,27.25,'#f39c12','哈巴雪山'); addMarker(map4,99.70,27.83,'#9b59b6','香格里拉');
+addRoute(map4,[[100.22,26.87],[100.05,27.15],[100.08,27.25],[99.70,27.83]],'#f39c12');
+
+// Day5
+var map5 = createMap('map-day5', [100.00, 27.35], 11);
+addMarker(map5,99.70,27.83,'#9b59b6','独克宗古城'); addMarker(map5,99.68,27.85,'#f39c12','松赞林寺');
+addMarker(map5,99.65,27.88,'#f39c12','纳帕海'); addMarker(map5,100.21,26.90,'#3498db','束河古镇');
+addMarker(map5,100.20,26.93,'#3498db','白沙古镇');
+addRoute(map5,[[99.70,27.83],[100.21,26.90]],'#9b59b6');
+
 function switchTab(btn, panelId) {
   var parent = btn.closest('.section') || btn.closest('.day-body') || btn.parentElement.parentElement;
   parent.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
@@ -1326,282 +1095,142 @@ function switchTab(btn, panelId) {
   setTimeout(refreshMaps, 100);
 }
 
-// 切换总览地图
 function switchOverviewMap(plan) {
   var mapA = document.getElementById('overview-map-a');
   var mapB = document.getElementById('overview-map-b');
   var tabs = mapA.parentElement.querySelectorAll('.tabs .tab-btn');
-  
   if (plan === 'a') {
-    mapA.style.height = 'auto';
-    mapA.style.overflow = 'visible';
-    mapA.style.position = 'static';
-    mapB.style.height = '0';
-    mapB.style.overflow = 'hidden';
-    mapB.style.position = 'absolute';
-    mapB.style.left = '-9999px';
-    tabs[0].classList.add('active');
-    tabs[1].classList.remove('active');
+    mapA.style.height='auto'; mapA.style.overflow='visible'; mapA.style.position='static';
+    mapB.style.height='0'; mapB.style.overflow='hidden'; mapB.style.position='absolute'; mapB.style.left='-9999px';
+    tabs[0].classList.add('active'); tabs[1].classList.remove('active');
   } else {
-    mapA.style.height = '0';
-    mapA.style.overflow = 'hidden';
-    mapA.style.position = 'absolute';
-    mapA.style.left = '-9999px';
-    mapB.style.height = 'auto';
-    mapB.style.overflow = 'visible';
-    mapB.style.position = 'static';
-    tabs[0].classList.remove('active');
-    tabs[1].classList.add('active');
+    mapA.style.height='0'; mapA.style.overflow='hidden'; mapA.style.position='absolute'; mapA.style.left='-9999px';
+    mapB.style.height='auto'; mapB.style.overflow='visible'; mapB.style.position='static';
+    tabs[0].classList.remove('active'); tabs[1].classList.add('active');
   }
-  
   setTimeout(refreshMaps, 200);
 }
 
-// 切换卫星图
 function toggleSatellite(btn) {
   isSatellite = !isSatellite;
-  
   allMaps.forEach(function(item) {
     if (!item.map) return;
-    
     if (isSatellite) {
-      // 添加卫星图层
-      item.satelliteLayer = new AMapRef.TileLayer.Satellite();
-      item.roadNetLayer = new AMapRef.TileLayer.RoadNet();
+      item.satelliteLayer = new AMap.TileLayer.Satellite();
+      item.roadNetLayer = new AMap.TileLayer.RoadNet();
       item.map.add([item.satelliteLayer, item.roadNetLayer]);
     } else {
-      // 移除卫星图层
-      if (item.satelliteLayer) {
-        item.map.remove([item.satelliteLayer, item.roadNetLayer]);
-        item.satelliteLayer = null;
-        item.roadNetLayer = null;
-      }
-      // 恢复深色/浅色样式
-      var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
-      item.map.setMapStyle(style);
+      if (item.satelliteLayer) { item.map.remove([item.satelliteLayer, item.roadNetLayer]); item.satelliteLayer=null; item.roadNetLayer=null; }
+      item.map.setMapStyle(isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light);
     }
   });
-  
   btn.classList.toggle('active', isSatellite);
   btn.textContent = isSatellite ? '🗺️ 路网图' : '🛰️ 卫星图';
 }
 
-// 更新地图主题
 function updateMapTheme() {
   if (isSatellite) return;
   var style = isDarkMode ? mapStyles.darkOptions[currentDarkStyleIndex] : mapStyles.light;
-  allMaps.forEach(function(item) {
-    if (item.map) item.map.setMapStyle(style);
-  });
+  allMaps.forEach(function(item){ if(item.map) item.map.setMapStyle(style); });
 }
 
-// 切换地图样式
 function toggleMapStyle() {
-  if (!isDarkMode) {
-    // 如果是浅色模式，先切换到深色模式
-    toggleTheme();
-    return;
-  }
-  
-  // 循环切换深色样式
+  if (!isDarkMode) { toggleTheme(); return; }
   currentDarkStyleIndex = (currentDarkStyleIndex + 1) % mapStyles.darkOptions.length;
-  var style = mapStyles.darkOptions[currentDarkStyleIndex];
-  var name = mapStyles.darkNames[currentDarkStyleIndex];
-  
-  allMaps.forEach(function(item) {
-    if (item.map) item.map.setMapStyle(style);
-  });
-  
-  // 显示提示
-  showToast('地图样式：' + name);
+  allMaps.forEach(function(item){ if(item.map) item.map.setMapStyle(mapStyles.darkOptions[currentDarkStyleIndex]); });
+  showToast('地图样式：' + mapStyles.darkNames[currentDarkStyleIndex]);
 }
 
-// 显示提示
 function showToast(message) {
   var toast = document.getElementById('toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toast';
-    toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;z-index:10000;transition:opacity 0.3s';
-    document.body.appendChild(toast);
-  }
-  toast.textContent = message;
-  toast.style.opacity = '1';
-  setTimeout(function() {
-    toast.style.opacity = '0';
-  }, 2000);
+  if (!toast) { toast = document.createElement('div'); toast.id='toast'; toast.style.cssText='position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 16px;border-radius:20px;font-size:14px;z-index:10000;transition:opacity 0.3s'; document.body.appendChild(toast); }
+  toast.textContent = message; toast.style.opacity = '1';
+  setTimeout(function(){ toast.style.opacity='0'; }, 2000);
 }
 
-// 深色模式切换
 function toggleTheme() {
   var html = document.documentElement;
   var btn = document.querySelector('.theme-toggle');
   var isDark = html.classList.toggle('dark');
-  
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
   btn.textContent = isDark ? '☀️' : '🌙';
   isDarkMode = isDark;
-  
-  // 切换到深色模式时，重置为第一个深色样式
-  if (isDark) {
-    currentDarkStyleIndex = 0;
-  }
-  
+  if (isDark) currentDarkStyleIndex = 0;
   updateMapTheme();
 }
 
-// PPT模式切换
 function togglePPTMode() {
   var body = document.body;
   var btn = document.querySelector('.ppt-toggle');
   var isPPT = body.classList.toggle('ppt-mode');
-  
   localStorage.setItem('pptMode', isPPT ? 'on' : 'off');
   btn.textContent = isPPT ? '📄' : '📱';
   btn.classList.toggle('active', isPPT);
-  
   if (isPPT) {
-    // PPT模式：展开所有day-card
-    document.querySelectorAll('.day-card').forEach(function(card) {
-      card.classList.add('open');
-    });
+    document.querySelectorAll('.day-card').forEach(function(c){ c.classList.add('open'); });
     showToast('PPT模式：上下滑动浏览');
   } else {
-    // 正常模式：收起所有day-card
-    document.querySelectorAll('.day-card').forEach(function(card) {
-      card.classList.remove('open');
-    });
+    document.querySelectorAll('.day-card').forEach(function(c){ c.classList.remove('open'); });
     showToast('正常模式');
   }
-  
   setTimeout(refreshMaps, 200);
 }
 
-// 初始化PPT模式
 function initPPTMode() {
   var saved = localStorage.getItem('pptMode');
   var btn = document.querySelector('.ppt-toggle');
-  
   if (saved === 'on' && window.innerWidth <= 768) {
     document.body.classList.add('ppt-mode');
-    btn.textContent = '📄';
-    btn.classList.add('active');
-    document.querySelectorAll('.day-card').forEach(function(card) {
-      card.classList.add('open');
-    });
+    btn.textContent = '📄'; btn.classList.add('active');
+    document.querySelectorAll('.day-card').forEach(function(c){ c.classList.add('open'); });
   }
 }
 
-// 方案切换
 var currentPlan = 'a';
-
 function togglePlan() {
   var btn = document.getElementById('planLabel');
-  
-  // 切换方案
   currentPlan = currentPlan === 'a' ? 'b' : 'a';
-  
-  // 更新按钮文字
   btn.textContent = currentPlan.toUpperCase();
-  
-  // 保存偏好
   localStorage.setItem('plan', currentPlan);
-  
-  // 切换所有方案标签
   switchAllPlans(currentPlan);
 }
 
 function switchAllPlans(plan) {
-  // 总览区域的方案
   var overviewPlanA = document.getElementById('overview-plan-a');
   var overviewPlanB = document.getElementById('overview-plan-b');
-  
   if (overviewPlanA && overviewPlanB) {
-    var overviewTabs = overviewPlanA.parentElement.querySelectorAll('.tab-btn');
-    overviewTabs.forEach(function(tab) { tab.classList.remove('active'); });
-    
-    if (plan === 'a') {
-      overviewPlanA.classList.add('active');
-      overviewPlanB.classList.remove('active');
-      overviewTabs[0].classList.add('active');
-    } else {
-      overviewPlanA.classList.remove('active');
-      overviewPlanB.classList.add('active');
-      overviewTabs[1].classList.add('active');
-    }
+    var tabs = overviewPlanA.parentElement.querySelectorAll('.tab-btn');
+    tabs.forEach(function(t){ t.classList.remove('active'); });
+    if (plan==='a') { overviewPlanA.classList.add('active'); overviewPlanB.classList.remove('active'); tabs[0].classList.add('active'); }
+    else { overviewPlanA.classList.remove('active'); overviewPlanB.classList.add('active'); tabs[1].classList.add('active'); }
   }
-  
-  // Day1 的方案
-  var day1PlanA = document.getElementById('day1-plan-a');
-  var day1PlanB = document.getElementById('day1-plan-b');
-  
-  if (day1PlanA && day1PlanB) {
-    var day1Tabs = day1PlanA.parentElement.querySelectorAll('.tab-btn');
-    day1Tabs.forEach(function(tab) { tab.classList.remove('active'); });
-    
-    if (plan === 'a') {
-      day1PlanA.classList.add('active');
-      day1PlanB.classList.remove('active');
-      day1Tabs[0].classList.add('active');
-    } else {
-      day1PlanA.classList.remove('active');
-      day1PlanB.classList.add('active');
-      day1Tabs[1].classList.add('active');
-    }
+  var day1A = document.getElementById('day1-plan-a'), day1B = document.getElementById('day1-plan-b');
+  if (day1A && day1B) {
+    var t1 = day1A.parentElement.querySelectorAll('.tab-btn');
+    t1.forEach(function(t){ t.classList.remove('active'); });
+    if (plan==='a') { day1A.classList.add('active'); day1B.classList.remove('active'); t1[0].classList.add('active'); }
+    else { day1A.classList.remove('active'); day1B.classList.add('active'); t1[1].classList.add('active'); }
   }
-  
-  // Day2 的方案
-  var day2PlanA = document.getElementById('day2-plan-a');
-  var day2PlanB = document.getElementById('day2-plan-b');
-  
-  if (day2PlanA && day2PlanB) {
-    var day2Tabs = day2PlanA.parentElement.querySelectorAll('.tab-btn');
-    day2Tabs.forEach(function(tab) { tab.classList.remove('active'); });
-    
-    if (plan === 'a') {
-      day2PlanA.classList.add('active');
-      day2PlanB.classList.remove('active');
-      day2Tabs[0].classList.add('active');
-    } else {
-      day2PlanA.classList.remove('active');
-      day2PlanB.classList.add('active');
-      day2Tabs[1].classList.add('active');
-    }
+  var day2A = document.getElementById('day2-plan-a'), day2B = document.getElementById('day2-plan-b');
+  if (day2A && day2B) {
+    var t2 = day2A.parentElement.querySelectorAll('.tab-btn');
+    t2.forEach(function(t){ t.classList.remove('active'); });
+    if (plan==='a') { day2A.classList.add('active'); day2B.classList.remove('active'); t2[0].classList.add('active'); }
+    else { day2A.classList.remove('active'); day2B.classList.add('active'); t2[1].classList.add('active'); }
   }
-  
-  // 刷新地图
-  setTimeout(refreshMaps, 100);
+  switchOverviewMap(plan);
 }
 
-// 初始化方案
 function initPlan() {
   var saved = localStorage.getItem('plan');
   var btn = document.getElementById('planLabel');
-  
-  if (saved === 'b') {
-    currentPlan = 'b';
-    btn.textContent = 'B';
-    switchAllPlans('b');
-  }
+  if (saved === 'b') { currentPlan='b'; btn.textContent='B'; switchAllPlans('b'); }
 }
 
-// 页面加载时初始化方案
 initPlan();
-
-// 页面加载时初始化PPT模式
 initPPTMode();
-
-// 页面加载完成后刷新地图
-window.addEventListener('load', function() {
-  setTimeout(refreshMaps, 500);
-});
-
-// 切换Day卡片时也刷新地图
-document.querySelectorAll('.day-header').forEach(function(header) {
-  header.addEventListener('click', function() {
-    setTimeout(refreshMaps, 200);
-  });
-});
+window.addEventListener('load', function(){ setTimeout(refreshMaps, 500); });
+document.querySelectorAll('.day-header').forEach(function(h){ h.addEventListener('click', function(){ setTimeout(refreshMaps, 200); }); });
 </script>
 </body>
 </html>
