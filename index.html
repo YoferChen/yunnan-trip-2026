@@ -127,14 +127,6 @@ tr:hover td{background:var(--bg-card)}
   td:before{content:attr(data-label);font-weight:600;color:#2d6a4f;display:inline-block;width:70px;margin-right:8px}
   td:first-child{font-size:1rem;font-weight:600;color:#2d6a4f;padding-bottom:8px;border-bottom:1px solid #eee}
   td:first-child:before{display:none}
-  
-  /* PPT模式 */
-  .ppt-mode .section{min-height:100vh;scroll-snap-align:start}
-  .ppt-mode .day-card{min-height:auto}
-  .ppt-mode body{scroll-snap-type:y mandatory;overflow-y:scroll}
-  
-  /* PPT模式按钮 */
-  .ppt-toggle{display:flex}
 }
 
 /* PPT模式切换按钮 */
@@ -142,8 +134,100 @@ tr:hover td{background:var(--bg-card)}
 .ppt-toggle:hover{background:#f4511e;transform:scale(1.1)}
 .ppt-toggle.active{background:#4caf50}
 
+/* PPT卡片模式 - 全屏滚动 */
+.ppt-card-mode body{
+  scroll-snap-type:y mandatory;
+  overflow-y:scroll;
+  scroll-behavior:smooth;
+}
+.ppt-card-mode .ppt-card{
+  min-height:100vh;
+  scroll-snap-align:start;
+  overflow-y:auto;
+  padding-bottom:80px;
+}
+.ppt-card-mode .ppt-card::-webkit-scrollbar{
+  width:4px;
+}
+.ppt-card-mode .ppt-card::-webkit-scrollbar-thumb{
+  background:rgba(0,0,0,.2);
+  border-radius:2px;
+}
+
+/* PPT导航按钮 */
+.ppt-nav{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:10000;
+  display:none;
+  flex-direction:column;
+  gap:8px;
+}
+.ppt-card-mode .ppt-nav{
+  display:flex;
+}
+.ppt-nav-btn{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:none;
+  background:#2d6a4f;
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+  transition:.3s;
+}
+.ppt-nav-btn:hover{
+  background:#1b4332;
+  transform:scale(1.1);
+}
+.ppt-nav-btn:disabled{
+  background:#ccc;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* PPT页码指示器 */
+.ppt-indicator{
+  position:fixed;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:10000;
+  display:none;
+  flex-direction:column;
+  gap:8px;
+}
+.ppt-card-mode .ppt-indicator{
+  display:flex;
+}
+.ppt-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(0,0,0,.2);
+  cursor:pointer;
+  transition:.3s;
+}
+.ppt-dot.active{
+  background:#2d6a4f;
+  transform:scale(1.3);
+}
+.dark .ppt-dot{
+  background:rgba(255,255,255,.3);
+}
+.dark .ppt-dot.active{
+  background:#64b5f6;
+}
+
 @media(max-width:768px){
   .ppt-toggle{display:flex}
+  .ppt-nav-btn{width:40px;height:40px;font-size:16px}
 }
 .alt-section{background:#faf5ff;border:2px solid #e1bee7;border-radius:12px;padding:16px;margin-top:16px}
 .alt-section h4{color:#7b1fa2;margin-bottom:12px}
@@ -258,7 +342,16 @@ tr:hover td{background:var(--bg-card)}
 <button class="map-style-toggle" onclick="toggleMapStyle()" title="切换地图样式">🎨</button>
 
 <!-- PPT模式切换按钮（手机端显示） -->
-<button class="ppt-toggle" onclick="togglePPTMode()" title="切换PPT浏览模式">📱</button>
+<button class="ppt-toggle" onclick="togglePPTCardMode()" title="切换PPT翻页模式">📱</button>
+
+<!-- PPT导航按钮 -->
+<div class="ppt-nav">
+  <button class="ppt-nav-btn" onclick="pptPrev()" title="上一页">↑</button>
+  <button class="ppt-nav-btn" onclick="pptNext()" title="下一页">↓</button>
+</div>
+
+<!-- PPT页码指示器 -->
+<div class="ppt-indicator" id="pptIndicator"></div>
 
 <header class="hero">
   <div class="container">
@@ -273,7 +366,7 @@ tr:hover td{background:var(--bg-card)}
 </header>
 
 <!-- 行程总览 -->
-<section class="section">
+<section class="section ppt-card" data-index="0">
   <div class="container">
     <h2 class="section-title">📍 行程总览与地图</h2>
     
@@ -406,7 +499,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- 每日行程 -->
-<section class="section" style="background:#fff">
+<section class="section ppt-card" style="background:#fff" data-index="1">
   <div class="container">
     <h2 class="section-title">📋 每日行程安排</h2>
 
@@ -872,7 +965,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- 实用信息 -->
-<section class="section">
+<section class="section ppt-card" data-index="2">
   <div class="container">
     <h2 class="section-title">🎒 实用信息</h2>
     <div class="tabs">
@@ -970,7 +1063,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- 小红书攻略 -->
-<section class="section" style="background:#fff">
+<section class="section ppt-card" style="background:#fff" data-index="3">
   <div class="container">
     <h2 class="section-title">📱 小红书热门攻略</h2>
     <div class="info-grid">
@@ -1185,32 +1278,94 @@ function toggleTheme() {
   updateMapTheme();
 }
 
-function togglePPTMode() {
-  var body = document.body;
-  var btn = document.querySelector('.ppt-toggle');
-  var isPPT = body.classList.toggle('ppt-mode');
-  localStorage.setItem('pptMode', isPPT ? 'on' : 'off');
-  btn.textContent = isPPT ? '📄' : '📱';
-  btn.classList.toggle('active', isPPT);
-  if (isPPT) {
-    document.querySelectorAll('.day-card').forEach(function(c){ c.classList.add('open'); });
-    showToast('PPT模式：上下滑动浏览');
-  } else {
-    document.querySelectorAll('.day-card').forEach(function(c){ c.classList.remove('open'); });
-    showToast('正常模式');
+function initPPTMode() {
+  var saved = localStorage.getItem('pptCardMode');
+  if (saved === 'on') {
+    document.documentElement.classList.add('ppt-card-mode');
+    updatePPTIndicator();
   }
-  setTimeout(refreshMaps, 200);
 }
 
-function initPPTMode() {
-  var saved = localStorage.getItem('pptMode');
-  var btn = document.querySelector('.ppt-toggle');
-  if (saved === 'on' && window.innerWidth <= 768) {
-    document.body.classList.add('ppt-mode');
-    btn.textContent = '📄'; btn.classList.add('active');
-    document.querySelectorAll('.day-card').forEach(function(c){ c.classList.add('open'); });
+// PPT卡片模式切换
+function togglePPTCardMode() {
+  var isPPT = document.documentElement.classList.toggle('ppt-card-mode');
+  localStorage.setItem('pptCardMode', isPPT ? 'on' : 'off');
+  updatePPTIndicator();
+  if (isPPT) {
+    showToast('PPT翻页模式：点击导航按钮切换卡片');
+  } else {
+    showToast('正常滚动模式');
   }
 }
+
+// PPT卡片导航
+var currentCardIndex = 0;
+var totalCards = 4; // 总览 + 每日行程 + 实用信息 + 小红书攻略
+
+function pptNext() {
+  if (currentCardIndex < totalCards - 1) {
+    currentCardIndex++;
+    scrollToCard(currentCardIndex);
+  }
+}
+
+function pptPrev() {
+  if (currentCardIndex > 0) {
+    currentCardIndex--;
+    scrollToCard(currentCardIndex);
+  }
+}
+
+function scrollToCard(index) {
+  var cards = document.querySelectorAll('.ppt-card');
+  if (cards[index]) {
+    cards[index].scrollIntoView({ behavior: 'smooth' });
+    updatePPTIndicator();
+    setTimeout(refreshMaps, 300);
+  }
+}
+
+// 更新PPT指示器
+function updatePPTIndicator() {
+  var indicator = document.getElementById('pptIndicator');
+  if (!indicator) return;
+  
+  indicator.innerHTML = '';
+  for (var i = 0; i < totalCards; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'ppt-dot' + (i === currentCardIndex ? ' active' : '');
+    dot.setAttribute('data-index', i);
+    dot.onclick = function() {
+      currentCardIndex = parseInt(this.getAttribute('data-index'));
+      scrollToCard(currentCardIndex);
+    };
+    indicator.appendChild(dot);
+  }
+}
+
+// 监听滚动事件，更新当前卡片索引
+function handlePPTScroll() {
+  if (!document.documentElement.classList.contains('ppt-card-mode')) return;
+  
+  var cards = document.querySelectorAll('.ppt-card');
+  var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  var windowHeight = window.innerHeight;
+  
+  for (var i = 0; i < cards.length; i++) {
+    var card = cards[i];
+    var rect = card.getBoundingClientRect();
+    if (rect.top <= windowHeight / 2 && rect.bottom >= windowHeight / 2) {
+      if (currentCardIndex !== i) {
+        currentCardIndex = i;
+        updatePPTIndicator();
+      }
+      break;
+    }
+  }
+}
+
+// 初始化PPT指示器
+updatePPTIndicator();
 
 var currentPlan = 'a';
 function togglePlan() {
@@ -1264,6 +1419,7 @@ function initPlan() {
 initPlan();
 initPPTMode();
 window.addEventListener('load', function(){ setTimeout(refreshMaps, 500); });
+window.addEventListener('scroll', handlePPTScroll);
 document.querySelectorAll('.day-header').forEach(function(h){ h.addEventListener('click', function(){ setTimeout(refreshMaps, 200); }); });
 </script>
 </body>
