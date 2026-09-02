@@ -550,7 +550,8 @@ tr:hover td{background:var(--bg-card)}
 <!-- PPT页码指示器 -->
 <div class="ppt-indicator" id="pptIndicator"></div>
 
-<header class="hero">
+<div class="ppt-cards-wrapper">
+<header class="hero ppt-card" data-index="0">
   <div class="container">
     <h1>🏔️ 云南5日家庭游</h1>
     <p class="subtitle">昆明 → 丽江 → 香格里拉 · 5人同行</p>
@@ -563,8 +564,7 @@ tr:hover td{background:var(--bg-card)}
 </header>
 
 <!-- 行程总览 -->
-<div class="ppt-cards-wrapper">
-<section class="section ppt-card" data-index="0">
+<section class="section ppt-card" data-index="1">
   <div class="container">
     <h2 class="section-title">📍 行程总览与地图</h2>
     
@@ -697,7 +697,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- Day 1 -->
-<section class="section ppt-card" style="background:#f8f9fa" data-index="1">
+<section class="section ppt-card" style="background:#f8f9fa" data-index="2">
   <div class="container">
     <h2 class="section-title">📋 每日行程安排</h2>
     <div class="day-card open">
@@ -843,7 +843,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- Day 2 -->
-<section class="section ppt-card" style="background:#fff" data-index="2">
+<section class="section ppt-card" style="background:#fff" data-index="3">
   <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
@@ -964,7 +964,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- Day 3 -->
-<section class="section ppt-card" style="background:#f8f9fa" data-index="3">
+<section class="section ppt-card" style="background:#f8f9fa" data-index="4">
   <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
@@ -1041,7 +1041,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- Day 4 -->
-<section class="section ppt-card" style="background:#fff" data-index="4">
+<section class="section ppt-card" style="background:#fff" data-index="5">
   <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
@@ -1129,7 +1129,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- Day 5 -->
-<section class="section ppt-card" style="background:#f8f9fa" data-index="5">
+<section class="section ppt-card" style="background:#f8f9fa" data-index="6">
   <div class="container">
     <div class="day-card">
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
@@ -1176,7 +1176,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- 实用信息 -->
-<section class="section ppt-card" data-index="6">
+<section class="section ppt-card" data-index="7">
   <div class="container">
     <h2 class="section-title">🎒 实用信息</h2>
     <div class="tabs">
@@ -1274,7 +1274,7 @@ tr:hover td{background:var(--bg-card)}
 </section>
 
 <!-- 小红书攻略 -->
-<section class="section ppt-card" style="background:#fff" data-index="7">
+<section class="section ppt-card" style="background:#fff" data-index="8">
   <div class="container">
     <h2 class="section-title">📱 小红书热门攻略</h2>
     <div class="info-grid">
@@ -1564,7 +1564,7 @@ function togglePPTCardMode() {
 
 // PPT卡片导航
 var currentCardIndex = 0;
-var totalCards = 8; // 总览 + Day1-5 + 实用信息 + 攻略
+var totalCards = 9; // 封面 + 总览 + Day1-5 + 实用信息 + 攻略
 
 function pptNext() {
   if (currentCardIndex < totalCards - 1) {
@@ -1595,7 +1595,7 @@ function updatePPTIndicator() {
   var indicator = document.getElementById('pptIndicator');
   if (!indicator) return;
   
-  var labels = ['总览', 'Day1', 'Day2', 'Day3', 'Day4', 'Day5', '实用', '攻略'];
+  var labels = ['封面', '总览', 'Day1', 'Day2', 'Day3', 'Day4', 'Day5', '实用', '攻略'];
   indicator.innerHTML = '';
   for (var i = 0; i < totalCards; i++) {
     var dot = document.createElement('div');
