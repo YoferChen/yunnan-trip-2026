@@ -166,11 +166,23 @@ tr:hover td{background:var(--bg-card)}
   td:first-child{font-size:1rem;font-weight:600;color:#2d6a4f;padding-bottom:8px;border-bottom:1px solid #eee}
   td:first-child:before{display:none}
   
+  /* 交通、距离、耗时合成一行 */
+  td[data-label="交通"],
+  td[data-label="距离"],
+  td[data-label="耗时"]{display:inline-block;width:auto;margin-right:8px}
+  td[data-label="交通"]:before,
+  td[data-label="距离"]:before,
+  td[data-label="耗时"]:before{display:none}
+  td[data-label="交通"]{background:#e3f2fd;padding:2px 8px;border-radius:4px;font-size:.8rem}
+  td[data-label="距离"]{color:#666;font-size:.8rem}
+  td[data-label="耗时"]{color:#666;font-size:.8rem}
+  
   /* 深色模式下手机端表格 */
   .dark tr{background:var(--bg-white);box-shadow:0 1px 4px rgba(0,0,0,.3)}
   .dark td{color:var(--text)}
   .dark td:before{color:#64b5f6}
   .dark td:first-child{color:#64b5f6;border-bottom-color:#444}
+  .dark td[data-label="交通"]{background:#1e3a5f;color:#64b5f6}
 }
 
 /* PPT模式切换按钮 */
@@ -771,6 +783,20 @@ tr:hover td{background:var(--bg-card)}
 .dark [style*="background:#f3e5f5"],
 .dark [style*="background: #f3e5f5"]{background:#2d1e3a!important;border-color:#4a2d6a!important}
 
+.dark [style*="background:#e3f2fd"],
+.dark [style*="background: #e3f2fd"]{background:#1e3a5f!important;border-color:#2d5a8f!important}
+.dark [style*="background:#e3f2fd"] *,
+.dark [style*="background: #e3f2fd"] *{color:var(--text)}
+.dark [style*="background:#e3f2fd"] h4,
+.dark [style*="background: #e3f2fd"] h4{color:#64b5f6!important}
+
+.dark [style*="background:#fff3e0"],
+.dark [style*="background: #fff3e0"]{background:#3a2e1e!important;border-color:#5a4a2d!important}
+.dark [style*="background:#fff3e0"] *,
+.dark [style*="background: #fff3e0"] *{color:var(--text)}
+.dark [style*="background:#fff3e0"] h4,
+.dark [style*="background: #fff3e0"] h4{color:#ffb74d!important}
+
 .dark [style*="color:#166534"],
 .dark [style*="color: #166534"]{color:#81c784!important}
 .dark [style*="color:#e65100"],
@@ -779,6 +805,25 @@ tr:hover td{background:var(--bg-card)}
 .dark [style*="color: #555"]{color:var(--text-light)!important}
 .dark [style*="color:#666"],
 .dark [style*="color: #666"]{color:var(--text-light)!important}
+
+/* 攻略卡片深色模式 */
+.dark .guide-detail-card{background:var(--bg-card);border-color:var(--border)}
+.dark .guide-title-link{color:var(--text)}
+.dark .guide-summary{color:var(--text-light)}
+.dark .guide-highlights .highlight-item{color:var(--text-light)}
+.dark .guide-tips{background:#1e3a2f;border-left-color:#81c784;color:var(--text-light)}
+.dark .guide-tags .tag{background:#2d6a4f}
+.dark .guide-location-title{color:var(--text-muted)}
+.dark .guide-location-name{color:var(--text-light)}
+.dark .guide-day-title{color:var(--text)}
+.dark .guide-mini-card{background:var(--bg-card);border-color:var(--border);color:var(--text)}
+.dark .guide-mini-card:hover{background:var(--bg-white)}
+.dark .guide-toggle{color:#64b5f6}
+.dark .guide-stats{color:var(--text-muted)}
+.dark .guide-more{color:#64b5f6}
+.dark .guide-link{color:#fff}
+.dark .pc-link{background:#2d6a4f}
+.dark .mobile-link{background:#d32f2f}
 </style>
 </head>
 <body>
@@ -793,9 +838,9 @@ tr:hover td{background:var(--bg-card)}
       <span class="settings-btn-icon">🌙</span>
       <span class="settings-btn-text">深色模式</span>
     </button>
-    <button class="settings-btn" onclick="togglePlan()" title="切换方案A/B">
-      <span class="settings-btn-icon">🅰️</span>
-      <span class="settings-btn-text">切换方案</span>
+    <button class="settings-btn" onclick="batchSearchCoords()" title="搜索所有地点坐标">
+      <span class="settings-btn-icon">🔍</span>
+      <span class="settings-btn-text">搜索坐标</span>
     </button>
     <button class="settings-btn" onclick="toggleSatellite(this)" title="切换卫星图/路网图">
       <span class="settings-btn-icon">🛰️</span>
@@ -836,7 +881,7 @@ tr:hover td{background:var(--bg-card)}
       <span>✈️ 揭阳/湛江 → 昆明</span>
     </div>
     <div class="hero-map">
-      <img src="./map.jpg" alt="云南地图" onerror="this.style.display='none'">
+      <img src="./travel_guide_overview.png" alt="云南5日家庭游攻略总览图" onerror="this.style.display='none'">
     </div>
   </div>
 </header>
@@ -846,37 +891,20 @@ tr:hover td{background:var(--bg-card)}
   <div class="container">
     <h2 class="section-title">📍 行程总览与地图</h2>
     
-    <!-- 总览地图方案切换 -->
-    <div class="tabs" style="margin-bottom:0">
-      <button class="tab-btn active" onclick="switchAllPlans('a')">🅰️ 方案A：昆明中转</button>
-      <button class="tab-btn" onclick="switchAllPlans('b')">🅱️ 方案B：大理中转</button>
-    </div>
-    
-    <!-- 方案A地图 -->
-    <div id="overview-map-a">
-      <div id="map-main-a" style="height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px;position:relative"></div>
-    </div>
-    
-    <!-- 方案B地图 -->
-    <div id="overview-map-b" style="height:0;overflow:hidden;position:absolute;left:-9999px">
-      <div id="map-main-b" style="height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px;position:relative"></div>
+    <!-- 总览地图 -->
+    <div id="overview-map">
+      <div id="map-main" style="height:500px;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.1);margin-bottom:16px;position:relative"></div>
     </div>
     <div class="map-legend">
       <span style="color:#e74c3c">● 机场/高铁站</span>
       <span style="color:#3498db">● 丽江</span>
       <span style="color:#9b59b6">● 香格里拉</span>
       <span style="color:#f39c12">● 景点</span>
-      <span style="color:#27ae60">● 大理（方案B）</span>
+      <span style="color:#27ae60">● 大理</span>
       <span>┈┈ 交通路线</span>
     </div>
 
-    <!-- 方案切换 -->
-    <div class="tabs" style="margin-bottom:0">
-      <button class="tab-btn active" onclick="switchTab(this,'overview-plan-a')">🅰️ 方案A：昆明中转</button>
-      <button class="tab-btn" onclick="switchTab(this,'overview-plan-b')">🅱️ 方案B：大理中转</button>
-    </div>
-
-    <!-- 方案A -->
+    <!-- 行程总览 -->
     <div id="overview-plan-a" class="tab-panel active">
       <div class="table-wrap">
         <table>
@@ -884,91 +912,41 @@ tr:hover td{background:var(--bg-card)}
           <tbody>
             <tr>
               <td data-label="日期">9.25</td>
-              <td data-label="行程">揭阳/湛江 → 昆明 → 逛农贸市场/滇池</td>
-              <td data-label="交通">✈️ 飞机</td>
+              <td data-label="行程">湛江/揭阳 → 昆明 → 篆新市场/昆明站 → 大理古城</td>
+              <td data-label="交通">✈️🚄</td>
               <td data-label="距离">~1500km</td>
+              <td data-label="耗时">~2.5h+2h</td>
+            </tr>
+            <tr>
+              <td data-label="日期">9.26</td>
+              <td data-label="行程">洱海日出 → 洱海漫步/骑行 → 高铁丽江 → 丽江古城夜景</td>
+              <td data-label="交通">🚄</td>
+              <td data-label="距离">~200km</td>
               <td data-label="耗时">~2.5h</td>
             </tr>
             <tr>
-              <td data-label="日期">9.26</td>
-              <td data-label="行程">昆明 → 丽江 → 忠义市场/古城</td>
-              <td data-label="交通">🚄 高铁</td>
-              <td data-label="距离">~520km</td>
-              <td data-label="耗时">~3.5h</td>
-            </tr>
-            <tr>
               <td data-label="日期">9.27</td>
-              <td data-label="行程">丽江 → 东巴谷日照金山 → 玉龙雪山</td>
-              <td data-label="交通">🚗 包车</td>
+              <td data-label="行程">甘海子日照金山 → 云杉坪 → 蓝月谷 → 白沙古镇 → 束河古镇</td>
+              <td data-label="交通">🚌</td>
               <td data-label="距离">~30km</td>
-              <td data-label="耗时">~45min</td>
+              <td data-label="耗时">~1h</td>
             </tr>
             <tr>
               <td data-label="日期">9.28</td>
-              <td data-label="行程">丽江 → 虎跳峡 → 香格里拉</td>
+              <td data-label="行程">丽江古城 → G214国道 → 虎跳峡观景台 → 白水台 → 纳帕海 → 独克宗古城</td>
               <td data-label="交通">🚗 自驾</td>
               <td data-label="距离">~180km</td>
-              <td data-label="耗时">~4h</td>
+              <td data-label="耗时">~8h</td>
             </tr>
             <tr>
               <td data-label="日期">9.29</td>
-              <td data-label="行程">香格里拉 → 丽江 → 深圳</td>
-              <td data-label="交通">🚄✈️</td>
+              <td data-label="行程">松赞林寺 → 拉姆央措湖 → 纳帕海环湖 → 丽江三义机场 → 深圳</td>
+              <td data-label="交通">🚗✈️</td>
               <td data-label="距离">~180km</td>
               <td data-label="耗时">—</td>
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-
-    <!-- 方案B -->
-    <div id="overview-plan-b" class="tab-panel">
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>日期</th><th>行程</th><th>交通</th><th>距离</th><th>耗时</th></tr></thead>
-          <tbody>
-            <tr>
-              <td data-label="日期">9.25</td>
-              <td data-label="行程">揭阳/湛江 → 昆明 → 高铁大理 → 洱海日落</td>
-              <td data-label="交通">✈️🚄</td>
-              <td data-label="距离">~1700km</td>
-              <td data-label="耗时">~4.5h</td>
-            </tr>
-            <tr>
-              <td data-label="日期">9.26</td>
-              <td data-label="行程">洱海日出 → 环洱海 → 高铁丽江</td>
-              <td data-label="交通">🚗🚄</td>
-              <td data-label="距离">~200km</td>
-              <td data-label="耗时">~3h</td>
-            </tr>
-            <tr>
-              <td data-label="日期">9.27</td>
-              <td data-label="行程">丽江 → 东巴谷日照金山 → 玉龙雪山</td>
-              <td data-label="交通">🚗 包车</td>
-              <td data-label="距离">~30km</td>
-              <td data-label="耗时">~45min</td>
-            </tr>
-            <tr>
-              <td data-label="日期">9.28</td>
-              <td data-label="行程">丽江 → 虎跳峡 → 香格里拉</td>
-              <td data-label="交通">🚗 自驾</td>
-              <td data-label="距离">~180km</td>
-              <td data-label="耗时">~4h</td>
-            </tr>
-            <tr>
-              <td data-label="日期">9.29</td>
-              <td data-label="行程">香格里拉 → 丽江 → 深圳</td>
-              <td data-label="交通">🚄✈️</td>
-              <td data-label="距离">~180km</td>
-              <td data-label="耗时">—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;margin-top:12px;font-size:.9rem">
-        <strong style="color:#166534">✅ 方案B优势：</strong>
-        多玩一个洱海，看日出日落，风景更壮观。Day1稍赶但值得。
       </div>
     </div>
   </div>
@@ -982,66 +960,60 @@ tr:hover td{background:var(--bg-card)}
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">25</span><span class="label">周四</span></div>
         <div class="day-info">
-          <h3>Day 1 · 抵达云南 · 中秋节</h3>
-          <div class="route">方案A：昆明半日游 · 方案B：直奔大理洱海</div>
+          <h3>Day 1 · 昆明 — 大理</h3>
+          <div class="route">昆明长水机场 → 篆新市场/昆明站 → 高铁大理 → 大理古城</div>
         </div>
         <span class="chevron">▼</span>
       </div>
       <div class="day-body">
-        <!-- 方案切换 -->
-        <div class="tabs" style="margin-top:16px">
-          <button class="tab-btn active" onclick="switchTab(this,'day1-plan-a')">🅰️ 方案A：昆明半日游</button>
-          <button class="tab-btn" onclick="switchTab(this,'day1-plan-b')">🅱️ 方案B：直奔大理</button>
-        </div>
-
-        <!-- 方案A：昆明 -->
-        <div id="day1-plan-a" class="tab-panel active">
-          <div id="map-day1-a" class="day-map"></div>
+        <div id="map-day1" class="day-map"></div>
           <div class="transport-bar">
             <span class="icon">✈️</span>
             <div class="info">
-              <strong>航班：</strong>揭阳 08:10 → 昆明长水 10:40 / 湛江 07:30 → 昆明长水 10:00<br>
-              <strong>机场→市区：</strong>地铁6号线+3号线，约50分钟；或打车约40分钟/80元
+              <strong>航班：</strong>湛江吴川 07:10→昆明长水 08:50（DR6530）/ 揭阳潮汕 08:10→昆明长水 10:40（MU9700）<br>
+              <strong>机场→昆明站：</strong>打车35分钟；地铁/公交54分钟
             </div>
           </div>
           <div class="timeline">
-            <div class="timeline-item"><div class="time">11:00 - 12:00</div><div class="content">抵达酒店放行李</div></div>
-            <div class="timeline-item"><div class="time">12:00 - 13:30</div><div class="content">午餐：昆明老街吃小锅米线</div></div>
-            <div class="timeline-item"><div class="time">14:00 - 15:30</div><div class="content">篆新农贸市场逛逛（各种云南水果、小吃）</div></div>
-            <div class="timeline-item"><div class="time">16:00 - 18:00</div><div class="content">滇池海埂公园（9月秋景很美）</div></div>
-            <div class="timeline-item"><div class="time">18:30 - 20:00</div><div class="content">茶马花街晚餐+逛吃</div></div>
+            <div class="timeline-item"><div class="time">08:50/10:40</div><div class="content">抵达昆明长水机场</div></div>
+            <div class="timeline-item"><div class="time">12:00 - 13:00</div><div class="content">午餐：篆新市场（南门/1号路/北门）或昆明站附近（英凤烧饵块/角角小吃店）</div></div>
+            <div class="timeline-item"><div class="time">14:40 - 16:50</div><div class="content">昆明站→大理站，高铁2小时18分，114元</div></div>
+            <div class="timeline-item"><div class="time">17:00 - 17:30</div><div class="content">打车到大理古城酒店</div></div>
+            <div class="timeline-item"><div class="time">17:30 - 19:30</div><div class="content">晚餐</div></div>
+            <div class="timeline-item"><div class="time">19:30 - 21:00</div><div class="content">逛大理古城</div></div>
           </div>
           <div class="spot-grid">
             <div class="spot">
               <h4>🛒 篆新农贸市场</h4>
-              <div class="desc">昆明最网红的菜市场！各种云南特色水果（便宜到离谱）、野生菌、鲜花、小吃。小红书1.6万赞推荐"云南第一站请留给昆明的菜市场"。</div>
-              <span class="tag highlight">强烈推荐</span><span class="tag">免费</span><span class="tag info">建议1.5h</span>
-              <div class="time-info">🕘 上午去最新鲜 · 买水果比外面便宜一半</div>
-              <a href="https://www.xiaohongshu.com/explore/69eefe44000000002003b60d" target="_blank" class="xhs-link">📕 攻略 (1.6万赞)</a>
+              <div class="desc">昆明本地人最爱的菜市场！各种云南特色水果、野生菌、鲜花、小吃。建议从南门进入，1号路和北门也有好吃的。</div>
+              <span class="tag highlight">午餐推荐</span><span class="tag">免费</span><span class="tag info">建议1.5h</span>
+              <div class="time-info">🕘 上午去最新鲜 · 英凤烧饵块、角角小吃店</div>
+              <a href="https://www.xiaohongshu.com/explore/6a2a8f7c000000001503cc1e" target="_blank" class="xhs-link">📕 篆新地图攻略</a>
             </div>
             <div class="spot">
-              <h4>🌊 滇池海埂公园</h4>
-              <div class="desc">9月底滇池秋景很美，湖水碧蓝，西山倒映。虽然没有海鸥（11月才有），但秋高气爽，适合散步拍照。</div>
-              <span class="tag">推荐</span><span class="tag">免费</span><span class="tag info">建议2h</span>
-              <div class="time-info">🕘 全天开放 · 下午光线好</div>
+              <h4>🚄 昆明站附近</h4>
+              <div class="desc">昆明站周边美食攻略，坐高铁必看！英凤烧饵块（排队30年老店）、角角小吃店等。</div>
+              <span class="tag highlight">午餐备选</span><span class="tag">美食</span><span class="tag info">建议1h</span>
+              <div class="time-info">🕘 出站后步行可达 · 吃饱再上车</div>
+              <a href="https://www.xiaohongshu.com/explore/69f44c8b0000000038021343" target="_blank" class="xhs-link">📕 昆明站美食攻略</a>
             </div>
             <div class="spot">
-              <h4>🍜 茶马花街</h4>
-              <div class="desc">位于滇池边，是昆明新晋美食街。汇集云南各地小吃：过桥米线、烤饵块、鲜花饼、菌子火锅等。</div>
-              <span class="tag">美食</span><span class="tag info">建议1.5h</span>
-            </div>
-            <div class="spot">
-              <h4>🌸 翠湖公园</h4>
-              <div class="desc">9月底荷花已谢，景色一般。如果时间充裕可以顺路逛逛，不建议专门去。</div>
-              <span class="tag warn">9月景色一般</span><span class="tag">免费</span>
+              <h4>🏯 大理古城</h4>
+              <div class="desc">比丽江古城更文艺，有各种特色店铺、咖啡馆。傍晚去氛围最好，晚上可以逛夜市。</div>
+              <span class="tag">晚上逛</span><span class="tag">免费</span><span class="tag info">建议2h</span>
+              <div class="time-info">🕘 19:30-21:00逛古城</div>
             </div>
           </div>
 
-          <!-- 住宿推荐 -->
-          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin-top:16px">
-            <h4 style="color:#166534;margin-bottom:12px">🏨 Day1 住宿位置</h4>
+          <!-- 昆明备选点位 -->
+          <div style="background:#e3f2fd;border:1px solid #90caf9;border-radius:8px;padding:16px;margin-top:16px">
+            <h4 style="color:#1565c0;margin-bottom:12px">📍 昆明备选点位</h4>
             <div style="font-size:.9rem;color:#555">
-              <p><strong>翠湖/南屏街附近</strong>，交通方便，离昆明老街近</p>
+              <ul style="list-style:none">
+                <li>• <strong>滇池：</strong>打车25分钟，9月秋景很美</li>
+                <li>• <strong>斗南花市：</strong>打车29分钟，亚洲最大鲜花市场</li>
+                <li>• <strong>翠湖公园：</strong>打车19分钟，时间充裕可去</li>
+              </ul>
             </div>
           </div>
 
@@ -1051,67 +1023,22 @@ tr:hover td{background:var(--bg-card)}
             <div style="font-size:.9rem;color:#555">
               <ul style="list-style:none">
                 <li>• <strong>篆新农贸市场：</strong>烤饵块、豆花米线、各种云南水果</li>
-                <li>• <strong>野生菌火锅：</strong>"菌故"或"滇菌王"（9月正当季）</li>
-                <li>• <strong>汽锅鸡：</strong>"福照楼"或"翠府"</li>
-                <li>• <strong>过桥米线：</strong>"建新园"或"桥香园"</li>
-                <li>• <strong>傣味小炒：</strong>"傣家小院"</li>
+                <li>• <strong>英凤烧饵块：</strong>昆明站附近，排队30年老店</li>
+                <li>• <strong>角角小吃店：</strong>昆明站附近，本地人推荐</li>
+                <li>• <strong>大理古城晚餐：</strong>白族特色美食</li>
               </ul>
-              <a href="https://www.xiaohongshu.com/explore/6895b7910000000003027f1f" target="_blank" class="xhs-link">📕 昆明美食 (2.7万赞)</a>
+              <a href="https://www.xiaohongshu.com/explore/6a2a8f7c000000001503cc1e" target="_blank" class="xhs-link">📕 篆新美食地图</a>
             </div>
           </div>
-        </div>
 
-        <!-- 方案B：大理 -->
-        <div id="day1-plan-b" class="tab-panel">
-          <div id="map-day1-b" class="day-map"></div>
-          <div class="transport-bar alt">
-            <span class="icon">🚄</span>
-            <div class="info">
-              <strong>方案B：直奔大理</strong><br>
-              昆明长水机场 → 昆明站（地铁约50分钟）→ 大理（高铁约2h）<br>
-              推荐车次：昆明站 13:00左右 → 大理站 15:00左右<br>
-              <strong>优势：</strong>下午就能到洱海，看洱海日落，第二天看洱海日出
-            </div>
-          </div>
-          <div class="timeline">
-            <div class="timeline-item"><div class="time">11:00 - 12:00</div><div class="content">机场→昆明站（地铁）</div></div>
-            <div class="timeline-item"><div class="time">12:00 - 13:00</div><div class="content">昆明站午餐+候车</div></div>
-            <div class="timeline-item"><div class="time">13:00 - 15:00</div><div class="content">高铁昆明→大理（约2小时）</div></div>
-            <div class="timeline-item"><div class="time">15:30 - 16:00</div><div class="content">入住洱海边酒店</div></div>
-            <div class="timeline-item"><div class="time">16:30 - 18:30</div><div class="content">洱海边骑行/散步，看日落</div></div>
-            <div class="timeline-item"><div class="time">19:00 - 20:30</div><div class="content">大理古城晚餐</div></div>
-            <div class="timeline-item"><div class="time">次日06:30</div><div class="content">🌅 洱海看日出（住洱海边的优势）</div></div>
-          </div>
-          <div class="spot-grid">
-            <div class="spot">
-              <h4>🌊 洱海</h4>
-              <div class="desc">大理标志性景点，9月底秋高气爽，洱海水色湛蓝。住在洱海边可以看日出日落，非常浪漫。</div>
-              <span class="tag highlight">强烈推荐</span><span class="tag">免费</span><span class="tag info">建议半天</span>
-              <a href="https://www.xiaohongshu.com/explore/69380c44000000001e010748" target="_blank" class="xhs-link">📕 环洱海攻略</a>
-            </div>
-            <div class="spot">
-              <h4>🏯 大理古城</h4>
-              <div class="desc">比丽江古城更文艺，有各种特色店铺、咖啡馆。傍晚去氛围最好。</div>
-              <span class="tag">文艺</span><span class="tag">免费</span><span class="tag info">建议2h</span>
-            </div>
-            <div class="spot">
-              <h4>🌅 洱海日出</h4>
-              <div class="desc">住在洱海边，第二天早起看日出。9月底日出约06:30，金色阳光洒在洱海上，非常美。</div>
-              <span class="tag highlight">Day2早起</span>
-            </div>
-          </div>
-          <div class="comparison-table">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>对比项</th><th>方案A：昆明</th><th>方案B：大理</th></tr></thead>
-                <tbody>
-                  <tr><td>风景</td><td>滇池秋景，城市公园</td><td>洱海日出日落，更壮观</td></tr>
-                  <tr><td>体验</td><td>美食为主，轻松</td><td>自然风光，浪漫</td></tr>
-                  <tr><td>交通</td><td>机场直达，简单</td><td>需转高铁，多1.5h</td></tr>
-                  <tr><td>住宿</td><td>昆明市区酒店</td><td>洱海边客栈（推荐）</td></tr>
-                  <tr><td>Day2</td><td>高铁去丽江</td><td>上午游洱海，下午去丽江</td></tr>
-                </tbody>
-              </table>
+          <!-- 洱海相关备注 -->
+          <div style="background:#f3e5f5;border:1px solid #ce93d8;border-radius:8px;padding:16px;margin-top:12px">
+            <h4 style="color:#7b1fa2;margin-bottom:12px">🌊 洱海相关备注</h4>
+            <div style="font-size:.9rem;color:#555">
+              <ul style="list-style:none">
+                <li>• 海西机动不进；海东有专线公交</li>
+                <li>• 大理地理点位：双廊古镇、鹿鹅山、小普陀、文笔村、理想邦、S湾、廊桥、大理古城、大理站</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1127,113 +1054,61 @@ tr:hover td{background:var(--bg-card)}
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">26</span><span class="label">周五</span></div>
         <div class="day-info">
-          <h3>Day 2 · 前往丽江 · 三大古城</h3>
-          <div class="route">方案A：昆明→丽江 · 方案B：大理→丽江</div>
+          <h3>Day 2 · 大理洱海日出漫步 — 丽江古城</h3>
+          <div class="route">洱海日出 → 洱海漫步/骑行 → 高铁丽江 → 丽江古城夜景</div>
         </div>
         <span class="chevron">▼</span>
       </div>
       <div class="day-body">
-        <!-- 方案切换 -->
-        <div class="tabs" style="margin-top:16px">
-          <button class="tab-btn active" onclick="switchTab(this,'day2-plan-a')">🅰️ 方案A：从昆明出发</button>
-          <button class="tab-btn" onclick="switchTab(this,'day2-plan-b')">🅱️ 方案B：从大理出发</button>
-        </div>
-
-        <!-- 方案A -->
-        <div id="day2-plan-a" class="tab-panel active">
-          <div id="map-day2-a" class="day-map"></div>
-          <div class="transport-bar">
-            <span class="icon">🚄</span>
-            <div class="info">
-              <strong>昆明→丽江高铁：</strong>D8782 昆明站 08:00 → 丽江站 11:30（3.5h）· 二等座约220元
-            </div>
-          </div>
-          <div class="timeline">
-            <div class="timeline-item"><div class="time">08:00 - 11:30</div><div class="content">高铁昆明→丽江</div></div>
-            <div class="timeline-item"><div class="time">12:00 - 13:00</div><div class="content">入住酒店，午餐</div></div>
-            <div class="timeline-item"><div class="time">13:30 - 15:00</div><div class="content">忠义市场逛逛（买水果、吃小吃、看雪山）</div></div>
-            <div class="timeline-item"><div class="time">15:30 - 18:00</div><div class="content">大研古城：四方街→木府→狮子山万古楼</div></div>
-            <div class="timeline-item"><div class="time">18:30 - 20:00</div><div class="content">束河古镇（打车10分钟）晚餐</div></div>
-            <div class="timeline-item"><div class="time">20:30</div><div class="content">返回大研看夜景</div></div>
+        <div id="map-day2" class="day-map"></div>
+        <div class="transport-bar">
+          <span class="icon">🌅</span>
+          <div class="info">
+            <strong>洱海日出：</strong>7:10日出，建议6:20前到达<br>
+            <strong>高铁：</strong>大理→丽江 16:35~19:05，车程2小时30分
           </div>
         </div>
-
-        <!-- 方案B -->
-        <div id="day2-plan-b" class="tab-panel">
-          <div id="map-day2-b" class="day-map"></div>
-          <div class="transport-bar alt">
-            <span class="icon">🚗</span>
-            <div class="info">
-              <strong>大理→丽江：</strong><br>
-              ① 上午环洱海半圈（才村→双廊，约1.5h）<br>
-              ② 双廊午餐后，高铁大理→丽江（约1.5h）<br>
-              或：直接自驾大理→丽江（约2.5h）
-            </div>
-          </div>
-          <div class="timeline">
-            <div class="timeline-item"><div class="time">06:30 - 07:30</div><div class="content">🌅 洱海看日出</div></div>
-            <div class="timeline-item"><div class="time">08:00 - 10:00</div><div class="content">环洱海：才村→喜洲→双廊</div></div>
-            <div class="timeline-item"><div class="time">10:30 - 11:30</div><div class="content">双廊古镇（洱海边最美小镇）</div></div>
-            <div class="timeline-item"><div class="time">12:00 - 13:00</div><div class="content">双廊午餐</div></div>
-            <div class="timeline-item"><div class="time">13:30 - 15:00</div><div class="content">高铁大理→丽江（约1.5h）</div></div>
-            <div class="timeline-item"><div class="time">15:30 - 16:00</div><div class="content">入住丽江酒店</div></div>
-            <div class="timeline-item"><div class="time">16:30 - 19:00</div><div class="content">束河古镇（比大研安静）</div></div>
-            <div class="timeline-item"><div class="time">19:30 - 21:00</div><div class="content">大研古城晚餐+夜景</div></div>
-          </div>
-          <div class="spot-grid">
-            <div class="spot">
-              <h4>🌊 双廊古镇</h4>
-              <div class="desc">洱海边最美的小镇，可以看洱海全景。有杨丽萍的太阳宫、月亮宫。</div>
-              <span class="tag highlight">必去</span><span class="tag info">建议1.5h</span>
-            </div>
-          </div>
+        <div class="timeline">
+          <div class="timeline-item"><div class="time">6:20 - 8:00</div><div class="content">🌅 洱海看日出（7:10日出）</div></div>
+          <div class="timeline-item"><div class="time">8:00 - 11:00</div><div class="content">洱海边漫步/骑行</div></div>
+          <div class="timeline-item"><div class="time">11:00 - 13:00</div><div class="content">午餐</div></div>
+          <div class="timeline-item"><div class="time">16:35 - 19:05</div><div class="content">大理高铁前往丽江，车程2小时30分</div></div>
+          <div class="timeline-item"><div class="time">19:30 - 21:00</div><div class="content">丽江古城（大研古城）夜景；忠义市场（早餐/夜市）</div></div>
         </div>
-
-        <!-- 共同景点 -->
-        <h4 style="margin-top:20px;color:#1e3a5f">📍 丽江古城景点</h4>
         <div class="spot-grid">
+          <div class="spot">
+            <h4>🌅 洱海日出</h4>
+            <div class="desc">9月底日出约7:10，建议6:20前到达。才村码头是经典日出点，金色阳光洒在洱海上，非常美。</div>
+            <span class="tag highlight">必去</span><span class="tag">免费</span><span class="tag info">建议1.5h</span>
+            <div class="time-info">🕘 6:20前到达 · 9月日出7:10</div>
+            <a href="https://www.xiaohongshu.com/explore/6a9b6f6a000000002900d265" target="_blank" class="xhs-link">📕 才村码头日出</a>
+          </div>
           <div class="spot">
             <h4>🛒 忠义市场</h4>
             <div class="desc">丽江最值得逛的菜市场！被称为"国内唯一能看到雪山的菜市场"。各种拌水果（9.9元随便选）、纳西族特色小吃、当地早餐。</div>
             <span class="tag highlight">强烈推荐</span><span class="tag">免费</span><span class="tag info">建议1.5h</span>
             <div class="time-info">🕘 上午去最新鲜 · 可以顺便吃早餐</div>
-            <a href="https://www.xiaohongshu.com/explore/69aa3cec000000001b01e1ae" target="_blank" class="xhs-link">📕 攻略 (7.7千赞)</a>
+            <a href="https://www.xiaohongshu.com/explore/6a1657e00000000007021030" target="_blank" class="xhs-link">📕 忠义市场红黑榜</a>
           </div>
           <div class="spot">
             <h4>🏯 大研古城</h4>
-            <div class="desc">世界文化遗产，最热闹的古城。四方街、木府（40元）、大水车。</div>
-            <span class="tag">世界文化遗产</span><span class="tag info">建议3h</span>
-            <a href="https://www.xiaohongshu.com/explore/6979df5e000000000c034771" target="_blank" class="xhs-link">📕 攻略</a>
-          </div>
-          <div class="spot">
-            <h4>🏡 束河古镇</h4>
-            <div class="desc">比大研安静，有茶马古道博物馆、九鼎龙潭。傍晚去氛围最好。</div>
-            <span class="tag">安静推荐</span><span class="tag info">建议2h</span>
-            <a href="https://www.xiaohongshu.com/explore/69db92d6000000001a0265be" target="_blank" class="xhs-link">📕 攻略</a>
-          </div>
-        </div>
-
-        <!-- 住宿推荐 -->
-        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin-top:16px">
-          <h4 style="color:#166534;margin-bottom:12px">🏨 Day2 住宿位置</h4>
-          <div style="font-size:.9rem;color:#555">
-            <p><strong>束河古镇附近</strong>，比大研安静，性价比高</p>
+            <div class="desc">世界文化遗产，最热闹的古城。晚上可以逛夜市，看夜景。</div>
+            <span class="tag">世界文化遗产</span><span class="tag info">建议2h</span>
+            <div class="time-info">🕘 19:30-21:00逛夜景</div>
           </div>
         </div>
 
         <!-- 美食推荐 -->
-        <div style="background:#fff8e1;border:1px solid #ffcc02;border-radius:8px;padding:16px;margin-top:12px">
+        <div style="background:#fff8e1;border:1px solid #ffcc02;border-radius:8px;padding:16px;margin-top:16px">
           <h4 style="color:#e65100;margin-bottom:12px">🍜 Day2 美食推荐</h4>
           <div style="font-size:.9rem;color:#555">
             <ul style="list-style:none">
               <li>• <strong>忠义市场：</strong>拌水果（9.9元随便选）、纳西粑粑、鸡豆凉粉</li>
-              <li>• <strong>腊排骨火锅：</strong>"钰洁腊排骨"或"滇厨餐厅"</li>
-              <li>• <strong>鸡豆凉粉：</strong>"阿妈意"或古城内小摊</li>
-              <li>• <strong>丽江粑粑：</strong>"丽江粑粑铺"</li>
-              <li>• <strong>束河美食：</strong>"粗茶淡饭"（束河本地人推荐）</li>
+              <li>• <strong>忠义市场红黑榜：</strong>本地人推荐的10家必吃店</li>
+              <li>• <strong>丽江古城美食：</strong>古城外平价小破店</li>
             </ul>
-            <a href="https://www.xiaohongshu.com/explore/6a0aca0c000000003700f0a0" target="_blank" class="xhs-link">📕 束河美食 (2.2万赞)</a>
-            <a href="https://www.xiaohongshu.com/explore/69de1b6d000000001d01b187" target="_blank" class="xhs-link" style="margin-left:8px">📕 丽江美食 (1.7万赞)</a>
+            <a href="https://www.xiaohongshu.com/explore/6a69ce450000000011013d4c" target="_blank" class="xhs-link">📕 忠义市场10家必吃</a>
+            <a href="https://www.xiaohongshu.com/explore/6a8a879c0000000024026cc0" target="_blank" class="xhs-link" style="margin-left:8px">📕 古城外平价店</a>
           </div>
         </div>
       </div>
@@ -1248,69 +1123,97 @@ tr:hover td{background:var(--bg-card)}
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">27</span><span class="label">周六</span></div>
         <div class="day-info">
-          <h3>Day 3 · 日照金山 + 玉龙雪山</h3>
-          <div class="route">🌅 东巴谷看日照金山 → 甘海子 → 云杉坪 → 蓝月谷 → 玉湖村</div>
+          <h3>Day 3 · 日照金山 — 玉龙雪山景区+周边</h3>
+          <div class="route">甘海子日照金山 → 云杉坪 → 蓝月谷 → 白沙古镇 → 束河古镇</div>
         </div>
         <span class="chevron">▼</span>
       </div>
       <div class="day-body">
         <div id="map-day3" class="day-map"></div>
         <div class="transport-bar">
-          <span class="icon">🚗</span>
+          <span class="icon">🚌</span>
           <div class="info">
-            <strong>包车：</strong>约300-400元/天<br>
-            <strong>费用明细（每人）：</strong><br>
-            • 进山费：100元（必买，含蓝月谷）<br>
-            • 云杉坪索道：55元<br>
-            • 甘海子：免费（景区内观景台）<br>
-            • 蓝月谷：免费（含在进山费内）<br>
-            <strong>合计：155元/人</strong>（不坐大索道，轻松适合父母）
+            <strong>交通：</strong>101专线公交，15元/人，1小时，首班车5:30，末班车18:00<br>
+            <strong>备选：</strong>打两辆网约车/顺风车，60-80元/辆
           </div>
         </div>
         <div class="transport-bar warn">
           <span class="icon">🌅</span>
           <div class="info">
-            <strong>日照金山：</strong>东巴谷（免费），9月底日出约06:30，需06:00前到达
+            <strong>日照金山：</strong>7:07，甘海子瑞士风情园，约6分钟<br>
+            <strong>云杉坪索道：</strong>60元，预约有时间段
           </div>
         </div>
         <div class="timeline">
-          <div class="timeline-item"><div class="time">05:30 - 06:00</div><div class="content">出发前往东巴谷</div></div>
-          <div class="timeline-item"><div class="time">06:00 - 07:30</div><div class="content">🌅 东巴谷看日照金山</div></div>
-          <div class="timeline-item"><div class="time">07:30 - 08:30</div><div class="content">前往甘海子，途中早餐</div></div>
-          <div class="timeline-item"><div class="time">08:30 - 09:00</div><div class="content">甘海子观景台</div></div>
-          <div class="timeline-item"><div class="time">09:30 - 11:30</div><div class="content">云杉坪索道，漫步高山草甸</div></div>
-          <div class="timeline-item"><div class="time">12:00 - 14:00</div><div class="content">蓝月谷（必去！）</div></div>
-          <div class="timeline-item"><div class="time">14:30 - 16:00</div><div class="content">玉湖村（免费，原生态）</div></div>
-          <div class="timeline-item"><div class="time">16:30</div><div class="content">返回丽江古城</div></div>
+          <div class="timeline-item"><div class="time">5:20</div><div class="content">出门；乘坐101专线公交1小时→甘海子</div></div>
+          <div class="timeline-item"><div class="time">6:30 - 7:00</div><div class="content">游客中心步行5分钟到瑞士风情园（甘海子日照金山观景点）</div></div>
+          <div class="timeline-item"><div class="time">7:07 - 7:13</div><div class="content">🌅 日照金山：甘海子看日照金山+彩虹（约6分钟）</div></div>
+          <div class="timeline-item"><div class="time">7:15</div><div class="content">步行前往游客中心</div></div>
+          <div class="timeline-item"><div class="time">7:30</div><div class="content">乘坐大巴+云杉坪索道（60元，预约有时间段）</div></div>
+          <div class="timeline-item"><div class="time">7:50</div><div class="content">到达云杉坪（游览，步行）</div></div>
+          <div class="timeline-item"><div class="time">10:00</div><div class="content">前往蓝月谷（步行600米下坡到白水河 或 乘坐景区大巴到水月阁）</div></div>
+          <div class="timeline-item"><div class="time">12:00</div><div class="content">午餐</div></div>
+          <div class="timeline-item"><div class="time">14:00</div><div class="content">白沙古镇</div></div>
+          <div class="timeline-item"><div class="time">16:30</div><div class="content">束河古镇</div></div>
+          <div class="timeline-item"><div class="time">18:00</div><div class="content">晚餐</div></div>
+          <div class="timeline-item"><div class="time">20:00</div><div class="content">回酒店休息</div></div>
         </div>
         <div class="spot-grid">
           <div class="spot">
-            <h4>🌅 东巴谷（日照金山）</h4>
-            <div class="desc">免费观赏玉龙雪山日照金山的最佳地点。9月底日出约06:30。</div>
-            <span class="tag highlight">必去</span><span class="tag">免费</span><span class="tag info">建议1.5h</span>
-            <a href="https://www.xiaohongshu.com/explore/697dbf4b000000001a032e69" target="_blank" class="xhs-link">📕 攻略</a>
+            <h4>🌅 甘海子日照金山</h4>
+            <div class="desc">7:07日照金山，瑞士风情园观景点。建议6:30前到达，步行5分钟从游客中心到观景点。</div>
+            <span class="tag highlight">必去</span><span class="tag">免费</span><span class="tag info">约6分钟</span>
+            <div class="time-info">🕘 7:07日出 · 约6分钟</div>
+            <a href="https://www.xiaohongshu.com/explore/6a64dbc5000000000401ea7b" target="_blank" class="xhs-link">📕 甘海子攻略</a>
           </div>
           <div class="spot">
             <h4>🌲 云杉坪</h4>
-            <div class="desc">海拔3240m高山草甸，推荐父母选择，索道轻松不累。</div>
-            <span class="tag highlight">推荐父母</span><span class="tag">索道55元</span><span class="tag info">建议2h</span>
-            <a href="https://www.xiaohongshu.com/explore/697d72120000000022031bda" target="_blank" class="xhs-link">📕 攻略</a>
+            <div class="desc">海拔3240m高山草甸，索道60元。从云杉坪索道站下来后，步行600米下坡到白水河。</div>
+            <span class="tag highlight">推荐</span><span class="tag">索道60元</span><span class="tag info">建议2h</span>
+            <a href="https://www.xiaohongshu.com/explore/697d72120000000022031bda" target="_blank" class="xhs-link">📕 云杉坪→蓝月谷攻略</a>
           </div>
           <div class="spot">
             <h4>💧 蓝月谷</h4>
-            <div class="desc">玉龙雪山脚下的蓝色湖泊，有"小九寨"之称，必去！</div>
-            <span class="tag highlight">必去</span><span class="tag">免费（含进山费）</span><span class="tag info">建议1.5h</span>
-            <a href="https://www.xiaohongshu.com/explore/6a360ede00000000080254ff" target="_blank" class="xhs-link">📕 攻略</a>
+            <div class="desc">游览顺序：白水台→玉液湖→镜潭湖→蓝月湖→听涛湖。景区大巴20元全程通用。</div>
+            <span class="tag highlight">必去</span><span class="tag">免费</span><span class="tag info">建议1.5h</span>
+            <div class="time-info">🕘 方案1：步行600米下坡到白水河；方案2：乘坐景区大巴到水月阁</div>
+            <a href="https://www.xiaohongshu.com/explore/6986e12a000000000d00bd7f" target="_blank" class="xhs-link">📕 蓝月谷步数最少攻略</a>
           </div>
           <div class="spot">
-            <h4>🌿 甘海子</h4>
-            <div class="desc">海拔3100m高山草甸，观赏玉龙雪山全貌的最佳位置。免费，先在这里适应高原。</div>
-            <span class="tag">免费</span><span class="tag info">建议30min</span>
+            <h4>🏘️ 白沙古镇</h4>
+            <div class="desc">免费开放，原生态古镇，游客少。14:00前往。</div>
+            <span class="tag">免费</span><span class="tag info">建议2h</span>
+            <a href="https://www.xiaohongshu.com/explore/6a9172f0000000000502b3f5" target="_blank" class="xhs-link">📕 白沙古镇攻略</a>
           </div>
           <div class="spot">
-            <h4>🏘️ 玉湖村</h4>
-            <div class="desc">雪山脚下的纳西族村落，免费，原生态，游客少。</div>
-            <span class="tag">小众</span><span class="tag">免费</span>
+            <h4>🏡 束河古镇</h4>
+            <div class="desc">比大研安静，傍晚去氛围最好。16:30前往。</div>
+            <span class="tag">安静推荐</span><span class="tag info">建议1.5h</span>
+            <a href="https://www.xiaohongshu.com/explore/6a5f243a000000000401ed31" target="_blank" class="xhs-link">📕 束河古镇美食篇</a>
+          </div>
+        </div>
+
+        <!-- 交通备选 -->
+        <div style="background:#e3f2fd;border:1px solid #90caf9;border-radius:8px;padding:16px;margin-top:16px">
+          <h4 style="color:#1565c0;margin-bottom:12px">🚌 交通备选</h4>
+          <div style="font-size:.9rem;color:#555">
+            <ul style="list-style:none">
+              <li>• 忠义市场（古城南门）坐101专线，15元/人到甘海子</li>
+              <li>• 15-20站，全程1小时</li>
+              <li>• 首班车5:30，末班车18:00</li>
+              <li>• 备选方案：打两辆网约车/顺风车，60-80元/辆</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 蓝月谷游览顺序 -->
+        <div style="background:#f3e5f5;border:1px solid #ce93d8;border-radius:8px;padding:16px;margin-top:12px">
+          <h4 style="color:#7b1fa2;margin-bottom:12px">💧 蓝月谷游览顺序</h4>
+          <div style="font-size:.9rem;color:#555">
+            <ul style="list-style:none">
+              <li>• ①白水台→玉液湖→镜潭湖→蓝月湖→听涛湖</li>
+              <li>• ②水月阁大巴返回游客中心</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -1325,8 +1228,8 @@ tr:hover td{background:var(--bg-card)}
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">28</span><span class="label">周日</span></div>
         <div class="day-info">
-          <h3>Day 4 · 自驾去香格里拉</h3>
-          <div class="route">🚗 丽江→G214国道→虎跳峡观景→哈巴雪山→香格里拉</div>
+          <h3>Day 4 · 丽江古城 自驾 → 香格里拉（独克宗古城）</h3>
+          <div class="route">丽江古城 → G214国道 → 虎跳峡观景台 → 白水台 → 纳帕海 → 独克宗古城</div>
         </div>
         <span class="chevron">▼</span>
       </div>
@@ -1335,30 +1238,36 @@ tr:hover td{background:var(--bg-card)}
         <div class="transport-bar">
           <span class="icon">🚗</span>
           <div class="info">
-            <strong>自驾路线：</strong>丽江→G214国道→虎跳峡镇（约2h）→哈巴雪山观景台→香格里拉（约2h）· 全程约180km
-          </div>
-        </div>
-        <div class="transport-bar warn">
-          <span class="icon">📌</span>
-          <div class="info">
-            <strong>关于虎跳峡：</strong>不需要进景区也能看到峡谷！G214国道沿途有多个免费观景点
+            <strong>自驾路线：</strong>丽江古城→G214国道→香格里拉独克宗古城<br>
+            <strong>全程：</strong>约180km，含观景台停留约8小时
           </div>
         </div>
         <div class="timeline">
-          <div class="timeline-item"><div class="time">08:00 - 10:00</div><div class="content">丽江→虎跳峡镇</div></div>
-          <div class="timeline-item"><div class="time">10:00 - 10:30</div><div class="content">路边观景点看虎跳峡（免费）</div></div>
-          <div class="timeline-item"><div class="time">10:30 - 11:30</div><div class="content">虎跳峡镇午餐</div></div>
-          <div class="timeline-item"><div class="time">11:30 - 12:00</div><div class="content">哈巴雪山观景台</div></div>
-          <div class="timeline-item"><div class="time">12:00 - 14:00</div><div class="content">继续前往香格里拉</div></div>
-          <div class="timeline-item"><div class="time">14:00 - 15:00</div><div class="content">入住酒店，休整</div></div>
-          <div class="timeline-item"><div class="time">16:00 - 18:00</div><div class="content">纳帕海/依拉草原</div></div>
-          <div class="timeline-item"><div class="time">18:30 - 20:30</div><div class="content">独克宗古城晚餐+夜游</div></div>
+          <div class="timeline-item"><div class="time">9:00</div><div class="content">丽江古城出发</div></div>
+          <div class="timeline-item"><div class="time">9:30</div><div class="content">手擎双虹观景台</div></div>
+          <div class="timeline-item"><div class="time">10:45</div><div class="content">望天瀑观景台（仅秋季可观赏）</div></div>
+          <div class="timeline-item"><div class="time">11:00</div><div class="content">下虎跳观景台</div></div>
+          <div class="timeline-item"><div class="time">12:00</div><div class="content">哈巴雪山观景台/观哈巴观景台/哈巴村</div></div>
+          <div class="timeline-item"><div class="time">13:00</div><div class="content">九仙峰观景台</div></div>
+          <div class="timeline-item"><div class="time">13:30 - 14:30</div><div class="content">白水台景区（游览1小时）</div></div>
+          <div class="timeline-item"><div class="time">17:00</div><div class="content">纳帕海（有时间可去，没时间就29号去）</div></div>
+          <div class="timeline-item"><div class="time">18:00</div><div class="content">抵达香格里拉独克宗古城</div></div>
         </div>
         <div class="spot-grid">
           <div class="spot">
-            <h4>🌊 虎跳峡（路边观景）</h4>
-            <div class="desc">G214国道沿途有多个免费观景点，不进景区也能感受震撼！</div>
-            <span class="tag">免费观景</span><a href="https://www.xiaohongshu.com/explore/6875e0ee0000000022031ab2" target="_blank" class="xhs-link">📕 攻略</a>
+            <h4>🌉 手擎双虹观景台</h4>
+            <div class="desc">G214国道第一个观景台，免费，可拍峡谷全景。</div>
+            <span class="tag">免费</span><span class="tag info">建议15min</span>
+          </div>
+          <div class="spot">
+            <h4>🌊 望天瀑观景台</h4>
+            <div class="desc">仅秋季可观赏，9月正好是观赏期。</div>
+            <span class="tag highlight">秋季限定</span><span class="tag">免费</span>
+          </div>
+          <div class="spot">
+            <h4>🌊 下虎跳观景台</h4>
+            <div class="desc">G214国道最壮观的虎跳峡观景点。</div>
+            <span class="tag highlight">最壮观</span><span class="tag">免费</span>
           </div>
           <div class="spot">
             <h4>🏔️ 哈巴雪山观景台</h4>
@@ -1366,39 +1275,40 @@ tr:hover td{background:var(--bg-card)}
             <span class="tag">免费</span>
           </div>
           <div class="spot">
-            <h4>🐎 纳帕海/依拉草原</h4>
-            <div class="desc">9月底草甸金黄，香格里拉最美季节。</div>
-            <span class="tag">9月最美</span>
+            <h4>⛰️ 九仙峰观景台</h4>
+            <div class="desc">G214国道观景台之一。</div>
+            <span class="tag">免费</span>
+          </div>
+          <div class="spot">
+            <h4>💧 白水台景区</h4>
+            <div class="desc">纳西族东巴文化发源地，有"仙人遗田"之称。门票30元，游览1小时。</div>
+            <span class="tag highlight">推荐</span><span class="tag">门票30元</span><span class="tag info">建议1h</span>
+            <a href="https://www.xiaohongshu.com/explore/69ff57ee0000000035022cc2" target="_blank" class="xhs-link">📕 白水台攻略</a>
+          </div>
+          <div class="spot">
+            <h4>🐎 纳帕海</h4>
+            <div class="desc">9月底草甸金黄，香格里拉最美季节。有时间可去，没时间就29号去。</div>
+            <span class="tag">9月最美</span><span class="tag">免费</span>
+            <a href="https://www.xiaohongshu.com/explore/6a12f3c70000000007020c72" target="_blank" class="xhs-link">📕 纳帕海环湖攻略</a>
           </div>
           <div class="spot">
             <h4>🏠 独克宗古城</h4>
-            <div class="desc">世界最大转经筒，晚上去氛围更好。</div>
+            <div class="desc">世界最大转经筒，晚上去氛围更好。18:00抵达。</div>
             <span class="tag">藏式古城</span>
-          </div>
-        </div>
-
-        <!-- 住宿推荐 -->
-        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin-top:16px">
-          <h4 style="color:#166534;margin-bottom:12px">🏨 Day4 住宿位置</h4>
-          <div style="font-size:.9rem;color:#555">
-            <p><strong>独克宗古城内</strong>，方便逛古城和转经筒</p>
-            <p style="color:#666;margin-top:4px">⚠️ 海拔3300m，建议住有暖气/电热毯的房间</p>
+            <a href="https://www.xiaohongshu.com/explore/69e1f9cc0000000022029d73" target="_blank" class="xhs-link">📕 独克宗古城1天吃8顿</a>
           </div>
         </div>
 
         <!-- 美食推荐 -->
-        <div style="background:#fff8e1;border:1px solid #ffcc02;border-radius:8px;padding:16px;margin-top:12px">
+        <div style="background:#fff8e1;border:1px solid #ffcc02;border-radius:8px;padding:16px;margin-top:16px">
           <h4 style="color:#e65100;margin-bottom:12px">🍜 Day4 美食推荐</h4>
           <div style="font-size:.9rem;color:#555">
             <ul style="list-style:none">
-              <li>• <strong>牦牛火锅：</strong>"阿若康巴"或"迪庆藏餐"</li>
-              <li>• <strong>酥油茶：</strong>"觉色滇香"或古城内藏餐馆</li>
-              <li>• <strong>青稞饼/糌粑：</strong>古城内藏餐馆都有</li>
-              <li>• <strong>酸奶：</strong>"香格里拉酸奶坊"</li>
-              <li>• <strong>松茸：</strong>9月是松茸季，可以尝尝鲜松茸</li>
+              <li>• <strong>独克宗古城：</strong>1天吃8顿！</li>
+              <li>• <strong>香格里拉美食：</strong>个人觉得无法超越的店（附地址）</li>
             </ul>
-            <a href="https://www.xiaohongshu.com/explore/696f3a9d000000000d0089b8" target="_blank" class="xhs-link">📕 香格里拉美食 (5.2千赞)</a>
-            <a href="https://www.xiaohongshu.com/explore/696b4cf0000000002203ada9" target="_blank" class="xhs-link" style="margin-left:8px">📕 牦牛火锅推荐</a>
+            <a href="https://www.xiaohongshu.com/explore/69e1f9cc0000000022029d73" target="_blank" class="xhs-link">📕 独克宗古城1天吃8顿</a>
+            <a href="https://www.xiaohongshu.com/explore/6a45ccf00000000022014443" target="_blank" class="xhs-link" style="margin-left:8px">📕 香格里拉必吃店</a>
           </div>
         </div>
       </div>
@@ -1413,39 +1323,103 @@ tr:hover td{background:var(--bg-card)}
       <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
         <div class="day-badge"><span class="num">29</span><span class="label">周一</span></div>
         <div class="day-info">
-          <h3>Day 5 · 香格里拉 → 丽江 → 深圳</h3>
-          <div class="route">🛕 松赞林寺 → 🚄 高铁回丽江 → 白沙古镇 → ✈️ 晚上飞深圳</div>
+          <h3>Day 5 · 香格里拉 — 丽江机场 — 深圳</h3>
+          <div class="route">松赞林寺 → 拉姆央措湖 → 纳帕海环湖 → 丽江三义机场 → 深圳</div>
         </div>
         <span class="chevron">▼</span>
       </div>
       <div class="day-body">
         <div id="map-day5" class="day-map"></div>
         <div class="transport-bar">
-          <span class="icon">✈️</span>
+          <span class="icon">🚗</span>
           <div class="info">
-            <strong>返程航班：</strong>丽江 22:00 → 深圳<br>
-            <strong>香格里拉→丽江高铁：</strong>C448 15:30 → 17:00（1.5h）· 约80元
+            <strong>自驾：</strong>独克宗古城→松赞林寺（5公里）→纳帕海环湖（40公里）→丽江三义机场<br>
+            <strong>返程航班：</strong>丽江 22:00 → 深圳
+          </div>
+        </div>
+        <div class="transport-bar warn">
+          <span class="icon">💰</span>
+          <div class="info">
+            <strong>省钱攻略：</strong>自驾去松赞林寺正门每人比打车到游客中心再坐景区大巴节省20元/人
           </div>
         </div>
         <div class="timeline">
-          <div class="timeline-item"><div class="time">09:00 - 11:30</div><div class="content">松赞林寺（门票90元）</div></div>
-          <div class="timeline-item"><div class="time">12:00 - 13:00</div><div class="content">午餐：牦牛火锅</div></div>
-          <div class="timeline-item"><div class="time">13:30 - 14:30</div><div class="content">收拾行李，前往香格里拉站</div></div>
-          <div class="timeline-item"><div class="time">15:30 - 17:00</div><div class="content">高铁香格里拉→丽江</div></div>
-          <div class="timeline-item"><div class="time">17:30 - 19:00</div><div class="content">白沙古镇（免费，原生态）</div></div>
-          <div class="timeline-item"><div class="time">19:30 - 20:00</div><div class="content">前往丽江机场</div></div>
+          <div class="timeline-item"><div class="time">8:30 - 9:00</div><div class="content">独克宗古城 — 松赞林寺（5公里，门票55元/人，美团购买）</div></div>
+          <div class="timeline-item"><div class="time">9:00 - 9:30</div><div class="content">到正门，先前往对面【拉姆央措湖】，顺时针绕湖一圈，拍摄寺庙全景</div></div>
+          <div class="timeline-item"><div class="time">9:30 - 10:30</div><div class="content">回到正门，爬147级台阶到达主殿广场，参观扎仓大殿、吉康大殿等</div></div>
+          <div class="timeline-item"><div class="time">10:30 - 11:00</div><div class="content">逛外围转经长廊，转动转经筒祈福</div></div>
+          <div class="timeline-item"><div class="time">11:00 - 12:30</div><div class="content">午餐（独克宗古城/沿途餐馆/自备干粮）</div></div>
+          <div class="timeline-item"><div class="time">13:00 - 15:00</div><div class="content">纳帕海环湖（40公里，游玩1.5小时）</div></div>
+          <div class="timeline-item"><div class="time">15:00 - 17:30</div><div class="content">独克宗古城 → 丽江三义机场（中途解决晚餐）</div></div>
+          <div class="timeline-item"><div class="time">17:30 - 20:00</div><div class="content">晚餐 → 前往三义机场（神州租车还车，值机）</div></div>
           <div class="timeline-item"><div class="time">22:00</div><div class="content">✈️ 丽江→深圳</div></div>
         </div>
         <div class="spot-grid">
           <div class="spot">
             <h4>🛕 松赞林寺</h4>
-            <div class="desc">"小布达拉宫"，金碧辉煌，气势恢宏。</div>
-            <span class="tag">藏传佛教</span><a href="https://www.xiaohongshu.com/explore/68ccfcd40000000014008f62" target="_blank" class="xhs-link">📕 攻略</a>
+            <div class="desc">门票55元/人，美团购买。自驾可直达松赞林寺正门，省景区大巴20元/人。</div>
+            <span class="tag highlight">必去</span><span class="tag">门票55元</span><span class="tag info">建议2h</span>
+            <div class="time-info">🕘 自驾导航：独克宗古城→纳帕海小布达拉景区（途径）→台享叫了个炸鸡（路边免费停车）→寺庙大门检票入园</div>
+            <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="xhs-link">📕 自驾松赞林寺攻略</a>
           </div>
           <div class="spot">
-            <h4>🏡 白沙古镇</h4>
-            <div class="desc">三个古镇中最原生态，游客最少，免费。顺路去，不绕路。</div>
-            <span class="tag">免费</span><a href="https://www.xiaohongshu.com/explore/68da3c1f000000001301f9f1" target="_blank" class="xhs-link">📕 攻略</a>
+            <h4>🌊 拉姆央措湖</h4>
+            <div class="desc">松赞林寺对面，顺时针绕湖一圈，拍摄寺庙全景倒影。</div>
+            <span class="tag highlight">必去</span><span class="tag">免费</span><span class="tag info">建议30min</span>
+            <a href="https://www.xiaohongshu.com/explore/6a5f4391000000001101ff61" target="_blank" class="xhs-link">📕 拉姆央措湖攻略</a>
+          </div>
+          <div class="spot">
+            <h4>🐎 纳帕海环湖</h4>
+            <div class="desc">40公里，游玩1.5小时，免费开放。9月底草原金黄，非常美。</div>
+            <span class="tag highlight">必去</span><span class="tag">免费</span><span class="tag info">建议1.5h</span>
+            <div class="time-info">🕘 自驾路线：松赞林寺→香格里拉高山植物园→半途而沸咖啡→独克宗古城</div>
+            <a href="https://www.xiaohongshu.com/explore/6a12f3c70000000007020c72" target="_blank" class="xhs-link">📕 纳帕海环湖攻略</a>
+          </div>
+        </div>
+
+        <!-- 松赞林寺自驾导航 -->
+        <div style="background:#e3f2fd;border:1px solid #90caf9;border-radius:8px;padding:16px;margin-top:16px">
+          <h4 style="color:#1565c0;margin-bottom:12px">🚗 松赞林寺自驾导航</h4>
+          <div style="font-size:.9rem;color:#555">
+            <ul style="list-style:none">
+              <li>• 独克宗古城→纳帕海小布达拉景区（途径）</li>
+              <li>• →台享叫了个炸鸡（路边免费停车，店面前后100米左右）</li>
+              <li>• →寺庙大门检票入园</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 纳帕海自驾路线 -->
+        <div style="background:#f3e5f5;border:1px solid #ce93d8;border-radius:8px;padding:16px;margin-top:12px">
+          <h4 style="color:#7b1fa2;margin-bottom:12px">🐎 纳帕海自驾路线</h4>
+          <div style="font-size:.9rem;color:#555">
+            <ul style="list-style:none">
+              <li>• 松赞林寺→香格里拉高山植物园→半途而沸咖啡→独克宗古城</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 返程提醒 -->
+        <div style="background:#fff3e0;border:1px solid #ffcc80;border-radius:8px;padding:16px;margin-top:12px">
+          <h4 style="color:#e65100;margin-bottom:12px">✈️ 返程提醒</h4>
+          <div style="font-size:.9rem;color:#555">
+            <ul style="list-style:none">
+              <li>• 航班：丽江 22:00 → 深圳</li>
+              <li>• 建议17:30前到达机场</li>
+              <li>• 神州租车还车，值机</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 美食推荐 -->
+        <div style="background:#fff8e1;border:1px solid #ffcc02;border-radius:8px;padding:16px;margin-top:12px">
+          <h4 style="color:#e65100;margin-bottom:12px">🍜 Day5 美食推荐</h4>
+          <div style="font-size:.9rem;color:#555">
+            <ul style="list-style:none">
+              <li>• <strong>午餐：</strong>独克宗古城/沿途餐馆/自备干粮</li>
+              <li>• <strong>晚餐：</strong>中途解决，前往机场</li>
+            </ul>
+            <a href="https://www.xiaohongshu.com/explore/6a45ccf00000000022014443" target="_blank" class="xhs-link">📕 香格里拉必吃店</a>
           </div>
         </div>
       </div>
@@ -2760,75 +2734,238 @@ function refreshMaps() {
   }
 }
 
+// POI搜索获取准确坐标
+function searchPOI(keyword, city, callback) {
+  AMap.plugin('AMap.PlaceSearch', function() {
+    var placeSearch = new AMap.PlaceSearch({
+      city: city,
+      citylimit: true,
+      pageSize: 1
+    });
+    placeSearch.search(keyword, function(status, result) {
+      if (status === 'complete' && result.info === 'OK') {
+        var poi = result.poiList.pois[0];
+        if (poi && poi.location) {
+          callback({
+            name: poi.name,
+            lng: poi.location.lng,
+            lat: poi.location.lat,
+            address: poi.address
+          });
+        } else {
+          callback(null);
+        }
+      } else {
+        callback(null);
+      }
+    });
+  });
+}
+
+// 批量搜索坐标并输出
+function batchSearchCoords() {
+  var locations = [
+    {keyword: '昆明长水机场', city: '昆明', key: 'kunming_airport'},
+    {keyword: '昆明站', city: '昆明', key: 'kunming_station'},
+    {keyword: '篆新农贸市场', city: '昆明', key: 'zhuanxin_market'},
+    {keyword: '大理古城', city: '大理', key: 'dali_old_town'},
+    {keyword: '洱海', city: '大理', key: 'erhai_lake'},
+    {keyword: '丽江古城', city: '丽江', key: 'lijiang_old_town'},
+    {keyword: '玉龙雪山', city: '丽江', key: 'yulong_snow_mountain'},
+    {keyword: '虎跳峡', city: '丽江', key: 'tiger_leaping_gorge'},
+    {keyword: '白水台', city: '迪庆', key: 'baishuitai'},
+    {keyword: '独克宗古城', city: '迪庆', key: 'dukezong_old_town'},
+    {keyword: '松赞林寺', city: '迪庆', key: 'songzanlin_temple'},
+    {keyword: '纳帕海', city: '迪庆', key: 'napa_sea'},
+    {keyword: '甘海子', city: '丽江', key: 'ganhaizi'},
+    {keyword: '云杉坪', city: '丽江', key: 'yunshanping'},
+    {keyword: '蓝月谷', city: '丽江', key: 'blue_moon_valley'},
+    {keyword: '白沙古镇', city: '丽江', key: 'baisha_old_town'},
+    {keyword: '束河古镇', city: '丽江', key: 'shuhe_old_town'},
+    {keyword: '忠义市场', city: '丽江', key: 'zhongyi_market'},
+    {keyword: '拉姆央措湖', city: '迪庆', key: 'lamuyangcuo_lake'},
+    {keyword: '丽江三义机场', city: '丽江', key: 'lijiang_airport'}
+  ];
+  
+  var results = {};
+  var count = 0;
+  
+  locations.forEach(function(loc) {
+    searchPOI(loc.keyword, loc.city, function(result) {
+      if (result) {
+        results[loc.key] = {
+          name: result.name,
+          lng: result.lng.toFixed(6),
+          lat: result.lat.toFixed(6),
+          address: result.address
+        };
+      } else {
+        results[loc.key] = {name: loc.keyword, error: '未找到'};
+      }
+      count++;
+      if (count === locations.length) {
+        console.log('=== 坐标搜索结果 ===');
+        console.log(JSON.stringify(results, null, 2));
+        alert('坐标搜索完成，请查看控制台输出');
+      }
+    });
+  });
+}
+
 initTheme();
 
-// 总览地图A
-var mapMainA = createMap('map-main-a', [101.0, 26.5], 7);
-addMarker(mapMainA,102.95,25.10,'#e74c3c','昆明长水机场','起点'); addMarker(mapMainA,102.72,25.02,'#e74c3c','昆明站','高铁站');
-addMarker(mapMainA,100.22,26.87,'#3498db','丽江古城','海拔2400m'); addMarker(mapMainA,100.26,27.10,'#f39c12','玉龙雪山','海拔4680m');
-addMarker(mapMainA,100.05,27.15,'#f39c12','虎跳峡','世界最深峡谷'); addMarker(mapMainA,99.70,27.83,'#9b59b6','香格里拉','海拔3300m');
-addMarker(mapMainA,99.68,27.85,'#f39c12','松赞林寺','小布达拉宫');
-addRoute(mapMainA,[[102.95,25.10],[100.22,26.87]],'#3b82f6');
-addRoute(mapMainA,[[100.22,26.87],[100.05,27.15],[99.70,27.83]],'#f39c12');
-addRoute(mapMainA,[[99.70,27.83],[100.22,26.87]],'#9b59b6');
-addLabel(mapMainA,101.50,25.95,'高铁 3.5h','#3b82f6'); addLabel(mapMainA,100.00,27.35,'自驾 4h','#f39c12');
-addLabel(mapMainA,99.90,27.35,'高铁 1.5h','#9b59b6');
+// 总览地图坐标（高德GCJ-02坐标系，API搜索获取）
+var mainCoords = {
+  'kunming_airport': [102.935835, 25.099565],  // 昆明长水国际机场
+  'kunming_station': [102.722277, 25.015257],  // 昆明站
+  'zhuanxin_market': [102.692314, 25.036678],  // 篆新农贸市场
+  'dali_old_town': [100.164000, 25.694836],    // 大理古城
+  'erhai_lake': [100.247329, 25.603041],       // 洱海
+  'lijiang_old_town': [100.235517, 26.870507], // 丽江古城
+  'yulong_snow_mountain': [100.258558, 27.098052], // 玉龙雪山
+  'tiger_leaping_gorge': [100.115306, 27.189303], // 虎跳峡
+  'baishuitai': [100.033177, 27.494426],       // 白水台
+  'dukezong_old_town': [99.708514, 27.810532], // 独克宗古城
+  'songzanlin_temple': [99.705525, 27.859991], // 松赞林寺
+  'napa_sea': [99.646379, 27.824387],          // 纳帕海
+  'ganhaizi': [100.257808, 27.090724],         // 甘海子
+  'yunshanping': [100.235197, 27.129758],      // 云杉坪
+  'blue_moon_valley': [100.245886, 27.124436], // 蓝月谷
+  'baisha_old_town': [100.216933, 26.953303],  // 白沙古镇
+  'shuhe_old_town': [100.205679, 26.919600],   // 束河古镇
+  'zhongyi_market': [100.235617, 26.866718],   // 忠义市场
+  'lamuyangcuo_lake': [99.707020, 27.855101],  // 拉姆央措湖
+  'lijiang_airport': [100.246460, 26.671508]   // 丽江三义机场
+};
 
-// 总览地图B
-var mapMainB = createMap('map-main-b', [101.0, 26.0], 8);
-addMarker(mapMainB,102.95,25.10,'#e74c3c','昆明长水机场','起点'); addMarker(mapMainB,102.72,25.02,'#e74c3c','昆明站');
-addMarker(mapMainB,100.22,25.58,'#27ae60','大理古城','方案B'); addMarker(mapMainB,100.20,25.75,'#27ae60','洱海','看日出日落');
-addMarker(mapMainB,100.22,26.87,'#3498db','丽江古城'); addMarker(mapMainB,99.70,27.83,'#9b59b6','香格里拉');
-addRoute(mapMainB,[[102.95,25.10],[100.22,25.58]],'#27ae60');
-addRoute(mapMainB,[[100.22,25.58],[100.22,26.87]],'#27ae60');
-addRoute(mapMainB,[[100.22,26.87],[100.05,27.15],[99.70,27.83]],'#f39c12');
-addRoute(mapMainB,[[99.70,27.83],[100.22,26.87]],'#9b59b6');
-addLabel(mapMainB,100.22,25.40,'高铁 2h','#27ae60'); addLabel(mapMainB,100.00,27.35,'自驾 4h','#f39c12');
+// 总览地图
+var mapMain = createMap('map-main', [101.0, 26.5], 7);
+addMarker(mapMain,mainCoords.kunming_airport[0],mainCoords.kunming_airport[1],'#e74c3c','昆明长水机场','Day1 起点');
+addMarker(mapMain,mainCoords.kunming_station[0],mainCoords.kunming_station[1],'#e74c3c','昆明站','高铁站');
+addMarker(mapMain,mainCoords.dali_old_town[0],mainCoords.dali_old_town[1],'#27ae60','大理古城','Day1 住宿');
+addMarker(mapMain,mainCoords.erhai_lake[0],mainCoords.erhai_lake[1],'#27ae60','洱海','Day2 日出');
+addMarker(mapMain,mainCoords.lijiang_old_town[0],mainCoords.lijiang_old_town[1],'#3498db','丽江古城','Day2-3 住宿');
+addMarker(mapMain,mainCoords.yulong_snow_mountain[0],mainCoords.yulong_snow_mountain[1],'#f39c12','玉龙雪山','Day3 景点');
+addMarker(mapMain,mainCoords.tiger_leaping_gorge[0],mainCoords.tiger_leaping_gorge[1],'#f39c12','虎跳峡','Day4 观景');
+addMarker(mapMain,mainCoords.baishuitai[0],mainCoords.baishuitai[1],'#f39c12','白水台','Day4 景点');
+addMarker(mapMain,mainCoords.dukezong_old_town[0],mainCoords.dukezong_old_town[1],'#9b59b6','独克宗古城','Day4-5 住宿');
+addMarker(mapMain,mainCoords.songzanlin_temple[0],mainCoords.songzanlin_temple[1],'#f39c12','松赞林寺','Day5 景点');
+addMarker(mapMain,mainCoords.napa_sea[0],mainCoords.napa_sea[1],'#f39c12','纳帕海','Day5 环湖');
+addRoute(mapMain,[mainCoords.kunming_airport,mainCoords.kunming_station],'#e74c3c');
+addRoute(mapMain,[mainCoords.kunming_station,mainCoords.dali_old_town],'#3b82f6');
+addRoute(mapMain,[mainCoords.dali_old_town,mainCoords.lijiang_old_town],'#3b82f6');
+addRoute(mapMain,[mainCoords.lijiang_old_town,mainCoords.yulong_snow_mountain],'#f39c12');
+addRoute(mapMain,[mainCoords.lijiang_old_town,mainCoords.tiger_leaping_gorge,mainCoords.baishuitai,mainCoords.dukezong_old_town],'#f39c12');
+addRoute(mapMain,[mainCoords.dukezong_old_town,mainCoords.lijiang_old_town],'#9b59b6');
+addLabel(mapMain,101.50,25.95,'高铁 2h','#3b82f6');
+addLabel(mapMain,100.10,27.00,'自驾 G214','#f39c12');
+addLabel(mapMain,99.90,27.35,'返回丽江','#9b59b6');
 
-// Day1A
-var map1a = createMap('map-day1-a', [102.80, 25.03], 12);
-addMarker(map1a,102.95,25.10,'#e74c3c','昆明长水机场'); addMarker(map1a,102.72,25.02,'#e74c3c','昆明站');
-addMarker(map1a,102.71,25.04,'#f39c12','篆新农贸市场','强烈推荐！'); addMarker(map1a,102.68,24.97,'#f39c12','滇池海埂公园');
-addMarker(map1a,102.67,24.98,'#f39c12','茶马花街');
-addRoute(map1a,[[102.95,25.10],[102.72,25.02]],'#e74c3c'); addRoute(map1a,[[102.72,25.02],[102.71,25.04],[102.68,24.97]],'#f39c12');
+// Day1坐标（高德GCJ-02坐标系，API搜索获取）
+var day1Coords = {
+  'kunming_airport': [102.935835, 25.099565],  // 昆明长水国际机场
+  'kunming_station': [102.722277, 25.015257],  // 昆明站
+  'zhuanxin_market': [102.692314, 25.036678],  // 篆新农贸市场
+  'dali_old_town': [100.164000, 25.694836]     // 大理古城
+};
 
-// Day1B
-var map1b = createMap('map-day1-b', [101.50, 25.50], 9);
-addMarker(map1b,102.95,25.10,'#e74c3c','昆明长水机场'); addMarker(map1b,102.72,25.02,'#e74c3c','昆明站');
-addMarker(map1b,100.22,25.58,'#27ae60','大理古城'); addMarker(map1b,100.20,25.75,'#27ae60','洱海');
-addRoute(map1b,[[102.95,25.10],[102.72,25.02]],'#e74c3c'); addRoute(map1b,[[102.72,25.02],[100.22,25.58]],'#27ae60');
+// Day1: 昆明长水机场 → 篆新市场/昆明站 → 高铁大理 → 大理古城
+var map1 = createMap('map-day1', [101.50, 25.50], 9);
+addMarker(map1,day1Coords.kunming_airport[0],day1Coords.kunming_airport[1],'#e74c3c','昆明长水机场','08:50/10:40到达');
+addMarker(map1,day1Coords.kunming_station[0],day1Coords.kunming_station[1],'#e74c3c','昆明站','14:40高铁');
+addMarker(map1,day1Coords.zhuanxin_market[0],day1Coords.zhuanxin_market[1],'#f39c12','篆新农贸市场','午餐推荐');
+addMarker(map1,day1Coords.dali_old_town[0],day1Coords.dali_old_town[1],'#27ae60','大理古城','17:30到达');
+addRoute(map1,[day1Coords.kunming_airport,day1Coords.kunming_station],'#e74c3c');
+addRoute(map1,[day1Coords.kunming_station,day1Coords.dali_old_town],'#3b82f6');
+addLabel(map1,101.50,25.40,'高铁 2h18min','#3b82f6');
 
-// Day2A
-var map2a = createMap('map-day2-a', [101.50, 26.00], 8);
-addMarker(map2a,102.72,25.02,'#e74c3c','昆明站'); addMarker(map2a,100.22,26.87,'#3498db','丽江古城');
-addMarker(map2a,100.23,26.88,'#f39c12','忠义市场','能看到雪山的菜市场');
-addRoute(map2a,[[102.72,25.02],[100.22,26.87]],'#3b82f6');
+// Day2坐标（高德GCJ-02坐标系，API搜索获取）
+var day2Coords = {
+  'erhai_lake': [100.247329, 25.603041],       // 洱海
+  'dali_old_town': [100.164000, 25.694836],    // 大理古城
+  'lijiang_old_town': [100.235517, 26.870507], // 丽江古城
+  'zhongyi_market': [100.235617, 26.866718]    // 忠义市场
+};
 
-// Day2B
-var map2b = createMap('map-day2-b', [100.20, 26.30], 9);
-addMarker(map2b,100.20,25.75,'#27ae60','洱海'); addMarker(map2b,100.13,25.80,'#27ae60','双廊古镇');
-addMarker(map2b,100.22,26.87,'#3498db','丽江古城');
-addRoute(map2b,[[100.20,25.75],[100.13,25.80],[100.22,26.87]],'#27ae60');
+// Day2: 大理洱海日出 → 洱海漫步/骑行 → 高铁丽江 → 丽江古城夜景
+var map2 = createMap('map-day2', [100.50, 26.00], 8);
+addMarker(map2,day2Coords.erhai_lake[0],day2Coords.erhai_lake[1],'#27ae60','洱海','6:20看日出');
+addMarker(map2,day2Coords.dali_old_town[0],day2Coords.dali_old_town[1],'#27ae60','大理古城','早餐/午餐');
+addMarker(map2,day2Coords.lijiang_old_town[0],day2Coords.lijiang_old_town[1],'#3498db','丽江古城','19:30夜景');
+addMarker(map2,day2Coords.zhongyi_market[0],day2Coords.zhongyi_market[1],'#f39c12','忠义市场','早餐/夜市');
+addRoute(map2,[day2Coords.erhai_lake,day2Coords.dali_old_town],'#27ae60');
+addRoute(map2,[day2Coords.dali_old_town,day2Coords.lijiang_old_town],'#3b82f6');
+addLabel(map2,100.22,26.30,'高铁 2.5h','#3b82f6');
 
-// Day3
-var map3 = createMap('map-day3', [100.22, 26.95], 12);
-addMarker(map3,100.22,26.87,'#3498db','丽江古城'); addMarker(map3,100.26,26.90,'#f39c12','东巴谷','日照金山');
-addMarker(map3,100.25,26.95,'#f39c12','甘海子'); addMarker(map3,100.24,26.98,'#f39c12','云杉坪');
-addMarker(map3,100.23,26.97,'#f39c12','蓝月谷'); addMarker(map3,100.22,26.94,'#f39c12','玉湖村');
-addRoute(map3,[[100.22,26.87],[100.26,26.90],[100.25,26.95],[100.24,26.98],[100.23,26.97],[100.22,26.94]],'#e74c3c');
+// Day3坐标（高德GCJ-02坐标系，API搜索获取）
+var day3Coords = {
+  'lijiang_old_town': [100.235517, 26.870507], // 丽江古城
+  'ganhaizi': [100.257808, 27.090724],          // 甘海子
+  'yunshanping': [100.235197, 27.129758],      // 云杉坪
+  'blue_moon_valley': [100.245886, 27.124436], // 蓝月谷
+  'baisha_old_town': [100.216933, 26.953303],  // 白沙古镇
+  'shuhe_old_town': [100.205679, 26.919600]    // 束河古镇
+};
 
-// Day4
+// Day3: 甘海子日照金山 → 云杉坪 → 蓝月谷 → 白沙古镇 → 束河古镇
+var map3 = createMap('map-day3', [100.22, 26.92], 12);
+addMarker(map3,day3Coords.lijiang_old_town[0],day3Coords.lijiang_old_town[1],'#3498db','丽江古城','5:20出发');
+addMarker(map3,day3Coords.ganhaizi[0],day3Coords.ganhaizi[1],'#f39c12','甘海子','7:07日照金山');
+addMarker(map3,day3Coords.yunshanping[0],day3Coords.yunshanping[1],'#f39c12','云杉坪','7:30索道');
+addMarker(map3,day3Coords.blue_moon_valley[0],day3Coords.blue_moon_valley[1],'#f39c12','蓝月谷','10:00前往');
+addMarker(map3,day3Coords.baisha_old_town[0],day3Coords.baisha_old_town[1],'#f39c12','白沙古镇','14:00');
+addMarker(map3,day3Coords.shuhe_old_town[0],day3Coords.shuhe_old_town[1],'#f39c12','束河古镇','16:30');
+addRoute(map3,[day3Coords.lijiang_old_town,day3Coords.ganhaizi],'#e74c3c');
+addRoute(map3,[day3Coords.ganhaizi,day3Coords.yunshanping,day3Coords.blue_moon_valley],'#f39c12');
+addRoute(map3,[day3Coords.blue_moon_valley,day3Coords.baisha_old_town,day3Coords.shuhe_old_town],'#f39c12');
+addLabel(map3,100.23,26.90,'101专线 1h','#e74c3c');
+
+// Day4坐标（高德GCJ-02坐标系，API搜索获取）
+var day4Coords = {
+  'lijiang_old_town': [100.235517, 26.870507], // 丽江古城
+  'shuanghong_viewpoint': [100.232273, 26.871184], // 手擎双虹观景台
+  'lower_tiger_viewpoint': [100.209445, 27.312363], // 下虎跳观景台
+  'haba_snow_viewpoint': [100.149186, 27.394215], // 哈巴雪山观景台
+  'tiger_leaping_gorge': [100.115306, 27.189303], // 虎跳峡
+  'baishuitai': [100.033177, 27.494426],       // 白水台
+  'napa_sea': [99.646379, 27.824387],          // 纳帕海
+  'dukezong_old_town': [99.708514, 27.810532]  // 独克宗古城
+};
+
+// Day4: 丽江古城 → G214国道 → 虎跳峡观景台 → 白水台 → 纳帕海 → 独克宗古城
 var map4 = createMap('map-day4', [100.00, 27.30], 10);
-addMarker(map4,100.22,26.87,'#3498db','丽江'); addMarker(map4,100.05,27.15,'#f39c12','虎跳峡');
-addMarker(map4,100.08,27.25,'#f39c12','哈巴雪山'); addMarker(map4,99.70,27.83,'#9b59b6','香格里拉');
-addRoute(map4,[[100.22,26.87],[100.05,27.15],[100.08,27.25],[99.70,27.83]],'#f39c12');
+addMarker(map4,day4Coords.lijiang_old_town[0],day4Coords.lijiang_old_town[1],'#3498db','丽江古城','9:00出发');
+addMarker(map4,day4Coords.shuanghong_viewpoint[0],day4Coords.shuanghong_viewpoint[1],'#f39c12','手擎双虹观景台','9:30');
+addMarker(map4,day4Coords.lower_tiger_viewpoint[0],day4Coords.lower_tiger_viewpoint[1],'#f39c12','下虎跳观景台','11:00');
+addMarker(map4,day4Coords.haba_snow_viewpoint[0],day4Coords.haba_snow_viewpoint[1],'#f39c12','哈巴雪山观景台','12:00');
+addMarker(map4,day4Coords.tiger_leaping_gorge[0],day4Coords.tiger_leaping_gorge[1],'#f39c12','虎跳峡','10:45');
+addMarker(map4,day4Coords.baishuitai[0],day4Coords.baishuitai[1],'#f39c12','白水台景区','13:30');
+addMarker(map4,day4Coords.napa_sea[0],day4Coords.napa_sea[1],'#f39c12','纳帕海','17:00');
+addMarker(map4,day4Coords.dukezong_old_town[0],day4Coords.dukezong_old_town[1],'#9b59b6','独克宗古城','18:00到达');
+addRoute(map4,[day4Coords.lijiang_old_town,day4Coords.shuanghong_viewpoint,day4Coords.lower_tiger_viewpoint,day4Coords.haba_snow_viewpoint,day4Coords.tiger_leaping_gorge,day4Coords.baishuitai,day4Coords.dukezong_old_town],'#f39c12');
+addLabel(map4,100.10,27.05,'G214国道','#f39c12');
 
-// Day5
+// Day5坐标（高德GCJ-02坐标系，API搜索获取）
+var day5Coords = {
+  'dukezong_old_town': [99.708514, 27.810532], // 独克宗古城
+  'songzanlin_temple': [99.705525, 27.859991], // 松赞林寺
+  'lamuyangcuo_lake': [99.707020, 27.855101],  // 拉姆央措湖
+  'napa_sea': [99.646379, 27.824387],          // 纳帕海
+  'lijiang_airport': [100.246460, 26.671508]   // 丽江三义机场
+};
+
+// Day5: 松赞林寺 → 拉姆央措湖 → 纳帕海环湖 → 丽江三义机场 → 深圳
 var map5 = createMap('map-day5', [100.00, 27.35], 11);
-addMarker(map5,99.70,27.83,'#9b59b6','独克宗古城'); addMarker(map5,99.68,27.85,'#f39c12','松赞林寺');
-addMarker(map5,99.65,27.88,'#f39c12','纳帕海'); addMarker(map5,100.21,26.90,'#3498db','束河古镇');
-addMarker(map5,100.20,26.93,'#3498db','白沙古镇');
-addRoute(map5,[[99.70,27.83],[100.21,26.90]],'#9b59b6');
+addMarker(map5,day5Coords.dukezong_old_town[0],day5Coords.dukezong_old_town[1],'#9b59b6','独克宗古城','8:30出发');
+addMarker(map5,day5Coords.songzanlin_temple[0],day5Coords.songzanlin_temple[1],'#f39c12','松赞林寺','9:00到达');
+addMarker(map5,day5Coords.lamuyangcuo_lake[0],day5Coords.lamuyangcuo_lake[1],'#f39c12','拉姆央措湖','拍倒影');
+addMarker(map5,day5Coords.napa_sea[0],day5Coords.napa_sea[1],'#f39c12','纳帕海','13:00环湖');
+addMarker(map5,day5Coords.lijiang_airport[0],day5Coords.lijiang_airport[1],'#3498db','丽江三义机场','17:30到达');
+addRoute(map5,[day5Coords.dukezong_old_town,day5Coords.songzanlin_temple],'#9b59b6');
+addRoute(map5,[day5Coords.songzanlin_temple,day5Coords.lamuyangcuo_lake,day5Coords.napa_sea],'#f39c12');
+addRoute(map5,[day5Coords.napa_sea,day5Coords.dukezong_old_town],'#9b59b6');
+addRoute(map5,[day5Coords.dukezong_old_town,day5Coords.lijiang_airport],'#9b59b6');
+addLabel(map5,99.90,27.35,'自驾 2.5h','#9b59b6');
 
 function switchTab(btn, panelId) {
   var parent = btn.closest('.section') || btn.closest('.day-body') || btn.parentElement.parentElement;
@@ -3020,54 +3157,6 @@ function handlePPTScroll() {
 // 初始化PPT指示器
 updatePPTIndicator();
 
-var currentPlan = 'a';
-function togglePlan() {
-  currentPlan = currentPlan === 'a' ? 'b' : 'a';
-  localStorage.setItem('plan', currentPlan);
-  switchAllPlans(currentPlan);
-  showToast('已切换到方案' + currentPlan.toUpperCase());
-}
-
-// 通用tab切换函数
-function switchTabs(tabContainer, plan) {
-  if (!tabContainer) return;
-  var tabs = tabContainer.querySelectorAll('.tab-btn');
-  var panels = tabContainer.querySelectorAll('.tab-panel');
-  tabs.forEach(function(t){ t.classList.remove('active'); });
-  panels.forEach(function(p){ p.classList.remove('active'); });
-  var index = plan === 'a' ? 0 : 1;
-  if (tabs[index]) tabs[index].classList.add('active');
-  if (panels[index]) panels[index].classList.add('active');
-}
-
-function switchAllPlans(plan) {
-  // 切换总览地图
-  var mapA = document.getElementById('overview-map-a');
-  var mapB = document.getElementById('overview-map-b');
-  if (mapA && mapB) {
-    if (plan === 'a') {
-      mapA.style.height='auto'; mapA.style.overflow='visible'; mapA.style.position='static';
-      mapB.style.height='0'; mapB.style.overflow='hidden'; mapB.style.position='absolute'; mapB.style.left='-9999px';
-    } else {
-      mapA.style.height='0'; mapA.style.overflow='hidden'; mapA.style.position='absolute'; mapA.style.left='-9999px';
-      mapB.style.height='auto'; mapB.style.overflow='visible'; mapB.style.position='static';
-    }
-  }
-  
-  // 切换所有tab
-  switchTabs(document.querySelector('#overview-plan-a')?.parentElement, plan);
-  switchTabs(document.querySelector('#day1-plan-a')?.parentElement, plan);
-  switchTabs(document.querySelector('#day2-plan-a')?.parentElement, plan);
-  
-  setTimeout(refreshMaps, 200);
-}
-
-function initPlan() {
-  var saved = localStorage.getItem('plan');
-  if (saved === 'b') { currentPlan='b'; switchAllPlans('b'); }
-}
-
-initPlan();
 initPPTMode();
 window.addEventListener('load', function(){ setTimeout(refreshMaps, 500); });
 window.addEventListener('scroll', handlePPTScroll);
