@@ -1,0 +1,852 @@
+# 云南旅行攻略配置文件
+# 最后更新: 2026-09-07
+
+meta:
+  title: "云南5日家庭游攻略"
+  dates: "2026-09-25 ~ 2026-09-29"
+  travelers: 5
+  last_update: "2026-09-07"
+
+guides:
+  # ========== Day1 昆明 ==========
+  - id: "user-5"
+    day: 3
+    location: "玉龙雪山"
+    type: "景点"
+    source: "user"
+    title: "玉龙雪山一日游攻略（详细时间版）"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/AAJDErKJmdn"
+    summary: "26年9月2日前往，详细时间规划"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "详细时间规划"
+      - "9月实测版本"
+    tips: "2026年最新攻略"
+    tags: ["丽江", "玉龙雪山", "攻略"]
+
+  - id: "search-28"
+    day: 1
+    location: "篆新市场"
+    type: "美食"
+    source: "search"
+    title: "如果你是游客，请避雷昆明篆新农贸市场"
+    url: "https://www.xiaohongshu.com/explore/6a3cec1b000000001102fc6f"
+    short_url: null
+    summary: "游客避雷指南，告诉你哪些值得吃"
+    stats:
+      likes: 44
+      collects: 14
+      comments: 53
+    highlights:
+      - "避雷指南"
+      - "游客必看"
+    tips: "先看攻略再去，避免踩坑"
+    tags: ["昆明", "篆新市场", "避雷"]
+
+  - id: "search-29"
+    day: 1
+    location: "篆新市场"
+    type: "美食"
+    source: "search"
+    title: "吃透篆新✨一张地图就够了"
+    url: "https://www.xiaohongshu.com/explore/6a2a8f7c000000001503cc1e"
+    short_url: null
+    summary: "篆新市场美食地图，一张图搞定"
+    stats:
+      likes: 189
+      collects: 241
+      comments: 9
+    highlights:
+      - "美食地图"
+      - "一图搞定"
+    tips: "建议保存地图，边逛边找"
+    tags: ["昆明", "篆新市场", "美食地图"]
+
+  - id: "search-30"
+    day: 1
+    location: "篆新市场"
+    type: "美食"
+    source: "search"
+    title: "云南第一站，打卡大观篆新农贸市场"
+    url: "https://www.xiaohongshu.com/explore/6a686ea4000000000100e4a1"
+    short_url: null
+    summary: "云南第一站打卡攻略"
+    stats:
+      likes: 279
+      collects: 92
+      comments: 29
+    highlights:
+      - "云南第一站"
+      - "打卡攻略"
+    tips: "建议上午去，最新鲜"
+    tags: ["昆明", "篆新市场", "打卡"]
+
+  - id: "search-31"
+    day: 1
+    location: "昆明站附近"
+    type: "美食"
+    source: "search"
+    title: "昆明站附件套！坐高铁必看！吃饱再出发"
+    url: "https://www.xiaohongshu.com/explore/69f44c8b0000000038021343"
+    short_url: null
+    summary: "昆明站附近美食攻略，坐高铁必看"
+    stats:
+      likes: 1419
+      collects: 1237
+      comments: 53
+    highlights:
+      - "高铁必看"
+      - "吃饱再出发"
+    tips: "提前1小时到，吃完再上车"
+    tags: ["昆明", "昆明站", "美食"]
+
+  - id: "search-33"
+    day: 1
+    location: "昆明站附近"
+    type: "美食"
+    source: "search"
+    title: "昆明美食之英凤烧饵块"
+    url: "https://www.xiaohongshu.com/explore/6a2220df000000002003bf16"
+    short_url: null
+    summary: "英凤烧饵块，昆明必吃美食"
+    stats:
+      likes: 116
+      collects: 87
+      comments: 10
+    highlights:
+      - "昆明必吃"
+      - "烧饵块"
+    tips: "排队30年的老店"
+    tags: ["昆明", "烧饵块", "必吃"]
+
+  - id: "search-34"
+    day: 1
+    location: "昆明站附近"
+    type: "美食"
+    source: "search"
+    title: "昆明站周边美食攻略"
+    url: "https://www.xiaohongshu.com/explore/6a3ff305000000002102042a"
+    short_url: null
+    summary: "昆明站周边美食全攻略"
+    stats:
+      likes: 301
+      collects: 213
+      comments: 18
+    highlights:
+      - "周边美食"
+      - "全攻略"
+    tips: "出站后步行可达"
+    tags: ["昆明", "昆明站", "美食攻略"]
+
+  - id: "search-22"
+    day: 1
+    location: "大理古城"
+    type: "美食"
+    source: "search"
+    title: "大理48小时！周末逛吃10家合集"
+    url: "https://www.xiaohongshu.com/explore/6a9b97780000000026015474"
+    short_url: null
+    summary: "大理48小时逛吃攻略"
+    stats:
+      likes: 47
+      collects: 30
+      comments: 2
+    highlights:
+      - "48小时"
+      - "10家合集"
+    tips: "周末去最合适"
+    tags: ["大理", "美食", "逛吃"]
+
+  - id: "search-23"
+    day: 1
+    location: "大理古城"
+    type: "美食"
+    source: "search"
+    title: "这是一份给吃货的大理美食攻略（无广告）"
+    url: "https://www.xiaohongshu.com/explore/69d66a9d000000002102c2d9"
+    short_url: null
+    summary: "无广告大理美食攻略"
+    stats:
+      likes: 13719
+      collects: 19603
+      comments: 308
+    highlights:
+      - "无广告"
+      - "吃货必看"
+    tips: "真实推荐，无商业合作"
+    tags: ["大理", "美食", "无广告"]
+
+  - id: "search-24"
+    day: 1
+    location: "大理古城"
+    type: "美食"
+    source: "search"
+    title: "大理个人觉得无法超越的店（附地址）"
+    url: "https://www.xiaohongshu.com/explore/6a60b2ae000000001101b4e8"
+    short_url: null
+    summary: "个人推荐的大理必吃店"
+    stats:
+      likes: 2729
+      collects: 3646
+      comments: 58
+    highlights:
+      - "无法超越"
+      - "附地址"
+    tips: "建议收藏，按地址找"
+    tags: ["大理", "美食", "必吃"]
+
+  # ========== Day2 大理 ==========
+  - id: "search-35"
+    day: 2
+    location: "洱海日出"
+    type: "景点"
+    source: "search"
+    title: "9.5号才村码头洱海边"
+    url: "https://www.xiaohongshu.com/explore/6a9b6f6a000000002900d265"
+    short_url: null
+    summary: "才村码头洱海日出实拍"
+    stats:
+      likes: 4
+      collects: 0
+      comments: 0
+    highlights:
+      - "才村码头"
+      - "日出实拍"
+    tips: "9月日出约7:10"
+    tags: ["大理", "洱海", "日出"]
+
+  - id: "search-36"
+    day: 2
+    location: "洱海日出"
+    type: "景点"
+    source: "search"
+    title: "新鲜出炉的才村码头日出"
+    url: "https://www.xiaohongshu.com/explore/6a7faf5b00000000060050e1"
+    short_url: null
+    summary: "才村码头日出最新实拍"
+    stats:
+      likes: 18
+      collects: 2
+      comments: 2
+    highlights:
+      - "新鲜出炉"
+      - "最新实拍"
+    tips: "建议6:20前到达"
+    tags: ["大理", "洱海", "日出"]
+
+  - id: "search-37"
+    day: 2
+    location: "洱海日出"
+    type: "景点"
+    source: "search"
+    title: "洱海晨跑攻略｜条路线，看完日出再出"
+    url: "https://www.xiaohongshu.com/explore/6a9bceb5000000000b00d0f1"
+    short_url: null
+    summary: "洱海晨跑+日出攻略"
+    stats:
+      likes: 7
+      collects: 6
+      comments: 3
+    highlights:
+      - "晨跑攻略"
+      - "看完日出再出"
+    tips: "适合喜欢运动的人"
+    tags: ["大理", "洱海", "晨跑"]
+
+  - id: "search-38"
+    day: 2
+    location: "洱海日出"
+    type: "景点"
+    source: "search"
+    title: "收集100场日出｜2洱海日出"
+    url: "https://www.xiaohongshu.com/explore/6a6b4d0d000000002c001013"
+    short_url: null
+    summary: "洱海日出美图收集"
+    stats:
+      likes: 8
+      collects: 6
+      comments: 0
+    highlights:
+      - "100场日出"
+      - "美图收集"
+    tips: "拍照参考"
+    tags: ["大理", "洱海", "日出"]
+
+  - id: "search-16"
+    day: 2
+    location: "忠义市场"
+    type: "美食"
+    source: "search"
+    title: "丽江忠义市场红黑榜测评"
+    url: "https://www.xiaohongshu.com/explore/6a1657e00000000007021030"
+    short_url: null
+    summary: "忠义市场红黑榜，告诉你哪些值得吃"
+    stats:
+      likes: 990
+      collects: 989
+      comments: 30
+    highlights:
+      - "红黑榜"
+      - "测评"
+    tips: "先看测评再去"
+    tags: ["丽江", "忠义市场", "测评"]
+
+  - id: "search-17"
+    day: 2
+    location: "忠义市场"
+    type: "美食"
+    source: "search"
+    title: "丽江忠义市场里本地人反复去吃十家美食合集"
+    url: "https://www.xiaohongshu.com/explore/6a69ce450000000011013d4c"
+    short_url: null
+    summary: "本地人推荐的10家必吃店"
+    stats:
+      likes: 1668
+      collects: 2776
+      comments: 48
+    highlights:
+      - "本地人推荐"
+      - "10家合集"
+    tips: "跟着本地人吃不踩坑"
+    tags: ["丽江", "忠义市场", "本地人推荐"]
+
+  - id: "search-18"
+    day: 2
+    location: "忠义市场"
+    type: "美食"
+    source: "search"
+    title: "丽江古城忠义市场第一顿我给到💯"
+    url: "https://www.xiaohongshu.com/explore/69e4f8af0000000023021c0b"
+    short_url: null
+    summary: "忠义市场第一顿推荐"
+    stats:
+      likes: 1795
+      collects: 1919
+      comments: 119
+    highlights:
+      - "第一顿"
+      - "满分推荐"
+    tips: "必吃榜"
+    tags: ["丽江", "忠义市场", "必吃"]
+
+  - id: "search-7"
+    day: 2
+    location: "丽江古城"
+    type: "美食"
+    source: "search"
+    title: "丽江古城外，舍不得分享的一家小破店（平价版）"
+    url: "https://www.xiaohongshu.com/explore/6a8a879c0000000024026cc0"
+    short_url: null
+    summary: "古城外平价美食店"
+    stats:
+      likes: 619
+      collects: 603
+      comments: 39
+    highlights:
+      - "舍不得分享"
+      - "平价版"
+    tips: "性价比高"
+    tags: ["丽江", "古城", "平价"]
+
+  - id: "search-8"
+    day: 2
+    location: "丽江古城"
+    type: "美食"
+    source: "search"
+    title: "5分钟告诉你云南丽江有多好吃》附地址！！"
+    url: "https://www.xiaohongshu.com/explore/6a65bd4100000000010001f1"
+    short_url: null
+    summary: "丽江美食全攻略"
+    stats:
+      likes: 1585
+      collects: 1454
+      comments: 40
+    highlights:
+      - "5分钟告诉你"
+      - "附地址"
+    tips: "快速了解丽江美食"
+    tags: ["丽江", "美食", "攻略"]
+
+  - id: "search-12"
+    day: 2
+    location: "丽江古城"
+    type: "景点"
+    source: "search"
+    title: "实逛实测纯干货｜丽江三大古城古镇怎么选"
+    url: "https://www.xiaohongshu.com/explore/6a5f59d2000000000f0048a1"
+    short_url: null
+    summary: "丽江三大古城对比攻略"
+    stats:
+      likes: 2272
+      collects: 3622
+      comments: 97
+    highlights:
+      - "实逛实测"
+      - "三大古城对比"
+    tips: "根据喜好选择"
+    tags: ["丽江", "古城", "对比"]
+
+  # ========== Day3 玉龙雪山 ==========
+  - id: "search-5"
+    day: 3
+    location: "甘海子"
+    type: "景点"
+    source: "search"
+    title: "谨记‼️101玉龙雪山甘海子站下车向右走‼️"
+    url: "https://www.xiaohongshu.com/explore/6a64dbc5000000000401ea7b"
+    short_url: null
+    summary: "甘海子下车方向指引"
+    stats:
+      likes: 378
+      collects: 433
+      comments: 29
+    highlights:
+      - "下车向右走"
+      - "重要提醒"
+    tips: "别走错了！"
+    tags: ["丽江", "玉龙雪山", "甘海子"]
+
+  - id: "search-1"
+    day: 3
+    location: "蓝月谷"
+    type: "景点"
+    source: "search"
+    title: "云杉坪→蓝月谷步行攻略（轻松无回头路）"
+    url: "https://www.xiaohongshu.com/explore/697d72120000000022031bda"
+    short_url: null
+    summary: "从云杉坪索道下来步行8分钟即到，全程约1.5小时"
+    stats:
+      likes: 23316
+      collects: 27227
+      comments: 660
+    highlights:
+      - "游览顺序：白水台→玉液湖→镜潭湖→蓝月湖→听涛湖"
+      - "建议步行，不坐电瓶车（省30元）"
+      - "最佳拍照点：玉液湖（蓝绿色湖水）"
+    tips: "海拔3000+，注意高反；建议带氧气瓶"
+    tags: ["丽江", "玉龙雪山", "蓝月谷", "必去"]
+
+  - id: "search-2"
+    day: 3
+    location: "蓝月谷"
+    type: "景点"
+    source: "search"
+    title: "蓝月谷步数最少攻略"
+    url: "https://www.xiaohongshu.com/explore/6986e12a000000000d00bd7f"
+    short_url: null
+    summary: "步数最少的蓝月谷游览路线"
+    stats:
+      likes: 3319
+      collects: 4135
+      comments: 183
+    highlights:
+      - "步数最少"
+      - "省体力"
+    tips: "适合老人小孩"
+    tags: ["丽江", "蓝月谷", "省力"]
+
+  - id: "search-3"
+    day: 3
+    location: "蓝月谷"
+    type: "景点"
+    source: "search"
+    title: "云杉坪→蓝月谷 不排队步行攻略✅"
+    url: "https://www.xiaohongshu.com/explore/69e4c4560000000023022aa6"
+    short_url: null
+    summary: "不排队的步行攻略"
+    stats:
+      likes: 5679
+      collects: 7493
+      comments: 143
+    highlights:
+      - "不排队"
+      - "步行攻略"
+    tips: "避开高峰期"
+    tags: ["丽江", "蓝月谷", "不排队"]
+
+  - id: "search-11"
+    day: 3
+    location: "白沙古镇"
+    type: "景点"
+    source: "search"
+    title: "丽江白沙丨免费一日游攻略来啦~"
+    url: "https://www.xiaohongshu.com/explore/6a9172f0000000000502b3f5"
+    short_url: null
+    summary: "白沙古镇免费一日游攻略"
+    stats:
+      likes: 97
+      collects: 149
+      comments: 0
+    highlights:
+      - "免费一日游"
+      - "攻略"
+    tips: "免费开放"
+    tags: ["丽江", "白沙古镇", "免费"]
+
+  - id: "search-13"
+    day: 3
+    location: "白沙古镇"
+    type: "景点"
+    source: "search"
+    title: "白沙古镇避雷"
+    url: "https://www.xiaohongshu.com/explore/6a7a7a9a0000000033036329"
+    short_url: null
+    summary: "白沙古镇避雷指南"
+    stats:
+      likes: 134
+      collects: 72
+      comments: 154
+    highlights:
+      - "避雷指南"
+      - "注意事项"
+    tips: "先看避雷再去"
+    tags: ["丽江", "白沙古镇", "避雷"]
+
+  - id: "search-6"
+    day: 3
+    location: "束河古镇"
+    type: "美食"
+    source: "search"
+    title: "束河古镇（美食篇）"
+    url: "https://www.xiaohongshu.com/explore/6a5f243a000000000401ed31"
+    short_url: null
+    summary: "束河古镇美食攻略"
+    stats:
+      likes: 1118
+      collects: 1122
+      comments: 66
+    highlights:
+      - "美食篇"
+      - "必吃推荐"
+    tips: "傍晚去氛围最好"
+    tags: ["丽江", "束河古镇", "美食"]
+
+  # ========== Day4 香格里拉 ==========
+  - id: "user-8"
+    day: 4
+    location: "虎跳峡"
+    type: "景点"
+    source: "user"
+    title: "丽江→香格里拉｜不走虎香公路真的会后悔"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/5YGe4S7UeQD"
+    summary: "虎香公路自驾攻略"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "虎香公路"
+      - "自驾攻略"
+    tips: "不走会后悔！"
+    tags: ["香格里拉", "虎跳峡", "自驾"]
+
+  - id: "user-6"
+    day: 4
+    location: "自驾路线"
+    type: "交通"
+    source: "user"
+    title: "丽江→香格里拉S230东环线自驾"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/8dR7oezeYef"
+    summary: "S230东环线自驾攻略"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "S230东环线"
+      - "自驾攻略"
+    tips: "风景优美"
+    tags: ["香格里拉", "自驾", "东环线"]
+
+  - id: "search-25"
+    day: 4
+    location: "白水台"
+    type: "景点"
+    source: "search"
+    title: "香格里拉白水台不走回头路线，全程实录"
+    url: "https://www.xiaohongshu.com/explore/69ff57ee0000000035022cc2"
+    short_url: null
+    summary: "白水台不走回头路攻略"
+    stats:
+      likes: 255
+      collects: 268
+      comments: 25
+    highlights:
+      - "不走回头路"
+      - "全程实录"
+    tips: "按路线走不绕路"
+    tags: ["香格里拉", "白水台", "攻略"]
+
+  - id: "search-26"
+    day: 4
+    location: "白水台"
+    type: "景点"
+    source: "search"
+    title: "30块门票的白水台，到底值不值得一去？"
+    url: "https://www.xiaohongshu.com/explore/6a7c06060000000029032cf5"
+    short_url: null
+    summary: "白水台值不值得去"
+    stats:
+      likes: 143
+      collects: 131
+      comments: 59
+    highlights:
+      - "30块门票"
+      - "值不值得"
+    tips: "门票30元"
+    tags: ["香格里拉", "白水台", "性价比"]
+
+  - id: "search-27"
+    day: 4
+    location: "白水台"
+    type: "景点"
+    source: "search"
+    title: "没看白水台攻略白跑一趟还生气"
+    url: "https://www.xiaohongshu.com/explore/696dd60d000000002103e0da"
+    short_url: null
+    summary: "白水台避坑指南"
+    stats:
+      likes: 760
+      collects: 675
+      comments: 147
+    highlights:
+      - "没看攻略白跑"
+      - "避坑指南"
+    tips: "先看攻略再去！"
+    tags: ["香格里拉", "白水台", "避坑"]
+
+  - id: "search-4"
+    day: 4
+    location: "纳帕海"
+    type: "景点"
+    source: "search"
+    title: "🛵纳帕海环湖｜超详细路线与拍照攻略来啦"
+    url: "https://www.xiaohongshu.com/explore/6a12f3c70000000007020c72"
+    short_url: null
+    summary: "纳帕海环湖超详细攻略"
+    stats:
+      likes: 4075
+      collects: 4912
+      comments: 194
+    highlights:
+      - "超详细路线"
+      - "拍照攻略"
+    tips: "免费开放"
+    tags: ["香格里拉", "纳帕海", "环湖"]
+
+  - id: "user-1"
+    day: 4
+    location: "纳帕海"
+    type: "景点"
+    source: "user"
+    title: "自驾环纳帕海路线图"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/5Rdrksxmiu9"
+    summary: "先导航香格里拉高山植物园，再按路线环湖"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "导航起点：香格里拉高山植物园"
+      - "全程约40公里，1.5小时"
+    tips: "免费开放；建议下午去光线好"
+    tags: ["香格里拉", "纳帕海", "自驾"]
+
+  - id: "search-9"
+    day: 4
+    location: "独克宗古城"
+    type: "美食"
+    source: "search"
+    title: "独克宗古城1天吃8顿！"
+    url: "https://www.xiaohongshu.com/explore/69e1f9cc0000000022029d73"
+    short_url: null
+    summary: "独克宗古城美食攻略"
+    stats:
+      likes: 746
+      collects: 528
+      comments: 5
+    highlights:
+      - "1天吃8顿"
+      - "美食攻略"
+    tips: "放开吃！"
+    tags: ["香格里拉", "独克宗古城", "美食"]
+
+  - id: "search-10"
+    day: 4
+    location: "独克宗古城"
+    type: "美食"
+    source: "search"
+    title: "香格里拉个人觉得无法超越的店（附地址）"
+    url: "https://www.xiaohongshu.com/explore/6a45ccf00000000022014443"
+    short_url: null
+    summary: "香格里拉必吃店推荐"
+    stats:
+      likes: 631
+      collects: 807
+      comments: 11
+    highlights:
+      - "无法超越"
+      - "附地址"
+    tips: "按地址找"
+    tags: ["香格里拉", "美食", "必吃"]
+
+  # ========== Day5 香格里拉 ==========
+  - id: "user-3"
+    day: 5
+    location: "松赞林寺"
+    type: "景点"
+    source: "user"
+    title: "自驾松赞林寺攻略！不踩坑！"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/4LZ0eWmoOg2"
+    summary: "自驾松赞林寺不踩坑攻略"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "自驾攻略"
+      - "不踩坑"
+    tips: "自驾直达正门"
+    tags: ["香格里拉", "松赞林寺", "自驾"]
+
+  - id: "user-4"
+    day: 5
+    location: "松赞林寺"
+    type: "景点"
+    source: "user"
+    title: "外牌成功自驾开到松赞林寺下"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/19qgqEpBJis"
+    summary: "外牌车自驾到松赞林寺攻略"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "外牌车"
+      - "成功自驾"
+    tips: "外牌车也能开到"
+    tags: ["香格里拉", "松赞林寺", "外牌车"]
+
+  - id: "search-14"
+    day: 5
+    location: "松赞林寺"
+    type: "景点"
+    source: "search"
+    title: "松赞林寺免门票打卡攻略！"
+    url: "https://www.xiaohongshu.com/explore/6a9cced4000000001001f128"
+    short_url: null
+    summary: "松赞林寺免门票攻略"
+    stats:
+      likes: 295
+      collects: 513
+      comments: 41
+    highlights:
+      - "免门票"
+      - "打卡攻略"
+    tips: "不进景区也能拍"
+    tags: ["香格里拉", "松赞林寺", "免费"]
+
+  - id: "search-15"
+    day: 5
+    location: "松赞林寺"
+    type: "景点"
+    source: "search"
+    title: "开车能直达的松赞林寺🆓拍照机位"
+    url: "https://www.xiaohongshu.com/explore/6a532f12000000000f015ec0"
+    short_url: null
+    summary: "开车直达的免费拍照机位"
+    stats:
+      likes: 280
+      collects: 424
+      comments: 27
+    highlights:
+      - "开车直达"
+      - "免费机位"
+    tips: "导航到小街子村"
+    tags: ["香格里拉", "松赞林寺", "拍照"]
+
+  - id: "search-20"
+    day: 5
+    location: "松赞林寺"
+    type: "景点"
+    source: "search"
+    title: "松赞林寺隐藏机位 不进景区亲测有效"
+    url: "https://www.xiaohongshu.com/explore/6a8fe49000000000080129cf"
+    short_url: null
+    summary: "松赞林寺隐藏拍照机位"
+    stats:
+      likes: 111
+      collects: 136
+      comments: 14
+    highlights:
+      - "隐藏机位"
+      - "不进景区"
+    tips: "亲测有效"
+    tags: ["香格里拉", "松赞林寺", "隐藏机位"]
+
+  - id: "search-21"
+    day: 5
+    location: "拉姆央措湖"
+    type: "景点"
+    source: "search"
+    title: "拉姆央措湖观景台拍松赞林寺倒影攻略！码住"
+    url: "https://www.xiaohongshu.com/explore/6a5f4391000000001101ff61"
+    short_url: null
+    summary: "拉姆央措湖拍松赞林寺倒影"
+    stats:
+      likes: 48
+      collects: 53
+      comments: 2
+    highlights:
+      - "观景台"
+      - "拍倒影"
+    tips: "顺时针绕湖一圈"
+    tags: ["香格里拉", "拉姆央措湖", "拍照"]
+
+  - id: "user-2"
+    day: 5
+    location: "纳帕海环湖"
+    type: "景点"
+    source: "user"
+    title: "纳帕海环湖及松赞林寺机位攻略"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/3ZfoFl5jCA8"
+    summary: "纳帕海环湖+松赞林寺机位"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "环湖攻略"
+      - "机位攻略"
+    tips: "下午去光线好"
+    tags: ["香格里拉", "纳帕海", "松赞林寺"]
+
+  # ========== 通用攻略 ==========
+  - id: "user-7"
+    day: 0
+    location: "通用"
+    type: "攻略"
+    source: "user"
+    title: "云南受冻已逃。要去的别乱带衣服"
+    url: "https://www.xiaohongshu.com/explore/xxx"
+    short_url: "https://xhslink.cn/o/3viUgeCK8bN"
+    summary: "云南穿搭建议，别乱带衣服"
+    stats:
+      likes: null
+      collects: null
+      comments: null
+    highlights:
+      - "穿搭建议"
+      - "别乱带衣服"
+    tips: "9月底早晚温差大"
+    tags: ["云南", "穿搭", "必备"]

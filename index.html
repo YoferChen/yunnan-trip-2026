@@ -303,6 +303,273 @@ tr:hover td{background:var(--bg-card)}
   .ppt-nav-btn{width:40px;height:40px;font-size:16px}
 }
 
+/* 攻略卡片样式 */
+.guide-section-daily {
+  margin-top: 16px;
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+}
+
+.guide-toggle {
+  font-size: 0.85rem;
+  color: var(--primary);
+  cursor: pointer;
+  padding: 4px 0;
+  user-select: none;
+}
+
+.guide-collapsed {
+  display: none;
+  margin-top: 8px;
+}
+
+.guide-section-daily.expanded .guide-collapsed {
+  display: block;
+}
+
+.guide-location-group {
+  margin-bottom: 12px;
+}
+
+.guide-location-title {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.guide-mini-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.85rem;
+  transition: background 0.2s;
+}
+
+.guide-mini-card:hover {
+  background: var(--bg-white);
+}
+
+.guide-type {
+  font-size: 1rem;
+}
+
+.guide-title {
+  flex: 1;
+  font-weight: 500;
+}
+
+.guide-stats {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.guide-more {
+  font-size: 0.75rem;
+  color: var(--primary);
+  padding: 4px 0;
+}
+
+/* 攻略汇总样式 */
+.guide-summary-container {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.guide-day-section {
+  margin-bottom: 24px;
+}
+
+.guide-day-title {
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary);
+}
+
+.guide-location-section {
+  margin-bottom: 16px;
+}
+
+.guide-location-name {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.guide-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.guide-detail-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.guide-detail-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.guide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.guide-title-link {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.guide-summary {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+
+.guide-foods {
+  background: #fff8e1;
+  border: 1px solid #ffcc02;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.guide-food-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ffe082;
+  font-size: 0.85rem;
+}
+
+.guide-food-item:last-child {
+  border-bottom: none;
+}
+
+.food-name {
+  font-weight: 600;
+  color: #e65100;
+}
+
+.food-desc {
+  color: #555;
+}
+
+.food-location {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.food-price {
+  color: #166534;
+  font-weight: 500;
+}
+
+.guide-highlights {
+  margin-bottom: 12px;
+}
+
+.highlight-item {
+  font-size: 0.85rem;
+  color: var(--text);
+  padding: 2px 0;
+}
+
+.guide-tips {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: #f0fdf4;
+  border-left: 3px solid var(--primary);
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.guide-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.guide-tags .tag {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.guide-links {
+  display: flex;
+  gap: 8px;
+}
+
+.guide-link {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.pc-link {
+  background: var(--primary);
+  color: white;
+}
+
+.pc-link:hover {
+  background: var(--primary-dark);
+}
+
+.mobile-link {
+  background: #ff6b6b;
+  color: white;
+}
+
+.mobile-link:hover {
+  background: #ee5a5a;
+}
+
+/* 移动端隐藏PC链接 */
+@media(max-width: 768px) {
+  .pc-link { display: none; }
+  .mobile-link { display: inline-block; }
+  .guide-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .guide-food-item {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+/* PC端隐藏手机链接 */
+@media(min-width: 769px) {
+  .pc-link { display: inline-block; }
+  .mobile-link { display: none; }
+}
+
 /* 设置菜单 */
 .settings-menu{position:fixed;top:20px;right:20px;z-index:10001}
 .settings-toggle{
@@ -1411,14 +1678,973 @@ tr:hover td{background:var(--bg-card)}
 <section class="section ppt-card" style="background:#fff" data-index="8">
   <div class="container">
     <h2 class="section-title">📱 小红书热门攻略</h2>
-    <div class="info-grid">
-      <div class="info-card"><h4>🌅 日照金山攻略 (7.6千赞)</h4><a href="https://www.xiaohongshu.com/explore/697dbf4b000000001a032e69" target="_blank" class="xhs-link">查看笔记 →</a></div>
-      <div class="info-card"><h4>🔥 丽江三大古镇 (1.3万赞)</h4><a href="https://www.xiaohongshu.com/explore/68c3d6e1000000001c03dcc3" target="_blank" class="xhs-link">查看笔记 →</a></div>
-      <div class="info-card"><h4>🔥 云杉坪→蓝月谷 (2.2万赞)</h4><a href="https://www.xiaohongshu.com/explore/697d72120000000022031bda" target="_blank" class="xhs-link">查看笔记 →</a></div>
-      <div class="info-card"><h4>🔥 香格里拉攻略 (2万赞)</h4><a href="https://www.xiaohongshu.com/explore/68ccfcd40000000014008f62" target="_blank" class="xhs-link">查看笔记 →</a></div>
-      <div class="info-card"><h4>🔥 虎跳峡自驾 (4千赞)</h4><a href="https://www.xiaohongshu.com/explore/6875e0ee0000000022031ab2" target="_blank" class="xhs-link">查看笔记 →</a></div>
-      <div class="info-card"><h4>🔥 洱海环湖攻略 (1.4万赞)</h4><a href="https://www.xiaohongshu.com/explore/69380c44000000001e010748" target="_blank" class="xhs-link">查看笔记 →</a></div>
+    <!-- SUMMARY_GUIDES_START -->
+<div class="guide-summary-container">
+  <div class="guide-day-section">
+    <h4 class="guide-day-title">📖 通用攻略</h4>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 通用</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">云南受冻已逃。要去的别乱带衣服</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">云南穿搭建议，别乱带衣服</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 穿搭建议</div>
+      <div class="highlight-item">• 别乱带衣服</div>
     </div>
+
+          <div class="guide-tips">💡 9月底早晚温差大</div>
+          <div class="guide-tags"><span class="tag">#云南</span><span class="tag">#穿搭</span><span class="tag">#必备</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/3viUgeCK8bN" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="guide-day-section">
+    <h4 class="guide-day-title">Day 1</h4>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 篆新市场</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">如果你是游客，请避雷昆明篆新农贸市场</div>
+            <span class="guide-stats">👍44 ⭐14</span>
+          </div>
+          <div class="guide-summary">游客避雷指南，告诉你哪些值得吃</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 避雷指南</div>
+      <div class="highlight-item">• 游客必看</div>
+    </div>
+
+          <div class="guide-tips">💡 先看攻略再去，避免踩坑</div>
+          <div class="guide-tags"><span class="tag">#昆明</span><span class="tag">#篆新市场</span><span class="tag">#避雷</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a3cec1b000000001102fc6f" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">吃透篆新✨一张地图就够了</div>
+            <span class="guide-stats">👍189 ⭐241</span>
+          </div>
+          <div class="guide-summary">篆新市场美食地图，一张图搞定</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 美食地图</div>
+      <div class="highlight-item">• 一图搞定</div>
+    </div>
+
+          <div class="guide-tips">💡 建议保存地图，边逛边找</div>
+          <div class="guide-tags"><span class="tag">#昆明</span><span class="tag">#篆新市场</span><span class="tag">#美食地图</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a2a8f7c000000001503cc1e" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">云南第一站，打卡大观篆新农贸市场</div>
+            <span class="guide-stats">👍279 ⭐92</span>
+          </div>
+          <div class="guide-summary">云南第一站打卡攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 云南第一站</div>
+      <div class="highlight-item">• 打卡攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 建议上午去，最新鲜</div>
+          <div class="guide-tags"><span class="tag">#昆明</span><span class="tag">#篆新市场</span><span class="tag">#打卡</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a686ea4000000000100e4a1" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 昆明站附近</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">昆明站附件套！坐高铁必看！吃饱再出发</div>
+            <span class="guide-stats">👍1.4千 ⭐1.2千</span>
+          </div>
+          <div class="guide-summary">昆明站附近美食攻略，坐高铁必看</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 高铁必看</div>
+      <div class="highlight-item">• 吃饱再出发</div>
+    </div>
+
+          <div class="guide-tips">💡 提前1小时到，吃完再上车</div>
+          <div class="guide-tags"><span class="tag">#昆明</span><span class="tag">#昆明站</span><span class="tag">#美食</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/69f44c8b0000000038021343" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">昆明美食之英凤烧饵块</div>
+            <span class="guide-stats">👍116 ⭐87</span>
+          </div>
+          <div class="guide-summary">英凤烧饵块，昆明必吃美食</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 昆明必吃</div>
+      <div class="highlight-item">• 烧饵块</div>
+    </div>
+
+          <div class="guide-tips">💡 排队30年的老店</div>
+          <div class="guide-tags"><span class="tag">#昆明</span><span class="tag">#烧饵块</span><span class="tag">#必吃</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a2220df000000002003bf16" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">昆明站周边美食攻略</div>
+            <span class="guide-stats">👍301 ⭐213</span>
+          </div>
+          <div class="guide-summary">昆明站周边美食全攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 周边美食</div>
+      <div class="highlight-item">• 全攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 出站后步行可达</div>
+          <div class="guide-tags"><span class="tag">#昆明</span><span class="tag">#昆明站</span><span class="tag">#美食攻略</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a3ff305000000002102042a" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 大理古城</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">大理48小时！周末逛吃10家合集</div>
+            <span class="guide-stats">👍47 ⭐30</span>
+          </div>
+          <div class="guide-summary">大理48小时逛吃攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 48小时</div>
+      <div class="highlight-item">• 10家合集</div>
+    </div>
+
+          <div class="guide-tips">💡 周末去最合适</div>
+          <div class="guide-tags"><span class="tag">#大理</span><span class="tag">#美食</span><span class="tag">#逛吃</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a9b97780000000026015474" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">这是一份给吃货的大理美食攻略（无广告）</div>
+            <span class="guide-stats">👍1.4万 ⭐2.0万</span>
+          </div>
+          <div class="guide-summary">无广告大理美食攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 无广告</div>
+      <div class="highlight-item">• 吃货必看</div>
+    </div>
+
+          <div class="guide-tips">💡 真实推荐，无商业合作</div>
+          <div class="guide-tags"><span class="tag">#大理</span><span class="tag">#美食</span><span class="tag">#无广告</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/69d66a9d000000002102c2d9" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">大理个人觉得无法超越的店（附地址）</div>
+            <span class="guide-stats">👍2.7千 ⭐3.6千</span>
+          </div>
+          <div class="guide-summary">个人推荐的大理必吃店</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 无法超越</div>
+      <div class="highlight-item">• 附地址</div>
+    </div>
+
+          <div class="guide-tips">💡 建议收藏，按地址找</div>
+          <div class="guide-tags"><span class="tag">#大理</span><span class="tag">#美食</span><span class="tag">#必吃</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a60b2ae000000001101b4e8" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="guide-day-section">
+    <h4 class="guide-day-title">Day 2</h4>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 洱海日出</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">9.5号才村码头洱海边</div>
+            <span class="guide-stats">👍4 ⭐0</span>
+          </div>
+          <div class="guide-summary">才村码头洱海日出实拍</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 才村码头</div>
+      <div class="highlight-item">• 日出实拍</div>
+    </div>
+
+          <div class="guide-tips">💡 9月日出约7:10</div>
+          <div class="guide-tags"><span class="tag">#大理</span><span class="tag">#洱海</span><span class="tag">#日出</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a9b6f6a000000002900d265" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">新鲜出炉的才村码头日出</div>
+            <span class="guide-stats">👍18 ⭐2</span>
+          </div>
+          <div class="guide-summary">才村码头日出最新实拍</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 新鲜出炉</div>
+      <div class="highlight-item">• 最新实拍</div>
+    </div>
+
+          <div class="guide-tips">💡 建议6:20前到达</div>
+          <div class="guide-tags"><span class="tag">#大理</span><span class="tag">#洱海</span><span class="tag">#日出</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a7faf5b00000000060050e1" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">洱海晨跑攻略｜条路线，看完日出再出</div>
+            <span class="guide-stats">👍7 ⭐6</span>
+          </div>
+          <div class="guide-summary">洱海晨跑+日出攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 晨跑攻略</div>
+      <div class="highlight-item">• 看完日出再出</div>
+    </div>
+
+          <div class="guide-tips">💡 适合喜欢运动的人</div>
+          <div class="guide-tags"><span class="tag">#大理</span><span class="tag">#洱海</span><span class="tag">#晨跑</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a9bceb5000000000b00d0f1" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">收集100场日出｜2洱海日出</div>
+            <span class="guide-stats">👍8 ⭐6</span>
+          </div>
+          <div class="guide-summary">洱海日出美图收集</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 100场日出</div>
+      <div class="highlight-item">• 美图收集</div>
+    </div>
+
+          <div class="guide-tips">💡 拍照参考</div>
+          <div class="guide-tags"><span class="tag">#大理</span><span class="tag">#洱海</span><span class="tag">#日出</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a6b4d0d000000002c001013" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 忠义市场</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">丽江忠义市场红黑榜测评</div>
+            <span class="guide-stats">👍990 ⭐989</span>
+          </div>
+          <div class="guide-summary">忠义市场红黑榜，告诉你哪些值得吃</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 红黑榜</div>
+      <div class="highlight-item">• 测评</div>
+    </div>
+
+          <div class="guide-tips">💡 先看测评再去</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#忠义市场</span><span class="tag">#测评</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a1657e00000000007021030" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">丽江忠义市场里本地人反复去吃十家美食合集</div>
+            <span class="guide-stats">👍1.7千 ⭐2.8千</span>
+          </div>
+          <div class="guide-summary">本地人推荐的10家必吃店</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 本地人推荐</div>
+      <div class="highlight-item">• 10家合集</div>
+    </div>
+
+          <div class="guide-tips">💡 跟着本地人吃不踩坑</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#忠义市场</span><span class="tag">#本地人推荐</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a69ce450000000011013d4c" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">丽江古城忠义市场第一顿我给到💯</div>
+            <span class="guide-stats">👍1.8千 ⭐1.9千</span>
+          </div>
+          <div class="guide-summary">忠义市场第一顿推荐</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 第一顿</div>
+      <div class="highlight-item">• 满分推荐</div>
+    </div>
+
+          <div class="guide-tips">💡 必吃榜</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#忠义市场</span><span class="tag">#必吃</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/69e4f8af0000000023021c0b" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 丽江古城</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">丽江古城外，舍不得分享的一家小破店（平价版）</div>
+            <span class="guide-stats">👍619 ⭐603</span>
+          </div>
+          <div class="guide-summary">古城外平价美食店</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 舍不得分享</div>
+      <div class="highlight-item">• 平价版</div>
+    </div>
+
+          <div class="guide-tips">💡 性价比高</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#古城</span><span class="tag">#平价</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a8a879c0000000024026cc0" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">5分钟告诉你云南丽江有多好吃》附地址！！</div>
+            <span class="guide-stats">👍1.6千 ⭐1.5千</span>
+          </div>
+          <div class="guide-summary">丽江美食全攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 5分钟告诉你</div>
+      <div class="highlight-item">• 附地址</div>
+    </div>
+
+          <div class="guide-tips">💡 快速了解丽江美食</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#美食</span><span class="tag">#攻略</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a65bd4100000000010001f1" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">实逛实测纯干货｜丽江三大古城古镇怎么选</div>
+            <span class="guide-stats">👍2.3千 ⭐3.6千</span>
+          </div>
+          <div class="guide-summary">丽江三大古城对比攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 实逛实测</div>
+      <div class="highlight-item">• 三大古城对比</div>
+    </div>
+
+          <div class="guide-tips">💡 根据喜好选择</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#古城</span><span class="tag">#对比</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a5f59d2000000000f0048a1" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="guide-day-section">
+    <h4 class="guide-day-title">Day 3</h4>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 玉龙雪山</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">玉龙雪山一日游攻略（详细时间版）</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">26年9月2日前往，详细时间规划</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 详细时间规划</div>
+      <div class="highlight-item">• 9月实测版本</div>
+    </div>
+
+          <div class="guide-tips">💡 2026年最新攻略</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#玉龙雪山</span><span class="tag">#攻略</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/AAJDErKJmdn" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 甘海子</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">谨记‼️101玉龙雪山甘海子站下车向右走‼️</div>
+            <span class="guide-stats">👍378 ⭐433</span>
+          </div>
+          <div class="guide-summary">甘海子下车方向指引</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 下车向右走</div>
+      <div class="highlight-item">• 重要提醒</div>
+    </div>
+
+          <div class="guide-tips">💡 别走错了！</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#玉龙雪山</span><span class="tag">#甘海子</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a64dbc5000000000401ea7b" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 蓝月谷</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">云杉坪→蓝月谷步行攻略（轻松无回头路）</div>
+            <span class="guide-stats">👍2.3万 ⭐2.7万</span>
+          </div>
+          <div class="guide-summary">从云杉坪索道下来步行8分钟即到，全程约1.5小时</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 游览顺序：白水台→玉液湖→镜潭湖→蓝月湖→听涛湖</div>
+      <div class="highlight-item">• 建议步行，不坐电瓶车（省30元）</div>
+      <div class="highlight-item">• 最佳拍照点：玉液湖（蓝绿色湖水）</div>
+    </div>
+
+          <div class="guide-tips">💡 海拔3000+，注意高反；建议带氧气瓶</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#玉龙雪山</span><span class="tag">#蓝月谷</span><span class="tag">#必去</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/697d72120000000022031bda" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">蓝月谷步数最少攻略</div>
+            <span class="guide-stats">👍3.3千 ⭐4.1千</span>
+          </div>
+          <div class="guide-summary">步数最少的蓝月谷游览路线</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 步数最少</div>
+      <div class="highlight-item">• 省体力</div>
+    </div>
+
+          <div class="guide-tips">💡 适合老人小孩</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#蓝月谷</span><span class="tag">#省力</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6986e12a000000000d00bd7f" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">云杉坪→蓝月谷 不排队步行攻略✅</div>
+            <span class="guide-stats">👍5.7千 ⭐7.5千</span>
+          </div>
+          <div class="guide-summary">不排队的步行攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 不排队</div>
+      <div class="highlight-item">• 步行攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 避开高峰期</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#蓝月谷</span><span class="tag">#不排队</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/69e4c4560000000023022aa6" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 白沙古镇</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">丽江白沙丨免费一日游攻略来啦~</div>
+            <span class="guide-stats">👍97 ⭐149</span>
+          </div>
+          <div class="guide-summary">白沙古镇免费一日游攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 免费一日游</div>
+      <div class="highlight-item">• 攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 免费开放</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#白沙古镇</span><span class="tag">#免费</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a9172f0000000000502b3f5" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">白沙古镇避雷</div>
+            <span class="guide-stats">👍134 ⭐72</span>
+          </div>
+          <div class="guide-summary">白沙古镇避雷指南</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 避雷指南</div>
+      <div class="highlight-item">• 注意事项</div>
+    </div>
+
+          <div class="guide-tips">💡 先看避雷再去</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#白沙古镇</span><span class="tag">#避雷</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a7a7a9a0000000033036329" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 束河古镇</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">束河古镇（美食篇）</div>
+            <span class="guide-stats">👍1.1千 ⭐1.1千</span>
+          </div>
+          <div class="guide-summary">束河古镇美食攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 美食篇</div>
+      <div class="highlight-item">• 必吃推荐</div>
+    </div>
+
+          <div class="guide-tips">💡 傍晚去氛围最好</div>
+          <div class="guide-tags"><span class="tag">#丽江</span><span class="tag">#束河古镇</span><span class="tag">#美食</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a5f243a000000000401ed31" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="guide-day-section">
+    <h4 class="guide-day-title">Day 4</h4>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 虎跳峡</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">丽江→香格里拉｜不走虎香公路真的会后悔</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">虎香公路自驾攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 虎香公路</div>
+      <div class="highlight-item">• 自驾攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 不走会后悔！</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#虎跳峡</span><span class="tag">#自驾</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/5YGe4S7UeQD" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 自驾路线</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">丽江→香格里拉S230东环线自驾</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">S230东环线自驾攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• S230东环线</div>
+      <div class="highlight-item">• 自驾攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 风景优美</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#自驾</span><span class="tag">#东环线</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/8dR7oezeYef" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 白水台</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">香格里拉白水台不走回头路线，全程实录</div>
+            <span class="guide-stats">👍255 ⭐268</span>
+          </div>
+          <div class="guide-summary">白水台不走回头路攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 不走回头路</div>
+      <div class="highlight-item">• 全程实录</div>
+    </div>
+
+          <div class="guide-tips">💡 按路线走不绕路</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#白水台</span><span class="tag">#攻略</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/69ff57ee0000000035022cc2" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">30块门票的白水台，到底值不值得一去？</div>
+            <span class="guide-stats">👍143 ⭐131</span>
+          </div>
+          <div class="guide-summary">白水台值不值得去</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 30块门票</div>
+      <div class="highlight-item">• 值不值得</div>
+    </div>
+
+          <div class="guide-tips">💡 门票30元</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#白水台</span><span class="tag">#性价比</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a7c06060000000029032cf5" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">没看白水台攻略白跑一趟还生气</div>
+            <span class="guide-stats">👍760 ⭐675</span>
+          </div>
+          <div class="guide-summary">白水台避坑指南</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 没看攻略白跑</div>
+      <div class="highlight-item">• 避坑指南</div>
+    </div>
+
+          <div class="guide-tips">💡 先看攻略再去！</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#白水台</span><span class="tag">#避坑</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/696dd60d000000002103e0da" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 纳帕海</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">🛵纳帕海环湖｜超详细路线与拍照攻略来啦</div>
+            <span class="guide-stats">👍4.1千 ⭐4.9千</span>
+          </div>
+          <div class="guide-summary">纳帕海环湖超详细攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 超详细路线</div>
+      <div class="highlight-item">• 拍照攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 免费开放</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#纳帕海</span><span class="tag">#环湖</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a12f3c70000000007020c72" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">自驾环纳帕海路线图</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">先导航香格里拉高山植物园，再按路线环湖</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 导航起点：香格里拉高山植物园</div>
+      <div class="highlight-item">• 全程约40公里，1.5小时</div>
+    </div>
+
+          <div class="guide-tips">💡 免费开放；建议下午去光线好</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#纳帕海</span><span class="tag">#自驾</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/5Rdrksxmiu9" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 独克宗古城</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">独克宗古城1天吃8顿！</div>
+            <span class="guide-stats">👍746 ⭐528</span>
+          </div>
+          <div class="guide-summary">独克宗古城美食攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 1天吃8顿</div>
+      <div class="highlight-item">• 美食攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 放开吃！</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#独克宗古城</span><span class="tag">#美食</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/69e1f9cc0000000022029d73" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">香格里拉个人觉得无法超越的店（附地址）</div>
+            <span class="guide-stats">👍631 ⭐807</span>
+          </div>
+          <div class="guide-summary">香格里拉必吃店推荐</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 无法超越</div>
+      <div class="highlight-item">• 附地址</div>
+    </div>
+
+          <div class="guide-tips">💡 按地址找</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#美食</span><span class="tag">#必吃</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a45ccf00000000022014443" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="guide-day-section">
+    <h4 class="guide-day-title">Day 5</h4>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 松赞林寺</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">自驾松赞林寺攻略！不踩坑！</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">自驾松赞林寺不踩坑攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 自驾攻略</div>
+      <div class="highlight-item">• 不踩坑</div>
+    </div>
+
+          <div class="guide-tips">💡 自驾直达正门</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#松赞林寺</span><span class="tag">#自驾</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/4LZ0eWmoOg2" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">外牌成功自驾开到松赞林寺下</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">外牌车自驾到松赞林寺攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 外牌车</div>
+      <div class="highlight-item">• 成功自驾</div>
+    </div>
+
+          <div class="guide-tips">💡 外牌车也能开到</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#松赞林寺</span><span class="tag">#外牌车</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/19qgqEpBJis" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">松赞林寺免门票打卡攻略！</div>
+            <span class="guide-stats">👍295 ⭐513</span>
+          </div>
+          <div class="guide-summary">松赞林寺免门票攻略</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 免门票</div>
+      <div class="highlight-item">• 打卡攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 不进景区也能拍</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#松赞林寺</span><span class="tag">#免费</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a9cced4000000001001f128" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">开车能直达的松赞林寺🆓拍照机位</div>
+            <span class="guide-stats">👍280 ⭐424</span>
+          </div>
+          <div class="guide-summary">开车直达的免费拍照机位</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 开车直达</div>
+      <div class="highlight-item">• 免费机位</div>
+    </div>
+
+          <div class="guide-tips">💡 导航到小街子村</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#松赞林寺</span><span class="tag">#拍照</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a532f12000000000f015ec0" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">松赞林寺隐藏机位 不进景区亲测有效</div>
+            <span class="guide-stats">👍111 ⭐136</span>
+          </div>
+          <div class="guide-summary">松赞林寺隐藏拍照机位</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 隐藏机位</div>
+      <div class="highlight-item">• 不进景区</div>
+    </div>
+
+          <div class="guide-tips">💡 亲测有效</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#松赞林寺</span><span class="tag">#隐藏机位</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a8fe49000000000080129cf" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 拉姆央措湖</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">拉姆央措湖观景台拍松赞林寺倒影攻略！码住</div>
+            <span class="guide-stats">👍48 ⭐53</span>
+          </div>
+          <div class="guide-summary">拉姆央措湖拍松赞林寺倒影</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 观景台</div>
+      <div class="highlight-item">• 拍倒影</div>
+    </div>
+
+          <div class="guide-tips">💡 顺时针绕湖一圈</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#拉姆央措湖</span><span class="tag">#拍照</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/6a5f4391000000001101ff61" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="guide-location-section">
+      <h5 class="guide-location-name">📍 纳帕海环湖</h5>
+      <div class="guide-cards-grid">
+        <div class="guide-detail-card">
+          <div class="guide-header">
+            <div class="guide-title-link">纳帕海环湖及松赞林寺机位攻略</div>
+            <span class="guide-stats"></span>
+          </div>
+          <div class="guide-summary">纳帕海环湖+松赞林寺机位</div>
+          
+          <div class="guide-highlights">
+      <div class="highlight-item">• 环湖攻略</div>
+      <div class="highlight-item">• 机位攻略</div>
+    </div>
+
+          <div class="guide-tips">💡 下午去光线好</div>
+          <div class="guide-tags"><span class="tag">#香格里拉</span><span class="tag">#纳帕海</span><span class="tag">#松赞林寺</span></div>
+          <div class="guide-links">
+      <a href="https://www.xiaohongshu.com/explore/xxx" target="_blank" class="guide-link pc-link">📕 PC查看</a>
+      <a href="https://xhslink.cn/o/3ZfoFl5jCA8" target="_blank" class="guide-link mobile-link">📱 手机打开</a>
+    </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- SUMMARY_GUIDES_END -->
   </div>
 </section>
 </div>
